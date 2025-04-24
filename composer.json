@@ -1,0 +1,36 @@
+{
+    "name": "aseqbase/shop",
+    "description": "To create a new Shop, with all accessibility and equipment, for an aseqbase website...",
+    "type": "project",
+    "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "Mohammad Fathi",
+            "email": "i@mimfa.net",
+            "homepage": "https://mfathi.ir",
+            "role": "Lead Developers"
+        },
+        {
+            "name": "Martin Fixoni",
+            "role": "Back-end Developer"
+        },
+        {
+            "name": "Jacoob Del Pano",
+            "role": "UI/UX Designer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.2",
+        "ext-pdo": "*"
+    },
+    "scripts": {
+        "start": "php -S localhost:8000 & net start MySQL & php index.php"
+    },
+    "extra": {
+        "installer-paths": {
+            "./": ["type:project"]
+        }
+    }
+}
