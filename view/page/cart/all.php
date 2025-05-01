@@ -11,7 +11,7 @@ $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
 $module->Items = grab($data, "Items");
-$module->NextButton = Html::Button("Confirm", "/cart/options", ["class" => "btn-main"]);
+$module->NextButton = Html::Button("Confirm", "/cart/options", ["class" => "btn main"]);
 swap($module, $data);
 $module->Render();
 ?>

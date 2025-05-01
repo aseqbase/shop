@@ -44,7 +44,7 @@ if(!\_::$Info->Services) \_::$Info->Services = \_::$Info->MainMenus;
 if(!\_::$Info->Shortcuts) \_::$Info->Shortcuts = [
     array("Name" => "MENU", "Path" => "viewSideMenu()", "Image" => "bars"),
     array("Name" => "CART", "Path" => "/cart", "Image" => "shopping-cart"),
-    array("Name" => "HOME", "Path" => "/", "Image" => "home"),
+    array("Name" => "HOME", "Path" => \_::$Info->HomePath, "Image" => "home"),
     array("Name" => "MERCHANDISES", "Path" => "/items", "Image" => "box"),
     array("Name" => "CONTACT", "Path" => "/contact", "Image" => "envelope")
 ];

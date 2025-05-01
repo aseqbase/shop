@@ -357,8 +357,8 @@ class MerchandiseCollection extends Collection
 
                 yield Html::Rack(
                         ($this->ShowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
-                        ($this->ShowTitle ? Html::Heading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
-                        ($this->ShowSupplier ? $this->GetSupplier($item) : "").
+                        Html::Division(($this->ShowTitle ? Html::Heading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
+                        ($this->ShowSupplier ? $this->GetSupplier($item) : "")).
                         (isValid($meta)?Html::Sub($meta, ["class" => 'metadata']):"")
                     , ["class" => 'header']);
                 if ($this->ShowDescription && $c_description)
@@ -373,7 +373,7 @@ class MerchandiseCollection extends Collection
                         ["class" => 'col-md-4 price']
                     ).
                     ($this->ShowButtons?Html::MediumSlot(
-                        $this->GetButtons($uid, $r_count??0, $m_count??0, $m_id),
+                        $this->GetButtons($uid, $r_count??0, $m_count??0, $m_id??0, $r_id??0),
                         ["class" => 'controls']):"")
                 ), ["class"=>"footer"]);
                 yield "</div>";
@@ -384,16 +384,16 @@ class MerchandiseCollection extends Collection
                 yield "</div>";
         })()));
     }
-    public function GetButtons($shownId, $count, $maxCount, $merchandiseId) {
+    public function GetButtons($shownId, $count, $maxCount, $merchandiseId, $requestId) {
         $countScript = "{$this->Name}_CurrentCount('$shownId')";
         $successScript = "(data,err)=>{$this->Name}_CartUpdated(data, err, '$shownId', $count, $maxCount)";
-        $controls = $this->AddButtonLabel?Html::Button($this->AddButtonLabel, "sendPut('/cart',{MerchandiseId:$merchandiseId,Request:true}, '#$shownId', $successScript)", ["class" => "btn-main btn-order".($count?" hide":"")]):"";
+        $controls = $this->AddButtonLabel?Html::Button($this->AddButtonLabel, "sendPut('/cart',{MerchandiseId:$merchandiseId, Request:true}, '#$shownId', $successScript)", ["class" => "btn main btn order".($count?" hide":"")]):"";
         $controls .= Html::Division(
-            ($this->RemoveButtonLabel?Html::Button($this->RemoveButtonLabel, "sendDelete('/cart',{MerchandiseId:$merchandiseId}, '#$shownId', $successScript)", ["class" => "btn-delete"]):"").
-            ($this->DecreaseButtonLabel?Html::Button($this->DecreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn-decrease".($count > 1?"":" hide")]):"").
+            ($this->RemoveButtonLabel?Html::Button($this->RemoveButtonLabel, "sendDelete('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId}, '#$shownId', $successScript)", ["class" => "btn delete"]):"").
+            ($this->DecreaseButtonLabel?Html::Button($this->DecreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn decrease".($count > 1?"":" hide")]):"").
             Html::Division($count, ["class" => "numbers"]).
-            ($this->IncreaseButtonLabel?Html::Button($this->IncreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn-increase".($maxCount > $count?"":" hide")]):"").
-            ($this->CartButtonLabel?Html::Button($this->CartButtonLabel, "/cart#$shownId", ["class" => "btn-main btn-cart"]):"")
+            ($this->IncreaseButtonLabel?Html::Button($this->IncreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn increase".($maxCount > $count?"":" hide")]):"").
+            ($this->CartButtonLabel?Html::Button($this->CartButtonLabel, "/cart#$shownId", ["class" => "btn main btn cart"]):"")
         ,["class"=>"btns".($count?"":" hide")]);
         $controls .= Convert::By($this->DefaultButtons, $item);
         return $controls;
@@ -420,21 +420,21 @@ class MerchandiseCollection extends Collection
                 $(`#\${shownId} .numbers`)?.html(d);
                 if(d<=0) {
                     document.querySelector(`#\${shownId} .btns`)?.classList.add('hide');
-                    document.querySelector(`#\${shownId} .btn-order`)?.classList.remove('hide');
+                    document.querySelector(`#\${shownId} .btn.order`)?.classList.remove('hide');
                 }
                 else{
-                    document.querySelector(`#\${shownId} .btn-order`)?.classList.add('hide');
+                    document.querySelector(`#\${shownId} .btn.order`)?.classList.add('hide');
                     document.querySelector(`#\${shownId} .btns`)?.classList.remove('hide');
                     if(d > 1){
-                        document.querySelector(`#\${shownId} .btn-decrease`)?.classList.remove('hide');
+                        document.querySelector(`#\${shownId} .btn.decrease`)?.classList.remove('hide');
                     } else {
-                        document.querySelector(`#\${shownId} .btn-decrease`)?.classList.add('hide');
+                        document.querySelector(`#\${shownId} .btn.decrease`)?.classList.add('hide');
                     }
                     if(d < maxCount){
-                        document.querySelector(`#\${shownId} .btn-increase`)?.classList.remove('hide');
+                        document.querySelector(`#\${shownId} .btn.increase`)?.classList.remove('hide');
                     }
                     else {
-                        document.querySelector(`#\${shownId} .btn-increase`)?.classList.add('hide');
+                        document.querySelector(`#\${shownId} .btn.increase`)?.classList.add('hide');
                     }
                 }
             }
