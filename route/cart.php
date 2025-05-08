@@ -2,7 +2,7 @@
 use MiMFa\Library\Router;
 (new Router())
 ->Route("cart/payment")
-    ->Put(fn() => \Res::Put(logic("request/update", \Req::Receive())))
+    ->Put(fn() => \Res::Set(logic("request/update", \Req::Receive())))
     ->Get(
     fn () =>
         view(\_::$Config->DefaultViewName, [
@@ -12,9 +12,9 @@ use MiMFa\Library\Router;
         ])
     )
 ->Route("cart/options")
-    ->Put(fn() => \Res::Put(logic("request/add", \Req::Receive())))
-    ->Patch(fn() => \Res::Put(logic("request/update", \Req::Receive())))
-    ->Delete(fn() => \Res::Put(logic("request/remove", \Req::Receive())))
+    ->Put(fn() => \Res::Set(logic("request/add", \Req::Receive())))
+    ->Patch(fn() => \Res::Set(logic("request/update", \Req::Receive())))
+    ->Delete(fn() => \Res::Set(logic("request/remove", \Req::Receive())))
     ->Get(
     fn () =>
         view(\_::$Config->DefaultViewName, [
@@ -24,9 +24,9 @@ use MiMFa\Library\Router;
         ])
     )
 ->Route("cart(/all)?")
-    ->Put(fn() => \Res::Put(logic("request/add", \Req::Receive())))
-    ->Patch(fn() => \Res::Put(logic("request/update", \Req::Receive())))
-    ->Delete(fn() => \Res::Put(logic("request/remove", \Req::Receive())))
+    ->Put(fn() => \Res::Set(logic("request/add", \Req::Receive())))
+    ->Patch(fn() => \Res::Set(logic("request/update", \Req::Receive())))
+    ->Delete(fn() => \Res::Set(logic("request/remove", \Req::Receive())))
     ->Get(
         fn () =>
             view(\_::$Config->DefaultViewName, [

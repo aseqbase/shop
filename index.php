@@ -18,7 +18,7 @@ $GLOBALS["BASE"] = ".aseq";/* Change it to the base directory if deferents */
     directory, newaseq;// Update directory in the \_::$Sequences
     directory, null;// Remove thw directory from the \_::$Sequences
 */
-$GLOBALS["SEQUENCES_PATCH"] = array();
+$GLOBALS["SEQUENCES_PATCH"] = $SEQUENCES_PATCH??array();
 
 require_once(__DIR__.DIRECTORY_SEPARATOR."initialize.php");
 require_once($GLOBALS["BASE_DIR"]."index.php");

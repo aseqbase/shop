@@ -10,7 +10,7 @@ $module = new Table("Content");
 $module->AllowServerSide = true;
 $module->Updatable = true;
 $module->UpdateAccess = \_::$Config->AdminAccess;
-//\res::end(getMethodName().": ").\Res::Put(\req::Receive());
+//\res::end(getMethodName().": ").\Res::Set(\req::Receive());
 (new MiMFa\Library\Router())
     ->Get(function () use ($module) {
         module("PrePage");
