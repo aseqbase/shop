@@ -1,5 +1,5 @@
 <?php
-logic("request/base");
+compute("request/base");
 if (
     (
         get($data, "RequestId") ||

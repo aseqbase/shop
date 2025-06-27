@@ -199,22 +199,30 @@ class Merchandise extends Content
               }
           ");
      }
-     public function GetTitle($path = null)
+     public function GetTitle($attributes = null)
      {
           return null;
      }
-     public function GetDescription($path = null)
+     public function GetDescription($attributes = null)
      {
+          $p_id = get( $this->Item, 'Id');
+          $p_name = getValid( $this->Item, 'Name') ?? $p_id ?? $this->Title;
+          $nameOrId = $p_id ?? $p_name;
+          if (!$this->CompressPath) {
+               $catDir = \_::$Back->Query->GetContentCategoryRoute( $this->Item);
+               if (isValid($catDir))
+                    $nameOrId = trim($catDir, "/\\") . "/" . ($p_name ?? $p_id);
+          }
           return Html::Rack(
                $this->GetImage() .
                Html::MediumSlot(
                     Html::Division(
-                         ($this->ShowTitle ? Html::ExternalHeading(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $path : null, ['class' => 'heading']) : "") .
-                         $this->GetDetails($path)
+                         ($this->ShowTitle ? Html::ExternalHeading(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->RootRoute . $nameOrId : null, ['class' => 'heading']) : "") .
+                         $this->GetDetails($this->CollectionRoute . $nameOrId)
                     ) .
                     ($this->ShowDescription ? $this->GetExcerpt() : "")
-               ) . $this->GetControls($path),
-               ["class" => "description"]
+               ) . $this->GetControls(),
+               ["class" => "description"], $attributes
           );
      }
      public function GetImage()
@@ -224,33 +232,33 @@ class Merchandise extends Content
           $p_image = getValid($this->Item, 'Image', $this->Image);
           return isValid($p_image) ? Html::MediumSlot(Html::Image(getValid($this->Item, 'Title', $this->Title), $p_image), ["class" => "col-lg-4", "style" => "text-align: center;"]) : "";
      }
-     public function GetButtons($path = null)
+     public function GetButtons()
      {
-          if (!$this->ShowButtons || isEmpty($path))
+          if (!$this->ShowButtons)
                return null;
-          $paths = (!$this->ShowContent && (!$this->AutoExcerpt || !$this->ShowDescription)) ? [$path] : Convert::FromJson(getValid($this->Item, 'Path', $this->Path));
+          $paths = Convert::FromJson(getValid($this->Item, 'Path', $this->Path));
           $p_morebuttontext = __(Convert::FromSwitch($this->ButtonsLabel, get($this->Item, 'Type')));
           return Html::Division(
-               loop($paths, function ($k, $v, $i) use ($p_morebuttontext) {
+               loop($paths, function ($v,$k) use ($p_morebuttontext) {
                     return Html::Button(is_numeric($k) ? $p_morebuttontext : $k, $v, ["class" => "btn outline"]);
                }),
                attributes: ["class" => "buttons md-hide"]
           );
      }
-     public function GetControls($path)
+     public function GetControls()
      {
           module("CartCollection");
           $merchandiseId = $this->Item["MerchandiseId"];
           $shownId = "cc_" . $this->Item["Id"];
-          $output = $this->GetButtons($path);
+          $output = $this->GetButtons();
           if (isValid($this->Item["MerchandiseSupplierId"])) {
                $d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $this->Item["MerchandiseSupplierId"]]);
-               $output .= Html::Division(
+               if(isset($d["Id"])) $output .= Html::Division(
                     Html::Super("Supplier") .
                     Html::Division(
-                         Html::Image($d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
+                         Html::Image($d["Image"]??User::$DefaultImagePath) .
                          Html::Link(
-                              $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown"),
+                              $d["Organization"]??$d["Name"]??"Unknown",
                               \_::$Aseq->UserRoute . $d["Id"]
                          )
                     ),

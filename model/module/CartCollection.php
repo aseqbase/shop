@@ -2,6 +2,9 @@
 namespace MiMFa\Module;
 use MiMFa\Library\Html;
 use MiMFa\Library\Convert;
+use MiMFa\Library\Internal;
+use MiMFa\Library\User;
+
 module("MerchandiseCollection");
 /**
  * To show cart items
@@ -25,11 +28,18 @@ class CartCollection extends MerchandiseCollection
      */
     public $ImageHeight = "var(--size-4)";
 
+    public $ShowBill = true;
+
     /**
      * @var bool
      * @category Parts
      */
     public $ShowAddress = true;
+    /**
+     * @var bool
+     * @category Parts
+     */
+    public $ShowContact = true;
 
     public $ShowItems = true;
 
@@ -38,10 +48,18 @@ class CartCollection extends MerchandiseCollection
     
     public $AddButtonLabel = null;
     public $CartButtonLabel = null;
+    public $EmptyHandler = null;
 
     function __construct()
     {
         parent::__construct();
+        if(is_null($this->EmptyHandler))
+            $this->EmptyHandler = Html::Container([
+                Html::Media("heart-broken", ["style"=>"font-size:20vmin; color: #8888;"]),
+                Html::Center("You haven't selected aAll right lobbynything yet!"),
+                Html::$NewLine,
+                [Html::Button("Add something...", $this->CollectionRoute, ["class"=>"main be fit"])]
+            ], ["class"=>"be align center"]);
     }
 
     public function GetStyle()
@@ -146,7 +164,6 @@ class CartCollection extends MerchandiseCollection
             }
             .{$this->Name} div.item .description{
                 gap: var(--size-0);
-                font-size: var(--size-1);
                 position: relative;
                 overflow-wrap: break-word;
                 flex-flow: wrap;
@@ -156,13 +173,9 @@ class CartCollection extends MerchandiseCollection
             .{$this->Name} div.item .description :is(.excerpt, .full){
                 padding-inline-end: calc(var(--size-0) / 3);
             }
-            .{$this->Name} div.item .address{
-                font-size: var(--size-1);
-                text-align: justify;
-            }
             
             .{$this->Name} div.item .supplier{
-                font-size: var(--size-0);
+                font-size: calc(var(--size-0) * 0.8);
                 display: flex;
                 align-content: center;
                 flex-wrap: nowrap;
@@ -182,6 +195,10 @@ class CartCollection extends MerchandiseCollection
                     align-items: center;
                     justify-content: flex-start;
                     align-content: flex-start;
+            }
+            .{$this->Name} div.item .detail{
+                    font-size: calc(var(--size-0) * 0.8);
+                    opacity: 0.8;
             }
             .{$this->Name} div.item .metadata{
                     font-size: calc(var(--size-0) * 0.8);
@@ -221,10 +238,10 @@ class CartCollection extends MerchandiseCollection
                 padding: calc(var(--size-1) / 3);
             }
 
-            .{$this->Name} .cart {
+            .{$this->Name} .bill {
                 padding: var(--size-1) calc(var(--size-1) / 3);
             }
-            .{$this->Name} .cart .final {
+            .{$this->Name} .bill .final {
                 justify-content: center;
             }
         ");
@@ -232,41 +249,25 @@ class CartCollection extends MerchandiseCollection
 
     public function Get($items = null)
     {
-        $merchandises = 0;
-        $totalCount = 0;
-        $totalCount = 0;
-        $totalPrice = 0;
-        $priceParams = ["Price" => 0];
-        $cartItems = join(PHP_EOL, iterator_to_array((function () use ($items, &$merchandises, &$totalPrice, &$totalCount, &$priceParams) {
+        $bill = $this->ComputeBill($items);
+        $cartItems = join(PHP_EOL, iterator_to_array((function () use ($bill) {
             $i = 0;
-            foreach (Convert::ToItems($items ?? $this->Items) as $k => $item) {
-                $merchandises++;
-                if ($meta = getValid($item, 'MetaData', null)) {
+            foreach ($bill["Items"] as $item) {
+                if ($meta = getValid($item["Content"], 'MetaData', null)) {
                     $meta = Convert::FromJson($meta);
                     swap($this, $meta);
                 }
+               
+                $r_description = getValid($item["Request"], 'Description', $this->DefaultDescription);
+                $r_contact = getValid($item["Request"], 'Contact', \_::$Back->User->GetValue("Contact"));
 
-                $r_id = get($item, 'RequestId');
-                $r_count = get($item, 'RequestCount');
-                $r_description = getValid($item, 'RequestDescription', $this->DefaultDescription);
-                $r_address = getValid($item, 'RequestAddress', \_::$Back->User->GetValue("Address"));
+                $m_discount = get($item["Merchandise"], 'Discount');
+                $m_tprice = get($item["Request"], 'Price');//Total Price
+                $m_price = get($item["Merchandise"], 'Price');//Price
 
-                $m_id = get($item, 'MerchandiseId');
-                $m_count = get($item, 'MerchandiseCount');
-                $r_count = min($r_count, $m_count);
-                $m_discount = get($item, 'MerchandiseDiscount');
-                $m_priceunit = get($item, 'MerchandisePriceUnit');//Unit Price
-                $m_tprice = $r_count * (\_::$Config->StandardPrice)(get($item, 'MerchandisePrice'), $m_priceunit);//Total Price
-                $m_price = $m_tprice - $m_discount *  $m_tprice /100;
-                $m_metadata = Convert::FromJson(get($item, 'MerchandiseMetaData'));
-
-                $c_id = get($item, 'Id');
-                $c_image = getValid($item, 'Image', $this->DefaultImage);
-                $c_title = getValid($item, 'Title', $this->DefaultTitle);
-
-                $priceParams['Price'] += $m_tprice;
-                $totalPrice += (\_::$Config->ComputePrice)($m_tprice, $m_discount, $m_metadata, $m_id, $priceParams);
-                $totalCount += $r_count;
+                $c_id = get($item["Content"], 'Id');
+                $c_image = getValid($item["Content"], 'Image', $this->DefaultImage);
+                $c_title = getValid($item["Content"], 'Title', $this->DefaultTitle);
 
                 $uid = "cc_$c_id";
                 $meta = "";
@@ -277,7 +278,7 @@ class CartCollection extends MerchandiseCollection
                                 if (isValid($val))
                                     $meta .= Html::Span(Convert::ToShownDateTimeString($val), ["class" => 'createtime']);
                             },
-                            $item,
+                            $item["Content"],
                             'CreateTime'
                         );
                     if ($this->ShowUpdateTime)
@@ -286,21 +287,20 @@ class CartCollection extends MerchandiseCollection
                                 if (isValid($val))
                                     $meta .= Html::Span(Convert::ToShownDateTimeString($val), ["class" => 'updatetime']);
                             },
-                            $item,
+                            $item["Content"],
                             'UpdateTime'
                         );
                 }
 
-                if ($i % $this->MaximumColumns === 0)
-                    yield "<div class='row'>";
+                if ($i % $this->MaximumColumns === 0) yield "<div class='row'>";
                 yield "<div id='$uid' class='item col col-lg'" . ($this->Animation ? " data-aos-delay='" . ($i % $this->MaximumColumns * \_::$Front->AnimationSpeed) . "' data-aos='{$this->Animation}'" : "") . ">";
 
                 yield Html::Rack(
                     Html::MediumSlot(
-                        ($this->ShowImage ? Html::Image($c_title, $c_image, \MiMFa\Library\User::$DefaultImagePath, ["class" => "item-image"]) : "") .
+                        ($this->ShowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
                         Html::Division(
                             ($this->ShowTitle ? Html::SubHeading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
-                            ($this->ShowSupplier ? $this->GetSupplier($item) : "")
+                            ($this->ShowSupplier ? $this->GetSupplier($item["Content"]) : "")
                         ), ["class" => 'item-title']) .
                     Html::MediumSlot(
                         Html::Division($m_discount?
@@ -312,43 +312,117 @@ class CartCollection extends MerchandiseCollection
                     )
                 );
                 if ($this->ShowDescription && $r_description)
-                    yield Html::Division(Html::Convert($this->AutoExcerpt?Convert::ToExcerpt($r_description,0,$this->ExcerptLength,$this->ExcerptSign):$r_description), ["class" => 'description']);
-                if ($this->ShowAddress && $r_address)
-                    yield Html::Division([Html::Icon("map-marker"), $r_address], ["class" => 'address']);
+                    yield Html::Division(Html::Convert($this->AutoExcerpt?Convert::ToExcerpt($r_description,0,$this->ExcerptLength,$this->ExcerptSign):$r_description), ["class" => 'detail description']);
+                if ($this->ShowContact && $r_contact)
+                    yield Html::Division([Html::Icon("phone"), $r_contact], ["class" => 'detail contact']);
                 yield Html::Rack(
                         (isValid($meta)?Html::MediumSlot($meta, ["class" => 'col-md-8 metadata']):"").
-                    ($this->ShowButtons?Html::MediumSlot($this->GetButtons($uid, $r_count, $m_count, $m_id??0, $r_id??0), ["class" => 'col-md controls']):"")
+                    ($this->ShowButtons?Html::MediumSlot($this->GetButtons($uid, $item["Content"]), ["class" => 'col-md controls']):"")
                 , ["class"=>"footer"]);
                 yield "</div>";
-                if (++$i % $this->MaximumColumns === 0)
-                    yield "</div>";
+                if (++$i % $this->MaximumColumns === 0) yield "</div>";
             }
-            if ($i % $this->MaximumColumns !== 0)
-                yield "</div>";
+            if ($i % $this->MaximumColumns !== 0) yield "</div>";
             yield ($this->MoreButtonLabel?Html::$NewLine.Html::Center(Html::Button($this->MoreButtonLabel, $this->CollectionRoute)):"");
         })()));
 
-        return Html::Rack(
-            Html::LargeSlot($this->GetCart($totalPrice, $totalCount, $priceParams, $merchandises), ["class" => "col-lg-4"]) .
-            Html::LargeSlot(
+        return !$bill["Variety"]? __($this->EmptyHandler) : Html::Rack(
+            ($this->ShowBill?Html::Aside($this->GetBill( $bill), ["class" => "col-lg col-lg-4"]):"") .
+            Html::Section(
                 $this->GetTitle().
                 $this->GetDescription().
                 ($this->ShowItems?$cartItems:"").
                 $this->GetContent()
+                , ["class" => "col-lg"]
             )
         );
     }
-    public function GetCart($totalPrice, $totalCount, $priceParams = [], $merchandises = null)
+
+    public function ComputeBill($items = null)
     {
+        $merchandises = 0;
+        $totalCount = 0;
+        $totalPrice = 0;
+        $priceParams = ["Price" => 0];
+        $requests = [];
+        foreach (Convert::ToItems($items ?? $this->Items) as $k => $item) {
+            $merchandises++;
+            $r_count = get($item, 'RequestCount');
+
+            $m_id = get($item, 'MerchandiseId');
+            $m_digital = get($item, 'MerchandiseDigital')??\_::$Config->DigitalStore;
+            $m_count = get($item, 'MerchandiseCount');
+            $m_count = min(get($item, 'MerchandiseLimit')??$m_count, $m_count);
+            $r_count = min($r_count, $m_count);
+            $m_discount = get($item, 'MerchandiseDiscount');
+            $m_priceunit = get($item, 'MerchandisePriceUnit');//Unit Price
+            $m_tprice = $r_count * (\_::$Config->StandardPrice)(get($item, 'MerchandisePrice'), $m_priceunit);//Total Price
+            $m_price = $m_tprice - $m_discount *  $m_tprice /100;
+            $m_metadata = Convert::FromJson(get($item, 'MerchandiseMetaData'));
+
+            $priceParams['Price'] += $m_tprice;
+            $totalPrice += (\_::$Config->ComputePrice)($m_tprice, $m_discount, $m_metadata, $m_id, $priceParams);
+            $totalCount += $r_count;
+
+            $requests[] = [
+                "Request"=>[
+                    "Id"=>get($item, 'RequestId'),
+                    "Count"=>$r_count,
+                    "Price"=>$m_tprice,
+                    "Subject"=>get($item, 'RequestSubject'),
+                    "Description"=>get($item, 'RequestDescription'),
+                    "Contact"=>get($item, 'RequestContact'),
+                    "Address"=>get($item, 'RequestAddress')
+                ],
+                "Merchandise"=>[
+                    "Id"=>$m_id,
+                    "Count"=>$m_count,
+                    "Discount"=>$m_discount,
+                    "Price"=>$m_price,
+                    "Digital"=>$m_digital,
+                    "MetaData"=>$m_metadata
+                ],
+                "Content"=>$item
+            ];
+        }
+        return [
+            "Price"=>$totalPrice,
+            "Count"=>$totalCount,
+            "Variety"=>$merchandises,
+            "Params"=>$priceParams,
+            "Items"=>$requests
+        ];
+    }
+    public function GetBill($bill=null)
+    {
+        $bill = $bill??$this->ComputeBill();
         return Html::Frame([
-            [Html::Label("Numbers:"), ($merchandises ? $merchandises . \_::$Config->MerchandiseUnit . " (" . Html::Span($totalCount . \_::$Config->CountUnit) . ")" : Html::Span($totalCount . \_::$Config->CountUnit))],
+            [...($bill["Variety"] ? [$bill["Variety"] . \_::$Config->MerchandiseUnit, Html::Span($bill["Count"] . \_::$Config->CountUnit)] : ["", Html::Span($bill["Count"] . \_::$Config->CountUnit)])],
             Html::$HorizontalBreak,
-            ...loop($priceParams, fn($k, $v) => [Html::Small($k), Html::Small($v . \_::$Config->PriceUnit)]),
+            ...loop($bill["Params"], fn($v,$k) => [Html::Small($k), Html::Small($v . \_::$Config->PriceUnit)]),
             Html::$HorizontalBreak,
-            [Html::Label("Total:"), Html::Bold($totalPrice . \_::$Config->PriceUnit)],
+            [Html::Label("Total:"), Html::Bold($bill["Price"] . \_::$Config->PriceUnit)],
             Html::$NewLine,
             $this->NextButton.$this->BackButton
-        ], ["class" => "cart be sticky"]);
+        ], ["class" => "bill be sticky"]);
+    }
+    public function GetSupplier($item){
+        $m_digital = get($item, 'MerchandiseDigital')??\_::$Config->DigitalStore;
+        $sup = \_::$Info->Name;
+        $del = "";
+        if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
+        {
+            $sup = $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown");
+            $del = Html::Image($d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
+                    Html::Link(
+                        $sup,
+                        \_::$Aseq->UserRoute . $d["Id"]
+                    );
+        }else $del = Html::Icon(\_::$Info->LogoPath);
+        $del .= $this->DeliveryLabel.Html::Icon($m_digital?"envelope":"map-marker").Html::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
+        $r_address = get($item, 'RequestAddress');
+        if ($this->ShowAddress && $r_address) $del .= $r_address;
+        return Html::Division($del, ["class" => "supplier"]);
     }
     
     public function GetScript(){
@@ -378,7 +452,7 @@ class CartCollection extends MerchandiseCollection
                         document.querySelector(`#\${shownId} .btn.increase`)?.classList.add('hide');
                     }
                 }
-                if(!err) load(location.pathname+'#'+shownId);
+                if(!err) reload(location.pathname+'#'+shownId);
             }
         ");
     }

@@ -3,8 +3,8 @@ $ctable = table("Content");
 $mtable = table("Merchandise");
 $rtable = table("Request");
 route("content", [
-    "Logic" => [
-        "LogicName" => "content/merchandise",
+    "Compute" => [
+        "ComputeName" => "content/merchandise",
         "ContentTable" => $ctable,
         "MerchandiseTable" => $mtable,
         "RequestTable" => $rtable,

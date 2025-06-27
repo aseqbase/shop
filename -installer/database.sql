@@ -40,10 +40,11 @@ CREATE TABLE IF NOT EXISTS `aseq_Request` (
     `MerchandiseId` int(11) DEFAULT NULL COMMENT 'Requested item id',
     `UserId` int(11) DEFAULT NULL COMMENT 'Requester user`s id',
     `UserCode` TINYTEXT DEFAULT NULL COMMENT 'Request user Ip or Unique Code',
-    `Collection` TINYTEXT DEFAULT NULL COMMENT 'Request collection name or id, It will be null when the request is not in progress yet',
-    `Like` BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Favorited request',
-    `Request` BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Requested',
+    `Collection` TINYTEXT DEFAULT NULL COMMENT 'Request collection name or payments relation, It will be null when the request is not in progress yet',
+    `Like` boolean NOT NULL DEFAULT FALSE COMMENT 'Favorited request',
+    `Request` boolean NOT NULL DEFAULT FALSE COMMENT 'Requested',
     `Count` int(11) NOT NULL DEFAULT 0 COMMENT 'Numbers of request',
+    `Price` float(11) NOT NULL DEFAULT 0 COMMENT 'Bought price',
     `Contact` TINYTEXT DEFAULT NULL COMMENT 'Request delivery contact',
     `Address` text DEFAULT NULL COMMENT 'Request delivery address',
     `Subject` varchar(256) DEFAULT NULL COMMENT 'Request subject',
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `aseq_Request` (
     `UpdateTime` datetime NOT NULL DEFAULT current_timestamp(),
     `MetaData` longtext DEFAULT NULL,
     PRIMARY KEY (`Id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1048 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
+) ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -64,20 +65,27 @@ CREATE TABLE IF NOT EXISTS `aseq_Request` (
 
 CREATE TABLE IF NOT EXISTS `aseq_Response` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
-    `RequestId` int(11) DEFAULT NULL COMMENT 'Related request id',
+    `MerchandiseId` int(11) DEFAULT NULL COMMENT 'Requested item id',
     `Collection` TINYTEXT DEFAULT NULL COMMENT 'Related request collection name or id',
+    `UserId` int(11) DEFAULT NULL COMMENT 'Requester user`s id',
+    `UserCode` TINYTEXT DEFAULT NULL COMMENT 'Request user Ip or Unique Code',
+    `Count` int(11) NOT NULL DEFAULT 0 COMMENT 'Numbers in this response',
+    `Price` float(11) NOT NULL DEFAULT 0 COMMENT 'Bought price',
+    `Contact` TINYTEXT DEFAULT NULL COMMENT 'Request delivery contact',
+    `Address` text DEFAULT NULL COMMENT 'Request delivery address',
+    `Subject` varchar(256) DEFAULT NULL COMMENT 'Request subject',
+    `Description` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Request delivery description',
+    `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Private content',
+    `Attach` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Request attachments',
+    `Priority` int(11) NOT NULL DEFAULT 0 COMMENT 'Request Periority',
     `AuthorId` int(11) DEFAULT NULL COMMENT 'Responser user`s id',
     `EditorId` int(11) DEFAULT NULL COMMENT 'Editor user`s id',
-    `Count` int(11) NOT NULL DEFAULT 0 COMMENT 'Numbers in this response',
     `Status` int(3) NOT NULL DEFAULT 0 COMMENT 'Response status (for example -5 for Rejected -4 for Canceled -3 for Defected -2 for Unavailable -1 for Unaccepted 0 for Unchecked 1 for Accepted 2 for Prepared 3 for Sent 4 for Received 5 for Delivered)',
-    `Subject` varchar(256) DEFAULT NULL COMMENT 'Response subject',
-    `Description` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Response status description',
-    `Attach` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Response attachments',
     `CreateTime` datetime NOT NULL DEFAULT current_timestamp(),
     `UpdateTime` datetime NOT NULL DEFAULT current_timestamp(),
     `MetaData` longtext DEFAULT NULL,
     PRIMARY KEY (`Id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1048 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
+) ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -91,18 +99,19 @@ CREATE TABLE IF NOT EXISTS `aseq_Merchandise` (
     `SupplierId` int(11) DEFAULT NULL COMMENT 'Related owner or supplier user`s id',
     `AuthorId` int(11) DEFAULT NULL COMMENT 'Author user`s id',
     `EditorId` int(11) DEFAULT NULL COMMENT 'Editor user`s id',
-    `Digital` BOOLEAN DEFAULT NULL COMMENT 'The item is digital or physical',
+    `Digital` boolean DEFAULT NULL COMMENT 'The item is digital or physical',
     `Count` float(11) NOT NULL DEFAULT 0 COMMENT 'Numbers of exists items',
     `CountUnit` tinytext DEFAULT NULL COMMENT 'The unit of counting',
     `Price` float(11) NOT NULL DEFAULT 0 COMMENT 'Sell price',
     `PriceUnit` tinytext DEFAULT NULL COMMENT 'The unit of prices',
+    `Limit` float(11) NOT NULL DEFAULT NULL COMMENT 'Numbers of available items in each request',
     `Discount` float(11) NOT NULL DEFAULT 0 COMMENT 'Discount of price',
     `Total` float(11) NOT NULL DEFAULT 0 COMMENT 'Total of sold items',
     `Volume` float(11) NOT NULL DEFAULT 0 COMMENT 'Total price of sold items',
     `Property` longtext DEFAULT NULL,
     `PrivateGenerator` text DEFAULT NULL COMMENT 'Private content generator path',
     `PrivateTitle` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Private content title',
-    `PrivateContent` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Private content',
+    `PrivateMessage` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Private content',
     `PrivateAttach` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Private content attachments',
     `Access` int(11) DEFAULT 0,
     `Status` tinytext DEFAULT NULL COMMENT '-1 for Buy 0 for Unpublished and 1 for Sale Merchandise',
@@ -110,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `aseq_Merchandise` (
     `UpdateTime` datetime NOT NULL DEFAULT current_timestamp(),
     `MetaData` longtext DEFAULT NULL,
     PRIMARY KEY (`Id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1048 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
+) ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -127,7 +136,37 @@ CREATE TABLE IF NOT EXISTS `aseq_History` (
     `UpdateTime` datetime NOT NULL DEFAULT current_timestamp(),
     `MetaData` longtext DEFAULT NULL,
     PRIMARY KEY (`Id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1048 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
+) ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `aseq_Payment`
+--
+
+CREATE TABLE IF NOT EXISTS `aseq_Payment` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Relation` VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `Transaction` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `Verify` boolean DEFAULT NULL COMMENT 'The transaction is verified',
+  `Source` tinytext DEFAULT NULL,
+  `SourceEmail` tinytext DEFAULT NULL,
+  `SourceContent` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `SourcePath` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `Value` float DEFAULT NULL,
+  `Unit` tinytext DEFAULT NULL,
+  `Network` tinytext DEFAULT NULL,
+  `Identifier` tinytext DEFAULT NULL,
+  `Destination` tinytext DEFAULT NULL,
+  `DestinationEmail` tinytext DEFAULT NULL,
+  `DestinationContent` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `DestinationPath` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `Others` text DEFAULT NULL,
+  `CreateTime` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdateTime` datetime NOT NULL DEFAULT current_timestamp(),
+  `MetaData` longtext DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 COMMIT;
 

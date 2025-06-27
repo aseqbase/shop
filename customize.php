@@ -21,10 +21,21 @@
         }
     return $discount ? $price - $discount * $price / 100 : $price;
 };
-\_::$Config->StandardPrice = fn($price = 0, $unit = null) => $price;
+\_::$Config->StandardPrice = function($price = 0, $unit = null){
+    switch (trim(strtolower($unit??""))) {
+        case 'usd':
+        case 'usdt':
+        case '$':
+            return $price;
+        default:
+            return $price;
+    }
+};
 $menus = array(
-    array("Name" => "CART", "Path" => "/cart", "Image" => "shopping-cart"),
     array("Name" => "MERCHANDISES", "Path" => "/items", "Image" => "box"),
+    array("Name" => "CART", "Path" => "/cart", "Image" => "shopping-cart"),
+    array("Name" => "WISHES", "Path" => "/cart/wish", "Image" => "heart"),
+    array("Name" => "REQUESTS", "Path" => "/cart/all", "Image" => "list"),
     array(
         "Name" => "CONTACTS",
         "Path" => "/contact",

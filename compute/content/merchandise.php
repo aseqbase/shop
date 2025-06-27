@@ -1,5 +1,5 @@
 <?php
-logic("request/base");
+compute("request/base");
 $ctable = grab($data, "Table")??grab($data, "ContentTable");
 $ctable = $ctable instanceof MiMFa\Library\DataTable?$ctable:table($ctable ?? "Content");
 $rtable = grab($data, "RequestTable");
@@ -10,7 +10,7 @@ $mtable = $mtable instanceof MiMFa\Library\DataTable?$mtable:table($mtable ?? "M
 $condition = grab($data, "Condition");
 $filter = grab($data, "Filter")??[];
 $columns = grab($filter, "Columns");
-return logic("content/get", [
+return compute("content/get", [
     "Filter"=>[
         "Columns"=>$columns??
             "$ctable->Name.*,
@@ -18,7 +18,7 @@ return logic("content/get", [
             $mtable->Name.Id AS 'MerchandiseId', $mtable->Name.SupplierId AS 'MerchandiseSupplierId',
             $mtable->Name.Price AS 'MerchandisePrice', $mtable->Name.PriceUnit AS 'MerchandisePriceUnit',
             $mtable->Name.Count AS 'MerchandiseCount', $mtable->Name.CountUnit AS 'MerchandiseCountUnit',
-            $mtable->Name.Digital AS 'MerchandiseDigital',
+            $mtable->Name.Limit AS 'MerchandiseLimit', $mtable->Name.Digital AS 'MerchandiseDigital',
             $mtable->Name.UpdateTime AS 'MerchandiseUpdateTime', $mtable->Name.CreateTime AS 'MerchandiseCreateTime',
             $mtable->Name.Discount AS 'MerchandiseDiscount', $mtable->Name.MetaData AS 'MerchandiseMetaData'",
         ...$filter

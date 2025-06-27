@@ -417,10 +417,7 @@ FodyWeavers.xsd
 /erp
 /vendor
 /shop
-/.vs
-/.vscode
-/.git
-/.package
+/.*
 /MiMFa aseqbase.sln
 /global.php
 /global.php
