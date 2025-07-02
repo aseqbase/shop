@@ -3,10 +3,7 @@ namespace MiMFa\Module;
 use MiMFa\Library\Html;
 use MiMFa\Library\Convert;
 use MiMFa\Library\Contact;
-use MiMFa\Library\Cryptograph;
 use MiMFa\Library\Script;
-use MiMFa\Library\SpecialCrypt;
-use MiMFa\Library\Style;
 module("Form");
 module("QRCodeBox");
 module("QRCodeScanner");
@@ -377,7 +374,7 @@ class PaymentForm extends Form
 							"Others" => $this->Transaction->Others
 						])
 					) {
-						$tr = table("Payment")->Last();
+						$tr = table("Payment")->SelectLastRow();
 						$this->Transaction->Id = $tr["Id"];
 						$this->Transaction->DateTime = Convert::ToDateTime($tr["CreateDate"]);
 						if(!compute("request/update-all", ["Collection" => $this->Transaction->Relation]))

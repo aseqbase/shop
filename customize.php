@@ -47,6 +47,8 @@ $menus = array(
         )
     )
 );
+
+\_::$Info->$Payment = \_::$Info->$Payment??null;
 \_::$Info->MainMenus = [...\_::$Info->MainMenus,...$menus];
 \_::$Info->SideMenus = [...\_::$Info->SideMenus,...$menus];
 

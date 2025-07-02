@@ -403,23 +403,15 @@ FodyWeavers.xsd
 *.sln.iml
 
 # aseqbase
-/single
-/sequence
-/administrator
+~*
+\.*
 /private
 /public
 /test
 /tmp
 /temp
-/ms
-/ums
-/gms
-/erp
 /vendor
-/shop
-/.*
 /MiMFa aseqbase.sln
-/global.php
 /global.php
 /Configuration.php
 /Information.php
