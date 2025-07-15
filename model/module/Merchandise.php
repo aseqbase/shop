@@ -264,7 +264,7 @@ class Merchandise extends Content
                     ),
                     ["class" => "supplier"]
                );
-               $output .= Html::$HorizontalBreak;
+               $output .= Html::$BreakLine;
           }
           $discount = $this->Item["MerchandiseDiscount"] ?? 0;
           $priceUnit = $this->Item["MerchandisePriceUnit"] ?? \_::$Config->PriceUnit;

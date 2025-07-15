@@ -57,7 +57,7 @@ class CartCollection extends MerchandiseCollection
             $this->EmptyHandler = Html::Container([
                 Html::Media("heart-broken", ["style"=>"font-size:20vmin; color: #8888;"]),
                 Html::Center("You haven't selected aAll right lobbynything yet!"),
-                Html::$NewLine,
+                Html::$Break,
                 [Html::Button("Add something...", $this->CollectionRoute, ["class"=>"main be fit"])]
             ], ["class"=>"be align center"]);
     }
@@ -323,7 +323,7 @@ class CartCollection extends MerchandiseCollection
                 if (++$i % $this->MaximumColumns === 0) yield "</div>";
             }
             if ($i % $this->MaximumColumns !== 0) yield "</div>";
-            yield ($this->MoreButtonLabel?Html::$NewLine.Html::Center(Html::Button($this->MoreButtonLabel, $this->CollectionRoute)):"");
+            yield ($this->MoreButtonLabel?Html::$Break.Html::Center(Html::Button($this->MoreButtonLabel, $this->CollectionRoute)):"");
         })()));
 
         return !$bill["Variety"]? __($this->EmptyHandler) : Html::Rack(
@@ -398,11 +398,11 @@ class CartCollection extends MerchandiseCollection
         $bill = $bill??$this->ComputeBill();
         return Html::Frame([
             [...($bill["Variety"] ? [$bill["Variety"] . \_::$Config->MerchandiseUnit, Html::Span($bill["Count"] . \_::$Config->CountUnit)] : ["", Html::Span($bill["Count"] . \_::$Config->CountUnit)])],
-            Html::$HorizontalBreak,
+            Html::$BreakLine,
             ...loop($bill["Params"], fn($v,$k) => [Html::Small($k), Html::Small($v . \_::$Config->PriceUnit)]),
-            Html::$HorizontalBreak,
+            Html::$BreakLine,
             [Html::Label("Total:"), Html::Bold($bill["Price"] . \_::$Config->PriceUnit)],
-            Html::$NewLine,
+            Html::$Break,
             $this->NextButton.$this->BackButton
         ], ["class" => "bill be sticky"]);
     }

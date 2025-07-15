@@ -16,7 +16,6 @@ class QRCodeScanner extends Module{
 	public $CameraIndex = 0;
 	/**
 	 * The target JS function name
-	 * @string
 	 */
 	public $TargetScriptFunction = null;
 	public $TargetId = null;
@@ -55,8 +54,8 @@ class QRCodeScanner extends Module{
 		return "
 			document.querySelector('.{$this->Name}').style.display = null;
 			try{
-				if(!Instascan.Scanner) Html.script.load(null, '" . Local::OptimizeUrl(\_::$Address->ScriptRoute . "Instascan.js") . "');
-			}catch{Html.script.load(null, '" . Local::OptimizeUrl(\_::$Address->ScriptRoute . "Instascan.js") . "');}
+				if(!Instascan.Scanner) Html.script.load(null, '" . asset(\_::$Address->ScriptDirectory, "Instascan.js", optimize: true) . "');
+			}catch{Html.script.load(null, '" . asset(\_::$Address->ScriptDirectory, "Instascan.js", optimize: true) . "');}
 			let scanner = new Instascan.Scanner({ video: document.querySelector('.{$this->Name}') });
 			scanner.addListener('scan', function (content) {
 				".($this->TargetScriptFunction?"{$this->TargetScriptFunction}(content);":"")."

@@ -164,9 +164,9 @@ class PaymentForm extends Form
 				lock: !is_null($trans->Transaction)
 			)
 		)->ToString();
-		yield Html::$NewLine;
+		yield Html::$Break;
 		yield Html::Break("More", "document.getElementById('$id').style.display = document.getElementById('$id').computedStyleMap().get('display') == 'none'?'inherit':'none';");
-		yield Html::$NewLine;
+		yield Html::$Break;
 		yield Html::Division(
 			Html::Rack(
 				Html::SmallSlot(
@@ -261,7 +261,7 @@ class PaymentForm extends Form
 		else $counter["onclick"] = $counter->Action;
 		$doc = Html::Document(__($this->SuccessContent) . $this->Transaction->ToHtml());
 		$res = [Html::Success($msg)];
-		$res[] = Html::$NewLine;
+		$res[] = Html::$Break;
 		$res[] = Html::Success("Your transaction recorded successfully", $attr);
 		if (isValid($this->Transaction->DestinationEmail))
 			if (Contact::SendHtmlEmail(\_::$Info->SenderEmail, $this->Transaction->DestinationEmail, __($this->SuccessSubject, styling: false) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->SourceEmail, $this->Transaction->DestinationEmail == \_::$Info->ReceiverEmail ? null : \_::$Info->ReceiverEmail))
@@ -273,7 +273,7 @@ class PaymentForm extends Form
 				$res[] = Html::Success("A notification to '{$this->Transaction->SourceEmail}' has been sent!", $attr);
 			else
 				$res[] = Html::Warning("Could not send a notification to '{$this->Transaction->SourceEmail}'!", $attr);
-		return Html::Center($this->Transaction->ToHtml() . $counter->ToString() . Html::$NewLine . join(Html::$NewLine,$res), ...$attr);
+		return Html::Center($this->Transaction->ToHtml() . $counter->ToString() . Html::$Break . join(Html::$Break,$res), ...$attr);
 	}
 	public function GetError($msg = null, ...$attr)
 	{
@@ -286,7 +286,7 @@ class PaymentForm extends Form
         if (!isScript($counter->Action) && isUrl($counter->Action))
 			$counter["onclick"] = "load(".Script::Convert($counter->Action).")";
 		else $counter["onclick"] = $counter->Action;
-		return Html::Center(parent::GetError($msg, ...$attr). Html::$NewLine . $counter->ToString());
+		return Html::Center(parent::GetError($msg, ...$attr). Html::$Break . $counter->ToString());
 	}
 
 	public function Put()

@@ -13,7 +13,7 @@ compute("request/base");
 if ($pid = get($data, "PaymentId")) {
     $collection = table("Payment")->SelectValue("Relation", "Verify IS TRUE AND Id=:Id", [":Id" => $pid]);
     if (isEmpty($collection)) {
-        \Res::Warning("Your order will be shipped to you once your transaction is confirmed!" . Html::$NewLine . "This may take up to 24 hours.");
+        \Res::Warning("Your order will be shipped to you once your transaction is confirmed!" . Html::$Break . "This may take up to 24 hours.");
         return false;
     }
     $rows = table("Request")->As("R")->Join(table("Merchandise")->As("M"))
@@ -46,7 +46,7 @@ if ($pid = get($data, "PaymentId")) {
                 $result[] = Html::Items(Convert::FromJson($res));
             if ($res = get($row, "PrivateGenerator")) {
                 $result[] = !isUrl($res) ? (isScript($res) ? eval ($res) : $res) : \Res::SendPost(getFullUrl($res), $row);
-                $result[] = Html::$HorizontalBreak;
+                $result[] = Html::$BreakLine;
             }
         } while ($res && --$c > 0);
         // Checkout

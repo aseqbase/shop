@@ -30,7 +30,7 @@ return compute("content/all", [
     ".\_::$Back->DataBase->ConditionNormalization([
         ...($condition?[$condition]:[]),
         "$mtable->Name.Count > 0",
-        \_::$Back->User->GetAccessCondition(tableName:$mtable->Name)
+        \_::$Back->GetAccessCondition(tableName:$mtable->Name)
     ]),
     "Table"=>$ctable,
     ...$data
