@@ -1,13 +1,13 @@
 <?php
 use MiMFa\Library\Router;
 (new Router())
-->Route("cart/payment(?!/)")
+->On("cart/payment(?!/)")
     ->Put(fn() => \Res::Set(compute("request/update", \Req::Receive())))
     ->Get(
     fn () =>
         view(\_::$Config->DefaultViewName, ["Name" => "cart/payment"])
     )
-->Route("cart/options(?!/)")
+->On("cart/options(?!/)")
     ->Put(function() {
         if(!auth(\_::$Config->UserAccess)) return \Res::Error("You don't have enough access!");
         $received = \Req::ReceivePut();
@@ -50,19 +50,19 @@ use MiMFa\Library\Router;
     fn () =>
         view(\_::$Config->DefaultViewName, ["Name" => "cart/options"])
     )
-->Route("cart/all(?!/)")
+->On("cart/all(?!/)")
     ->Get(
         fn () =>
             view(\_::$Config->DefaultViewName, ["Name" => "cart/all"])
     )
-->Route("cart/wish(?!/)")
+->On("cart/wish(?!/)")
     ->Put(fn() => \Res::Set(compute("request/add-wish", \Req::Receive())))
     ->Delete(fn() => \Res::Set(compute("request/remove-wish", \Req::Receive())))
     ->Get(
         fn () =>
             view(\_::$Config->DefaultViewName, ["Name" => "cart/wish"])
     )
-->Route("(cart|(cart/current))(?!/)")
+->On("(cart|(cart/current))(?!/)")
     ->Put(fn() => \Res::Set(compute("request/add", \Req::Receive())))
     ->Patch(fn() => \Res::Set(compute("request/update", \Req::Receive())))
     ->Delete(fn() => \Res::Set(compute("request/remove", \Req::Receive())))
@@ -70,7 +70,7 @@ use MiMFa\Library\Router;
         fn () =>
             view(\_::$Config->DefaultViewName, ["Name" => "cart/current"])
     )
-->Route("cart/.*")
+->On("cart/.*")
     ->Get(
         fn () =>
             view(\_::$Config->DefaultViewName, ["Name" => \Req::$Direction,])

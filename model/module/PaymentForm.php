@@ -65,7 +65,7 @@ class PaymentForm extends Form
 			$data = Convert::FromJson(decrypt(array_key_first($data)));
 
 		if (count($data) > 0)
-			$this->Transaction = find($transactions, fn($v) => $v->Unit == get($data, "Unit")) ??
+			$this->Transaction = seek($transactions, fn($v) => $v->Unit == get($data, "Unit")) ??
 				new Transaction(
 					description: get($data, "Description"),
 					path: get($data, "DestinationPath"),

@@ -61,7 +61,7 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
             }
         return \Res::Error(Html::Icon("close"));
     })
-    ->if(\Req::Receive("ContentId"))->On($module->ExclusiveMethod, function () use ($module) {
+    ->if(\Req::Receive("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
         $module->Set("Merchandise");
         $access = auth(\_::$Config->AdminAccess);
         $users = table("User")->SelectPairs("Id", "Name");

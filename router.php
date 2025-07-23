@@ -1,15 +1,15 @@
 <?php
 // To unset the default router sat at the bottom layers
-\_::$Back->Router->Route->Reset();
+\_::$Back->Router->On()->Reset();
 
 /**
  * Use your routers by below formats
- * \_::$Back->Router->Route("A Part Of Path?")->Default("Route Name");
+ * \_::$Back->Router->On("A Part Of Path?")->Default("Route Name");
  */
-\_::$Back->Router->Route("cart")->Default("cart");
-\_::$Back->Router->Route("(item|merchandise)s")->Default("merchandises");
-\_::$Back->Router->Route("item|merchandise")->Default("merchandise");
+\_::$Back->Router->On("cart")->Default("cart");
+\_::$Back->Router->On("(item|merchandise)s")->Default("merchandises");
+\_::$Back->Router->On("item|merchandise")->Default("merchandise");
 
 // To route other requests to the DefaultRouteName
-\_::$Back->Router->Route->Default(\_::$Config->DefaultRouteName);
+\_::$Back->Router->On()->Default(\_::$Config->DefaultRouteName);
 ?>

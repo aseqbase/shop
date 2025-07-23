@@ -22,7 +22,12 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "start": "php -S localhost:8000 & net start MySQL & php index.php"
+        "start": [
+            "Composer\\Config::disableProcessTimeout",
+            "php -S localhost:8000", 
+            "net start MySQL",
+            "php index.php"
+        ]
     },
     "autoload": {
         "psr-4": {
