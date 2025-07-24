@@ -21,17 +21,27 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "require": {
+        "composer/installers": "^1.12"
+    },
     "scripts": {
         "start": [
             "Composer\\Config::disableProcessTimeout",
             "php -S localhost:8000", 
             "net start MySQL",
             "php index.php"
+        ],
+        "post-install-cmd": [
+            "MiMFa\\Installer::Install"
+        ],
+        "post-update-cmd": [
+            "MiMFa\\Installer::Update"
         ]
     },
     "autoload": {
+        "files": [ "-installer/Installer.php" ],
         "psr-4": {
-            "\\": "../"
+            "MiMFa\\": ["model/","-installer/", "../model/","../-installer/"]
         }
     },
     "extra": {
@@ -46,6 +56,11 @@
             "route/": ["type:route"],
             "compute/": ["type:compute"],
             "asset/": ["type:asset"]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
         }
     }
 }

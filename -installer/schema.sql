@@ -2,7 +2,7 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
+-- Host: %%DATABASE%%:3306
 -- Generation Time: Jan 07, 2025 at 03:39 PM
 -- Server version: 10.5.27-MariaDB
 -- PHP Version: 8.3.14
@@ -23,19 +23,19 @@ SET time_zone = "+00:00";
 ;
 
 --
--- Database: `localhost`
+-- Database: `%%DATABASE%%`
 --
-CREATE DATABASE IF NOT EXISTS `localhost` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `%%DATABASE%%` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE `localhost`;
+USE `%%DATABASE%%`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aseq_Request`
+-- Table structure for table `%%PREFIX%%Request`
 --
 
-CREATE TABLE IF NOT EXISTS `aseq_Request` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Request` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `MerchandiseId` int(11) DEFAULT NULL COMMENT 'Requested item id',
     `UserId` int(11) DEFAULT NULL COMMENT 'Requester user`s id',
@@ -60,10 +60,10 @@ CREATE TABLE IF NOT EXISTS `aseq_Request` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aseq_Request`
+-- Table structure for table `%%PREFIX%%Request`
 --
 
-CREATE TABLE IF NOT EXISTS `aseq_Response` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Response` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `MerchandiseId` int(11) DEFAULT NULL COMMENT 'Requested item id',
     `Collection` TINYTEXT DEFAULT NULL COMMENT 'Related request collection name or id',
@@ -90,10 +90,10 @@ CREATE TABLE IF NOT EXISTS `aseq_Response` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aseq_Merchandise`
+-- Table structure for table `%%PREFIX%%Merchandise`
 --
 
-CREATE TABLE IF NOT EXISTS `aseq_Merchandise` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Merchandise` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `ContentId` int(11) DEFAULT NULL COMMENT 'Related item id',
     `SupplierId` int(11) DEFAULT NULL COMMENT 'Related owner or supplier user`s id',
@@ -124,10 +124,10 @@ CREATE TABLE IF NOT EXISTS `aseq_Merchandise` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aseq_History`
+-- Table structure for table `%%PREFIX%%History`
 --
 
-CREATE TABLE IF NOT EXISTS `aseq_History` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%History` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `ContentId` int(11) DEFAULT NULL COMMENT 'Visited item id',
     `UserId` int(11) DEFAULT NULL COMMENT 'Visitor user`s id',
@@ -141,10 +141,10 @@ CREATE TABLE IF NOT EXISTS `aseq_History` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aseq_Payment`
+-- Table structure for table `%%PREFIX%%Payment`
 --
 
-CREATE TABLE IF NOT EXISTS `aseq_Payment` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Payment` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Relation` VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `Transaction` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
