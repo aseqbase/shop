@@ -10,22 +10,22 @@ $module->Image = grab($data, "Image") ?? "truck";
 $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
-$module->Items = grab($data, "Items")??compute("request/currents", \Req::Receive());
+$module->Items = grab($data, "Items")??compute("request/currents", receive());
 $isDigital = \_::$Config->DigitalStore;
 foreach ($module->Items as $k => $v) 
     if(!(get($v, "MerchandiseDigital")??\_::$Config->DigitalStore)){
         $isDigital = false;
         break;
     }
-$module->ShowItems = false;
+$module->AllowItems = false;
 $id = "form_" . getId(true);
 $module->Description = Html::Style("
             #$id {
                 width:100%;
             }
             #$id .field .input{
-                background-color: var(--back-color-1);
-                color: var(--fore-color-1);
+                background-color: var(--back-color-input);
+                color: var(--fore-color-input);
                 width:100%;
             }
             #$id .field .description{

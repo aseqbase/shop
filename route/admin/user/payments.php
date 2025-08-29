@@ -11,21 +11,21 @@ use MiMFa\Library\Html;
     })
     ->Put(
         function () {
-            $id = \Req::ReceivePut("Id");
+            $id = receivePut("Id");
             if (!$id)
-                \Res::End(Html::Error("It is not a valid transaction!"));
+                response(Html::Error("It is not a valid transaction!"));
             if (table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => true]))
                 if ($res = compute("request/complete", ["PaymentId" => $id]))
-                    \Res::Flip(Html::Success("The transaction verified successfully!"));
+                    flipResponse(Html::Success("The transaction verified successfully!"));
                 else {
                     table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => 0]);
                     if ($res === false)
-                        \Res::End(Html::Error("There a problem is occured!"));
+                        response(Html::Error("There a problem is occured!"));
                     else
-                        \Res::End(Html::Warning("There was no requests to verify!"));
+                        response(Html::Warning("There was no requests to verify!"));
                 }
             else
-                \Res::End(Html::Error("We could not verify your transaction!"));
+                response(Html::Error("We could not verify your transaction!"));
         }
     )
     ->Default(function () {

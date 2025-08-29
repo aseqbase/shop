@@ -28,20 +28,20 @@ class CartCollection extends MerchandiseCollection
      */
     public $ImageHeight = "var(--size-4)";
 
-    public $ShowBill = true;
+    public $AllowBill = true;
 
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowAddress = true;
+    public $AllowAddress = true;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowContact = true;
+    public $AllowContact = true;
 
-    public $ShowItems = true;
+    public $AllowItems = true;
 
     public $NextButton = null;
     public $BackButton = null;
@@ -75,22 +75,22 @@ class CartCollection extends MerchandiseCollection
                 font-size: var(--size-0);
                 box-shadow: var(--shadow-1);
                 border-radius: var(--radius-2);
-                border: var(--border-1) var(--back-color-5);
-                " . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+                border: var(--border-1) var(--back-color-special-output);
+                " . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
             }
             .{$this->Name} div.item:hover{
                 box-shadow: var(--shadow-2);
                 border-radius:  var(--radius-1);
-                border-color: var(--back-color-4);
+                border-color: var(--back-color-special-input);
                 background-Color: #88888818;
-                " . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+                " . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
             }
             .{$this->Name} div.item.deactive {
                 background-Color: #88888844;
                 box-shadow: var(--shadow-0);
                 border-radius: var(--radius-0);
                 border: none;
-                " . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+                " . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
             }
 
             .{$this->Name} div.item .item-title{
@@ -111,8 +111,8 @@ class CartCollection extends MerchandiseCollection
                 margin-bottom: 0px;
             }
             .{$this->Name} div.item .item-image {
-                background-color: var(--back-color-2);
-                color: var(--fore-color-2);
+                background-color: var(--back-color-output);
+                color: var(--fore-color-output);
                 opacity: 0.6;
                 aspect-ratio: 1;
                 box-shadow: var(--shadow-1);
@@ -127,11 +127,11 @@ class CartCollection extends MerchandiseCollection
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
-                " . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+                " . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
             }
             .{$this->Name} div.item:hover .item-image{
                 opacity: 1;
-                " . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+                " . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
             }
             .{$this->Name} .price{
                 display: flex;
@@ -153,8 +153,8 @@ class CartCollection extends MerchandiseCollection
             }
             .{$this->Name} .price .discount .value{
                 font-size: calc(var(--size-3) / 2);
-                background-color: var(--color-1);
-                color: var(--color-7);
+                background-color: var(--color-red);
+                color: var(--color-white);
                 border-radius: var(--radius-2);
                 padding: calc(var(--size-0) / 2);
                 display: flex;
@@ -168,7 +168,7 @@ class CartCollection extends MerchandiseCollection
                 overflow-wrap: break-word;
                 flex-flow: wrap;
                 text-wrap-mode: wrap;
-                " . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+                " . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
             }
             .{$this->Name} div.item .description :is(.excerpt, .full){
                 padding-inline-end: calc(var(--size-0) / 3);
@@ -271,8 +271,8 @@ class CartCollection extends MerchandiseCollection
 
                 $uid = "cc_$c_id";
                 $meta = "";
-                if ($this->ShowMetaData) {
-                    if ($this->ShowCreateTime)
+                if ($this->AllowMetaData) {
+                    if ($this->AllowCreateTime)
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
@@ -281,7 +281,7 @@ class CartCollection extends MerchandiseCollection
                             $item["Content"],
                             'CreateTime'
                         );
-                    if ($this->ShowUpdateTime)
+                    if ($this->AllowUpdateTime)
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
@@ -297,10 +297,10 @@ class CartCollection extends MerchandiseCollection
 
                 yield Html::Rack(
                     Html::MediumSlot(
-                        ($this->ShowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
+                        ($this->AllowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
                         Html::Division(
-                            ($this->ShowTitle ? Html::SubHeading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
-                            ($this->ShowSupplier ? $this->GetSupplier($item["Content"]) : "")
+                            ($this->AllowTitle ? Html::SubHeading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
+                            ($this->AllowSupplier ? $this->GetSupplier($item["Content"]) : "")
                         ), ["class" => 'item-title']) .
                     Html::MediumSlot(
                         Html::Division($m_discount?
@@ -311,13 +311,13 @@ class CartCollection extends MerchandiseCollection
                         ["class" => 'col-md-3 price']
                     )
                 );
-                if ($this->ShowDescription && $r_description)
+                if ($this->AllowDescription && $r_description)
                     yield Html::Division(Html::Convert($this->AutoExcerpt?Convert::ToExcerpt($r_description,0,$this->ExcerptLength,$this->ExcerptSign):$r_description), ["class" => 'detail description']);
-                if ($this->ShowContact && $r_contact)
+                if ($this->AllowContact && $r_contact)
                     yield Html::Division([Html::Icon("phone"), $r_contact], ["class" => 'detail contact']);
                 yield Html::Rack(
                         (isValid($meta)?Html::MediumSlot($meta, ["class" => 'col-md-8 metadata']):"").
-                    ($this->ShowButtons?Html::MediumSlot($this->GetButtons($uid, $item["Content"]), ["class" => 'col-md controls']):"")
+                    ($this->AllowButtons?Html::MediumSlot($this->GetButtons($uid, $item["Content"]), ["class" => 'col-md controls']):"")
                 , ["class"=>"footer"]);
                 yield "</div>";
                 if (++$i % $this->MaximumColumns === 0) yield "</div>";
@@ -326,12 +326,12 @@ class CartCollection extends MerchandiseCollection
             yield ($this->MoreButtonLabel?Html::$Break.Html::Center(Html::Button($this->MoreButtonLabel, $this->CollectionRoute)):"");
         })()));
 
-        return !$bill["Variety"]? __($this->EmptyHandler) : Html::Rack(
-            ($this->ShowBill?Html::Aside($this->GetBill( $bill), ["class" => "col-lg col-lg-4"]):"") .
+        return !$bill["Variety"]? __($this->EmptyHandler, styling:true, referring:true) : Html::Rack(
+            ($this->AllowBill?Html::Aside($this->GetBill( $bill), ["class" => "col-lg col-lg-4"]):"") .
             Html::Section(
                 $this->GetTitle().
                 $this->GetDescription().
-                ($this->ShowItems?$cartItems:"").
+                ($this->AllowItems?$cartItems:"").
                 $this->GetContent()
                 , ["class" => "col-lg"]
             )
@@ -413,7 +413,7 @@ class CartCollection extends MerchandiseCollection
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
             $sup = $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown");
-            $del = Html::Image($d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
+            $del = Html::Image(null, $d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
                     Html::Link(
                         $sup,
                         \_::$Aseq->UserRoute . $d["Id"]
@@ -421,7 +421,7 @@ class CartCollection extends MerchandiseCollection
         }else $del = Html::Icon(\_::$Info->LogoPath);
         $del .= $this->DeliveryLabel.Html::Icon($m_digital?"envelope":"map-marker").Html::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
         $r_address = get($item, 'RequestAddress');
-        if ($this->ShowAddress && $r_address) $del .= $r_address;
+        if ($this->AllowAddress && $r_address) $del .= $r_address;
         return Html::Division($del, ["class" => "supplier"]);
     }
     

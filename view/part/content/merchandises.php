@@ -8,7 +8,7 @@ module("MerchandiseCollection");
 $module = new \MiMFa\Module\MerchandiseCollection();
 $module->Title = !isEmpty($Title) && !isEmpty($Name) && abs(strlen($Name) - strlen($Title)) > 3 ? "$Title ".($Name?"($Name)":"") : between($Title, $Name);
 $module->DefaultImage = \_::$Info->FullLogoPath;
-$module->ShowRoute = false;
+$module->AllowRoute = false;
 $module->Description = grab($data, "Description");
 $module->Class .= " page";
 $module->Items = $nav->GetItems();

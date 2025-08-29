@@ -10,9 +10,9 @@ $module->Image = grab($data, "Image")??"shopping-cart";
 $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
-$module->Items = grab($data, "Items")??compute("request/currents", \Req::Receive());
-$module->ShowContact = 
-$module->ShowAddress = false;
+$module->Items = grab($data, "Items")??compute("request/currents", receive());
+$module->AllowContact = 
+$module->AllowAddress = false;
 if(auth(\_::$Config->UserAccess)) $module->NextButton = Html::Button("Confirm", "/cart/options", ["class" => "btn main"]);
 else $module->NextButton = Html::Button("Confirm", "/cart/sign-in", ["class" => "btn main"]);
 swap($module, $data);

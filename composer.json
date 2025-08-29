@@ -46,7 +46,7 @@
     },
     "extra": {
         "installer-paths": {
-            "./": ["type:framework", "type:patch"],
+            "./": ["type:framework", "type:patch", "type:package"],
             "{$name}/": ["type:project", "type:directory"],
             "model/library/": ["type:library"],
             "model/component/": ["type:component"],

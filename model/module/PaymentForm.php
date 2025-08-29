@@ -50,7 +50,7 @@ class PaymentForm extends Form
 		$this->QRCodeScanner->ActiveAtBegining = false;
 		$this->QRCodeScanner->ActiveAtEnding = false;
 		$this->QRCodeScanner->Style = "border: var(--border-1) #8888; margin-top: var(--size-0);";
-		$this->Path = \Req::$Url;
+		$this->Path = \_::$Url;
 		$this->CancelLabel = "Cancel";
 		$this->SetTypes(...$transactions);
 	}
@@ -60,7 +60,7 @@ class PaymentForm extends Form
 		$this->Types = [];
 		foreach ($transactions as $v)
 			$this->Types[$v->DestinationPath] = $v;
-		$data = \Req::ReceiveGet();
+		$data = receiveGet();
 		if (count($data) == 1)
 			$data = Convert::FromJson(decrypt(array_key_first($data)));
 
@@ -106,7 +106,7 @@ class PaymentForm extends Form
 	{
 		return parent::GetStyle() . Html::Style("
 			.{$this->Name} .header .details{
-				background-color: var(--back-color-1);
+				background-color: var(--back-color-input);
 				padding: var(--size-5);
 				margin: var(--size-0);
 			}
@@ -118,7 +118,7 @@ class PaymentForm extends Form
 				font-size: var(--size-0);
 			}
 			.{$this->Name} .input{
-				background-color: var(--back-color-0);
+				background-color: var(--back-color);
 				margin: 0px var(--size-0);
 			}
 		");
@@ -165,7 +165,7 @@ class PaymentForm extends Form
 			)
 		)->ToString();
 		yield Html::$Break;
-		yield Html::Break("More", "document.getElementById('$id').style.display = document.getElementById('$id').computedStyleMap().get('display') == 'none'?'inherit':'none';");
+		yield Html::BreakLine("More", "document.getElementById('$id').style.display = document.getElementById('$id').computedStyleMap().get('display') == 'none'?'inherit':'none';");
 		yield Html::$Break;
 		yield Html::Division(
 			Html::Rack(
@@ -233,7 +233,7 @@ class PaymentForm extends Form
 			$content = $this->Transaction->DestinationContent ?? $this->Transaction->DestinationPath;
 			module("TimeCounter");
 			$counter = new TimeCounter($this->ValidationTimeout / 1000, 0, $this->Transaction->FailPath);
-			return Html::Center(__($this->Description, styling: false) . Html::Big($counter->ToString())) . Html::Center(
+			return Html::Center(__($this->Description) . Html::Big($counter->ToString())) . Html::Center(
 				$this->QRCodeBox->ToString() .
 				Html::Division(
 					($this->Transaction->DestinationPath?Html::Link($content, $this->Transaction->DestinationPath):$content) . " " .
@@ -264,12 +264,12 @@ class PaymentForm extends Form
 		$res[] = Html::$Break;
 		$res[] = Html::Success("Your transaction recorded successfully", $attr);
 		if (isValid($this->Transaction->DestinationEmail))
-			if (Contact::SendHtmlEmail(\_::$Info->SenderEmail, $this->Transaction->DestinationEmail, __($this->SuccessSubject, styling: false) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->SourceEmail, $this->Transaction->DestinationEmail == \_::$Info->ReceiverEmail ? null : \_::$Info->ReceiverEmail))
+			if (Contact::SendHtmlEmail(\_::$Info->SenderEmail, $this->Transaction->DestinationEmail, __($this->SuccessSubject) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->SourceEmail, $this->Transaction->DestinationEmail == \_::$Info->ReceiverEmail ? null : \_::$Info->ReceiverEmail))
 				$res[] = Html::Success("Your transaction received", $attr);
 			else
 				$res[] = Html::Warning("We could not receive your transaction details, please notify us!", $attr);
 		if (isValid($this->Transaction->SourceEmail))
-			if (Contact::SendHtmlEmail(\_::$Info->SenderEmail, $this->Transaction->SourceEmail, __($this->SuccessSubject, styling: false) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->DestinationEmail))
+			if (Contact::SendHtmlEmail(\_::$Info->SenderEmail, $this->Transaction->SourceEmail, __($this->SuccessSubject) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->DestinationEmail))
 				$res[] = Html::Success("A notification to '{$this->Transaction->SourceEmail}' has been sent!", $attr);
 			else
 				$res[] = Html::Warning("Could not send a notification to '{$this->Transaction->SourceEmail}'!", $attr);
@@ -311,7 +311,7 @@ class PaymentForm extends Form
 
 	public function Handler($received = null)
 	{
-		\Res::Render(Html::Page(Html::Container(function () use ($received) {
+		render(Html::Page(Html::Container(function () use ($received) {
 			if ($code = get($received, $this->ValidationRequest))
 				try {
 					$code = \_::$Back->Cryptograph->Decrypt($code, $this->ValidationKey, true);
@@ -498,17 +498,17 @@ class Transaction
 
 	public function ToHtml()
 	{
-		return Html::Heading(__("Transaction" . ($this->DateTime ? " Succeed" : " Failed"), styling: false), ["class" => "result" . ($this->DateTime ? " success" : " error")]) .
+		return Html::Heading(__("Transaction" . ($this->DateTime ? " Succeed" : " Failed")), ["class" => "result" . ($this->DateTime ? " success" : " error")]) .
 			Html::Table([
-				[__("Traction Number", styling: false) . ":", Html::Bold($this->Relation).Html::Icon("copy", "copy(".Script::Convert($this->Relation).")")],
-				[__("From", styling: false) . ":", "{$this->Source} {$this->SourceEmail} {$this->SourceContent}"],
-				[__("To", styling: false) . ":", "{$this->Destination} {$this->DestinationEmail} {$this->DestinationContent}"],
-				[__("Value", styling: false) . ":", $this->Value . $this->Unit],
-				[__("Network", styling: false) . ":", $this->Network],
-				[__("Transaction", styling: false) . ":", $this->Transaction.Html::Icon("copy", "copy(".Script::Convert($this->Transaction).")")],
-				[__("Identifier", styling: false) . ":", $this->Identifier],
-				[__("Time", styling: false) . ":", Convert::ToShownDateTimeString($this->DateTime)],
-				[__("Others", styling: false) . ":", $this->Others]
+				[__("Traction Number") . ":", Html::Bold($this->Relation).Html::Icon("copy", "copy(".Script::Convert($this->Relation).")")],
+				[__("From") . ":", "{$this->Source} {$this->SourceEmail} {$this->SourceContent}"],
+				[__("To") . ":", "{$this->Destination} {$this->DestinationEmail} {$this->DestinationContent}"],
+				[__("Value") . ":", $this->Value . $this->Unit],
+				[__("Network") . ":", $this->Network],
+				[__("Transaction") . ":", $this->Transaction.Html::Icon("copy", "copy(".Script::Convert($this->Transaction).")")],
+				[__("Identifier") . ":", $this->Identifier],
+				[__("Time") . ":", Convert::ToShownDateTimeString($this->DateTime)],
+				[__("Others") . ":", $this->Others]
 			], ["RowHeaders" => [], "ColHeaders" => []]) .
 			Html::Button(Html::Big(Html::Icon("print")), "window.print()");
 	}

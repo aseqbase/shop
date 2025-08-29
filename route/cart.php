@@ -2,15 +2,15 @@
 use MiMFa\Library\Router;
 (new Router())
 ->On("cart/payment(?!/)")
-    ->Put(fn() => \Res::Set(compute("request/update", \Req::Receive())))
+    ->Put(fn() => response(compute("request/update", receive())))
     ->Get(
     fn () =>
         view(\_::$Config->DefaultViewName, ["Name" => "cart/payment"])
     )
 ->On("cart/options(?!/)")
     ->Put(function() {
-        if(!auth(\_::$Config->UserAccess)) return \Res::Error("You don't have enough access!");
-        $received = \Req::ReceivePut();
+        if(!auth(\_::$Config->UserAccess)) return renderError("You don't have enough access!");
+        $received = receivePut();
         $address = [];
         if($v = get($received, "Email"))
             \_::$Back->User->SetMetaValue("Email", $v);
@@ -43,8 +43,8 @@ use MiMFa\Library\Router;
         if($address && !$uaddress) \_::$Back->User->Set(["Address"=>get($received, "Address")]);
         $r = compute("request/update-physicals", ["Address"=>$address, "Contact"=> get($received, "Contact")])===null?null:true;
         $r = compute("request/update-digitals", ["Address"=> get($received, "Email"), "Contact"=> get($received, "Contact")])===null?$r:true;
-        if($r) return \Res::Success("Your requests data updated successfully!");
-        else return \Res::Error("Could not update your requests data!");
+        if($r) return renderSuccess("Your requests data updated successfully!");
+        else return renderError("Could not update your requests data!");
     })
     ->Get(
     fn () =>
@@ -56,16 +56,16 @@ use MiMFa\Library\Router;
             view(\_::$Config->DefaultViewName, ["Name" => "cart/all"])
     )
 ->On("cart/wish(?!/)")
-    ->Put(fn() => \Res::Set(compute("request/add-wish", \Req::Receive())))
-    ->Delete(fn() => \Res::Set(compute("request/remove-wish", \Req::Receive())))
+    ->Put(fn() => response(compute("request/add-wish", receive())))
+    ->Delete(fn() => response(compute("request/remove-wish", receive())))
     ->Get(
         fn () =>
             view(\_::$Config->DefaultViewName, ["Name" => "cart/wish"])
     )
 ->On("(cart|(cart/current))(?!/)")
-    ->Put(fn() => \Res::Set(compute("request/add", \Req::Receive())))
-    ->Patch(fn() => \Res::Set(compute("request/update", \Req::Receive())))
-    ->Delete(fn() => \Res::Set(compute("request/remove", \Req::Receive())))
+    ->Put(fn() => response(compute("request/add", receive())))
+    ->Patch(fn() => response(compute("request/update", receive())))
+    ->Delete(fn() => response(compute("request/remove", receive())))
     ->Get(
         fn () =>
             view(\_::$Config->DefaultViewName, ["Name" => "cart/current"])
@@ -73,6 +73,6 @@ use MiMFa\Library\Router;
 ->On("cart/.*")
     ->Get(
         fn () =>
-            view(\_::$Config->DefaultViewName, ["Name" => \Req::$Direction,])
+            view(\_::$Config->DefaultViewName, ["Name" => \_::$Direction,])
     )->Handle();
 ?>

@@ -34,47 +34,47 @@ class MerchandiseCollection extends Collection
      * @var bool
      * @category Parts
      */
-    public $ShowMetaData = true;
+    public $AllowMetaData = true;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowSupplier = true;
+    public $AllowSupplier = true;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowCreateTime = true;
+    public $AllowCreateTime = true;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowUpdateTime = false;
+    public $AllowUpdateTime = false;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowTitle = true;
+    public $AllowTitle = true;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowImage = true;
+    public $AllowImage = true;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowDescription = true;
+    public $AllowDescription = true;
     /**
      * @var bool
      * @category Parts
      */
-    public $ShowAddress = true;
+    public $AllowAddress = true;
     /**
      * Allow to analyze all text and linking categories and tags to their messages, to improve the website's SEO
      * @var mixed
      */
-    public $AutoRefering = true;
+    public $AutoReferring = true;
     /**
      * Selected Excerpts text automatically
      * @var bool
@@ -96,20 +96,20 @@ class MerchandiseCollection extends Collection
      * @var bool
      * @category Parts
      */
-    public $ShowButtons = true;
+    public $AllowButtons = true;
     public $DeliveryLabel = "→";
     /**
      * The label text of Decrease button
      * @var array|string|null
      * @category Management
      */
-    public $DecreaseButtonLabel = "<i class='fa fa-minus'></i>";
+    public $DecreaseButtonLabel = "<i class='icon fa fa-minus'></i>";
     /**
      * The label text of Increase button
      * @var array|string|null
      * @category Management
      */
-    public $IncreaseButtonLabel = "<i class='fa fa-plus'></i>";
+    public $IncreaseButtonLabel = "<i class='icon fa fa-plus'></i>";
     /**
     * The label text of Add button
     * @var array|string|null
@@ -121,13 +121,13 @@ class MerchandiseCollection extends Collection
     * @var array|string|null
     * @category Management
     */
-    public $RemoveButtonLabel = "<i class='fa fa-trash'></i>";
+    public $RemoveButtonLabel = "<i class='icon fa fa-trash'></i>";
     /**
     * The label text of Cart button
     * @var array|string|null
     * @category Management
     */
-    public $CartButtonLabel = "<i class='fa fa-shopping-cart'></i>";
+    public $CartButtonLabel = "<i class='icon fa fa-shopping-cart'></i>";
 
     function __construct()
     {
@@ -153,22 +153,22 @@ class MerchandiseCollection extends Collection
 				font-size: var(--size-0);
 				box-shadow: var(--shadow-1);
 				border-radius: var(--radius-2);
-            	border: var(--border-1) var(--back-color-5);
-				" . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+            	border: var(--border-1) var(--back-color-special-output);
+				" . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
 			}
 			.{$this->Name} div.item:hover{
 				box-shadow: var(--shadow-2);
 				border-radius:  var(--radius-1);
-				border-color: var(--back-color-4);
+				border-color: var(--back-color-special-input);
 				background-Color: #88888818;
-				" . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+				" . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
 			}
 			.{$this->Name} div.item.deactive {
 				background-Color: #88888844;
 				box-shadow: var(--shadow-0);
 				border-radius: var(--radius-0);
             	border: none;
-				" . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+				" . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
 			}
 
 			.{$this->Name} div.item .header{
@@ -185,7 +185,7 @@ class MerchandiseCollection extends Collection
                 margin-bottom: 0px;
 			}
 			.{$this->Name} div.item .item-image {
-				color: var(--fore-color-2);
+				color: var(--fore-color-output);
                 line-height: {$this->ImageWidth};
 				width: {$this->ImageWidth};
 				height: {$this->ImageHeight};
@@ -195,7 +195,7 @@ class MerchandiseCollection extends Collection
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
-				" . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+				" . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
 			}
                 
                .{$this->Name} div.item .supplier{
@@ -232,7 +232,7 @@ class MerchandiseCollection extends Collection
                 flex-flow: wrap;
                 text-wrap-mode: wrap;
                 gap: var(--size-0);
-				" . (\MiMFa\Library\Style::UniversalProperty("transition", \_::$Front->Transition(1))) . "
+				" . (\MiMFa\Library\Style::UniversalProperty("transition", "var(--transition-1)")) . "
 			}
 			.{$this->Name} div.item .description :is(.excerpt, .full){
                 padding-inline-end: calc(var(--size-0) / 2);
@@ -269,8 +269,8 @@ class MerchandiseCollection extends Collection
             }
             .{$this->Name} .price .discount .value{
                 font-size: calc(var(--size-3) / 2);
-                background-color: var(--color-1);
-                color: var(--color-7);
+                background-color: var(--color-red);
+                color: var(--color-white);
                 border-radius: var(--radius-2);
                 padding: calc(var(--size-0) / 2);
                 display: flex;
@@ -325,8 +325,8 @@ class MerchandiseCollection extends Collection
 
                 $uid = "cc_$c_id";
                 $meta = null;
-                if ($this->ShowMetaData) {
-                    if ($this->ShowCreateTime)
+                if ($this->AllowMetaData) {
+                    if ($this->AllowCreateTime)
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
@@ -335,7 +335,7 @@ class MerchandiseCollection extends Collection
                             $item,
                             'MerchandiseCreateTime'
                         );
-                    if ($this->ShowUpdateTime)
+                    if ($this->AllowUpdateTime)
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
@@ -350,12 +350,12 @@ class MerchandiseCollection extends Collection
                     yield "<div class='row'>";
                 yield "<div id='$uid' class='item col col-lg'" . ($this->Animation ? " data-aos-delay='" . ($i % $this->MaximumColumns * \_::$Front->AnimationSpeed) . "' data-aos='{$this->Animation}'" : "") . ">";
                 yield Html::Rack(
-                        ($this->ShowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
-                        Html::Division(($this->ShowTitle ? Html::Heading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
-                        ($this->ShowSupplier ? $this->GetSupplier($item) : "")).
+                        ($this->AllowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
+                        Html::Division(($this->AllowTitle ? Html::Heading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
+                        ($this->AllowSupplier ? $this->GetSupplier($item) : "")).
                         (isValid($meta)?Html::Sub($meta, ["class" => 'metadata']):"")
                     , ["class" => 'header']);
-                if ($this->ShowDescription && $c_description)
+                if ($this->AllowDescription && $c_description)
                     yield Html::Division(Html::Convert($this->AutoExcerpt?Convert::ToExcerpt($c_description,0,$this->ExcerptLength,$this->ExcerptSign):$c_description), ["class" => 'description']);
                 yield Html::Frame(Html::Row(
                     Html::MediumSlot(
@@ -366,7 +366,7 @@ class MerchandiseCollection extends Collection
                         Html::Bold($m_fprice . \_::$Config->PriceUnit),
                         ["class" => 'col-md-4 price']
                     ).
-                    ($this->ShowButtons?Html::MediumSlot(
+                    ($this->AllowButtons?Html::MediumSlot(
                         $this->GetButtons($uid, $item),
                         ["class" => 'controls']):"")
                 ), ["class"=>"footer"]);
@@ -404,7 +404,7 @@ class MerchandiseCollection extends Collection
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
             $sup = $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown");
-            $del = Html::Image($d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
+            $del = Html::Image(null, $d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
                     Html::Link(
                         $sup,
                         \_::$Aseq->UserRoute . $d["Id"]

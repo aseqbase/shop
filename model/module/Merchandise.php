@@ -17,19 +17,19 @@ class Merchandise extends Content
      public $RootRoute = "/item/";
      public $CollectionRoute = "/items/";
 
-     public $ShowAuthor = false;
+     public $AllowAuthor = false;
      /**
       * The label text of Decrease button
       * @var array|string|null
       * @category Management
       */
-     public $DecreaseButtonLabel = "<i class='fa fa-minus'></i>";
+     public $DecreaseButtonLabel = "<i class='icon fa fa-minus'></i>";
      /**
       * The label text of Increase button
       * @var array|string|null
       * @category Management
       */
-     public $IncreaseButtonLabel = "<i class='fa fa-plus'></i>";
+     public $IncreaseButtonLabel = "<i class='icon fa fa-plus'></i>";
      /**
       * The label text of Add button
       * @var array|string|null
@@ -41,13 +41,13 @@ class Merchandise extends Content
       * @var array|string|null
       * @category Management
       */
-     public $RemoveButtonLabel = "<i class='fa fa-trash'></i>";
+     public $RemoveButtonLabel = "<i class='icon fa fa-trash'></i>";
      /**
       * The label text of Cart button
       * @var array|string|null
       * @category Management
       */
-     public $CartButtonLabel = "<i class='fa fa-shopping-cart'></i>";
+     public $CartButtonLabel = "<i class='icon fa fa-shopping-cart'></i>";
 
      public $CommentTitle = "Leave Your Idea";
      public $CommentDescription = "How did you find this item?";
@@ -72,8 +72,8 @@ class Merchandise extends Content
      {
           return parent::GetStyle() . Html::Style("
                .{$this->Name} .controls{
-                    background-color: var(--back-color-1);
-                    color: var(--fore-color-1);
+                    background-color: var(--back-color-input);
+                    color: var(--fore-color-input);
                     shadow: var(--shadow-1);
                     border-radius: var(--radius-1);
                     padding: var(--size-0);
@@ -127,8 +127,8 @@ class Merchandise extends Content
                }
                .{$this->Name} .controls .price .discount .value{
                     font-size: calc(var(--size-3) / 2);
-                    background-color: var(--color-1);
-                    color: var(--color-7);
+                    background-color: var(--color-red);
+                    color: var(--color-white);
                     border-radius: var(--radius-2);
                     padding: calc(var(--size-0) / 2);
                     display: flex;
@@ -141,7 +141,7 @@ class Merchandise extends Content
                }
                .{$this->Name} .controls .count {
                     font-size: calc(var(--size-3) / 2);
-                    color: var(--color-4);
+                    color: var(--color-yellow);
                     padding-top: var(--size-0);
                }
 
@@ -217,24 +217,24 @@ class Merchandise extends Content
                $this->GetImage() .
                Html::MediumSlot(
                     Html::Division(
-                         ($this->ShowTitle ? Html::ExternalHeading(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->RootRoute . $nameOrId : null, ['class' => 'heading']) : "") .
+                         ($this->AllowTitle ? Html::ExternalHeading(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->RootRoute . $nameOrId : null, ['class' => 'heading']) : "") .
                          $this->GetDetails($this->CollectionRoute . $nameOrId)
                     ) .
-                    ($this->ShowDescription ? $this->GetExcerpt() : "")
+                    ($this->AllowDescription ? $this->GetExcerpt() : "")
                ) . $this->GetControls(),
                ["class" => "description"], $attributes
           );
      }
      public function GetImage()
      {
-          if (!$this->ShowImage)
+          if (!$this->AllowImage)
                return null;
           $p_image = getValid($this->Item, 'Image', $this->Image);
           return isValid($p_image) ? Html::MediumSlot(Html::Image(getValid($this->Item, 'Title', $this->Title), $p_image), ["class" => "col-lg-4", "style" => "text-align: center;"]) : "";
      }
      public function GetButtons()
      {
-          if (!$this->ShowButtons)
+          if (!$this->AllowButtons)
                return null;
           $paths = Convert::FromJson(getValid($this->Item, 'Path', $this->Path));
           $p_morebuttontext = __(Convert::FromSwitch($this->ButtonsLabel, get($this->Item, 'Type')));
@@ -242,7 +242,7 @@ class Merchandise extends Content
                loop($paths, function ($v,$k) use ($p_morebuttontext) {
                     return Html::Button(is_numeric($k) ? $p_morebuttontext : $k, $v, ["class" => "btn outline"]);
                }),
-               attributes: ["class" => "buttons md-hide"]
+               attributes: ["class" => "buttons view md-hide"]
           );
      }
      public function GetControls()
@@ -256,7 +256,7 @@ class Merchandise extends Content
                if(isset($d["Id"])) $output .= Html::Division(
                     Html::Super("Supplier") .
                     Html::Division(
-                         Html::Image($d["Image"]??User::$DefaultImagePath) .
+                         Html::Image(null, $d["Image"]??User::$DefaultImagePath) .
                          Html::Link(
                               $d["Organization"]??$d["Name"]??"Unknown",
                               \_::$Aseq->UserRoute . $d["Id"]

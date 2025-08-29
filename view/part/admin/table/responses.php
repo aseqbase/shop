@@ -32,18 +32,18 @@ $module->CellsValues = [
     "Status"=>function($v){
         $status = $v;
         switch ($v) {
-            case 5: $status = __("Delivered", styling:false); break;
-            case 4: $status = __("Received", styling:false); break;
-            case 3: $status = __("Sent", styling:false); break;
-            case 2: $status = __("Prepared", styling:false); break;
-            case 1: $status = __("Accepted", styling:false); break;
-            case 0: $status = __("Unchecked", styling:false); break;
-            case -1: $status = __("Unaccepted", styling:false); break;
-            case -2: $status = __("Unavailable", styling:false); break;
-            case -3: $status = __("Defected", styling:false); break;
-            case -4: $status = __("Canceled", styling:false); break;
-            case -5: $status = __("Rejected", styling:false); break;
-            default: $status = __("Undefined", styling:false); break;
+            case 5: $status = __("Delivered"); break;
+            case 4: $status = __("Received"); break;
+            case 3: $status = __("Sent"); break;
+            case 2: $status = __("Prepared"); break;
+            case 1: $status = __("Accepted"); break;
+            case 0: $status = __("Unchecked"); break;
+            case -1: $status = __("Unaccepted"); break;
+            case -2: $status = __("Unavailable"); break;
+            case -3: $status = __("Defected"); break;
+            case -4: $status = __("Canceled"); break;
+            case -5: $status = __("Rejected"); break;
+            default: $status = __("Undefined"); break;
         }
         return Html::Span($status,["class"=>$v>0?"success":($v<0?"error":""), "style"=>"color:rgba(".(128-$v*127/5).", ".(128+$v*127/5).", 0)"]);
     },
@@ -87,17 +87,17 @@ $module->CellsTypes = [
         $std->Title = "Status";
         $std->Type = "select";
         $std->Options = [
-            "-5"=> __("Rejected", styling:false),
-            "-4"=> __("Canceled", styling:false),
-            "-3"=> __("Defected", styling:false),
-            "-2"=> __("Unavailable", styling:false),
-            "-1"=> __("Unaccepted", styling:false),
-            "0"=> __("Unchecked", styling:false),
-            "1"=> __("Accepted", styling:false),
-            "2"=> __("Prepared", styling:false),
-            "3"=> __("Sent", styling:false),
-            "4"=> __("Received", styling:false),
-            "5"=> __("Delivered", styling:false)
+            "-5"=> __("Rejected"),
+            "-4"=> __("Canceled"),
+            "-3"=> __("Defected"),
+            "-2"=> __("Unavailable"),
+            "-1"=> __("Unaccepted"),
+            "0"=> __("Unchecked"),
+            "1"=> __("Accepted"),
+            "2"=> __("Prepared"),
+            "3"=> __("Sent"),
+            "4"=> __("Received"),
+            "5"=> __("Delivered")
         ];
         $std->Value = $v;
         return $std;

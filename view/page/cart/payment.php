@@ -11,8 +11,8 @@ $module->Image = grab($data, "Image") ?? "credit-card";
 $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
-$module->Items = grab($data, "Items") ?? compute("request/fix-currents", \Req::Receive());
-$module->ShowItems = false;
+$module->Items = grab($data, "Items") ?? compute("request/fix-currents", receive());
+$module->AllowItems = false;
 $bill = $module->ComputeBill();
 $transaction = Convert::ToJson([
     "Description" => "Buy from " . \_::$Info->FullOwner,
@@ -28,12 +28,12 @@ $methods = compute("get/payment-methods//");
 $mc = count($methods) - 1;
 $module->Content = Html::Style("
             #$id .button{
-                background-color: var(--back-color-0);
-                color: var(--fore-color-0);
+                background-color: var(--back-color);
+                color: var(--fore-color);
                 padding: 0px;
                 margin: calc(var(--size-0) * .25);
                 border-radius: var(--radius-1);
-                border: var(--border-1) var(--back-color-1);
+                border: var(--border-1) var(--back-color-input);
                 text-align: initial;
             }
             #$id .button .label{
@@ -46,14 +46,14 @@ $module->Content = Html::Style("
                 gap: var(--size-0);
             }
             #$id .button:has(input:checked){
-                background-color: var(--back-color-2);
-                color: var(--fore-color-2);
-                border-color: var(--fore-color-2);
+                background-color: var(--back-color-output);
+                color: var(--fore-color-output);
+                border-color: var(--fore-color-output);
             }
             #$id :is(.button, .button:has(input:checked)):hover{
-                background-color: var(--back-color-5);
-                color: var(--fore-color-5);
-                border-color: var(--fore-color-5);
+                background-color: var(--back-color-special-output);
+                color: var(--fore-color-special-output);
+                border-color: var(--fore-color-special-output);
             }
             #$id .button .input{
                 display: none;

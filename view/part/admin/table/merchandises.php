@@ -95,13 +95,13 @@ $module->CellsTypes = [
     },
     "MetaData" => "json"
 ];
-\Res::Style(".{$module->Name} tr td input{
-    background-color: var(--back-color-1);
-    color: var(--fore-color-1);
+renderStyle(".{$module->Name} tr td input{
+    background-color: var(--back-color-input);
+    color: var(--fore-color-input);
     max-width: 100px;
 }");
-$forLabel = __("for", styling: false);
-$eachLabel = __("each", styling: false);
+$forLabel = __("for");
+$eachLabel = __("each");
 $module->CellsValues = [
     "Update" => function ($id, $k, $r) use ($module, $forLabel, $eachLabel) {
         $selector = "'table:nth-child(1)'";

@@ -21,9 +21,9 @@ $module->AddAccess =
 $module->DuplicateAccess =
 $module->ModifyAccess =
 $module->DeleteAccess = \_::$Config->SuperAccess;
-\Res::Style("
+renderStyle("
     .{$module->Name} tr:has(.verified){
-        color: var(--color-2);
+        color: var(--color-green);
     }
 ");
 $module->CellsValues = [

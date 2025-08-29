@@ -4,20 +4,9 @@ To create a new Shop, with all accessibility and equipment, for an aseqbase webs
 * <a href="http://github.com//aseqbase/aseqbase">aseqbase/aseqbase</a>
 ## Installations
 1. Install all dependencies
-  ### To make the Main Domain of aseqbase website
-  2. Open a terminal in the home directory (public_html) of the website, then install the project by:
+2. Open a terminal in the home directory (public_html) of the website, then install the project by:
 	
- 	> composer create-project aseqbase/shop
-  or
-	
- 	> composer require aseqbase/shop
-  ### To make the Sub Domain of aseqbase website
-  2. Open a terminal in your subdomain directory (public_html/[my-subdomain-name]/), then install the framework by:
-	
- 	> composer create-project aseqbase/shop
-  or
-	
- 	> composer require aseqbase/shop
+ 	> composer create-project aseqbase/shop my-subdomain-name
 3. Create an opitonal file name `global.php` on the root directory with the bellow codes:
   ```
   <?php

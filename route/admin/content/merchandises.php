@@ -17,7 +17,7 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
         ]);
     })
     ->Put(function () {// Create new Item
-        $received = \Req::ReceivePut();
+        $received = receivePut();
         if ($received["Id"])
             try {
                 if(table("Merchandise")->Insert([
@@ -25,14 +25,14 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
                     "SupplierId" => $received["AuthorId"],
                     "AuthorId" => \_::$Back->User->Id,
                     "Count" => 1
-                ])) return \Res::Flip(Html::Success("Your item sat as a Merchandise successfully!"));
-                else return \Res::Error("A problem is occured in the process!");
+                ])) return flipResponse(Html::Success("Your item sat as a Merchandise successfully!"));
+                else return renderError("A problem is occured in the process!");
             } catch (Exception $ex) {
-                return \Res::Error($ex);
+                return renderError($ex);
             }
     })
     ->Patch(function () {// Update Item
-        $received = \Req::ReceivePatch();
+        $received = receivePatch();
         if ($MerchandiseId = $received["MerchandiseId"])
             try {
                 table("Merchandise")->Update("`Id`=:Id", [
@@ -42,26 +42,26 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
                     "EditorId" => \_::$Back->User->Id,
                     "UpdateTime" => Convert::ToDateTimeString()
                 ]);
-                return \Res::Success(Html::Icon("check"));
+                return renderSuccess(Html::Icon("check"));
             } catch (Exception $ex) {
-                return \Res::Error($ex);
+                return renderError($ex);
             }
-        return \Res::Error(Html::Icon("close"));
+        return renderError(Html::Icon("close"));
     })
     ->Delete(function () {// Delete Item
-        $received = \Req::ReceiveDelete();
+        $received = receiveDelete();
         if ($MerchandiseId = $received["MerchandiseId"])
             try {
                 table("Merchandise")->Delete("`Id`=:Id", [
                     ":Id" => $MerchandiseId
                 ]);
-                return \Res::Success(Html::Icon("check"));
+                return renderSuccess(Html::Icon("check"));
             } catch (Exception $ex) {
-                return \Res::Error($ex);
+                return renderError($ex);
             }
-        return \Res::Error(Html::Icon("close"));
+        return renderError(Html::Icon("close"));
     })
-    ->if(\Req::Receive("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
+    ->if(receive("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
         $module->Set("Merchandise");
         $access = auth(\_::$Config->AdminAccess);
         $users = table("User")->SelectPairs("Id", "Name");

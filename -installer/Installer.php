@@ -34,14 +34,21 @@ class Installer
         if (!isset(self::$Configurations["DataBase"]))
             self::$Configurations["DataBase"] = [];
 
-        $host = ($force ? self::$Configurations["DataBase"]["Host"]??null : null) ?? (readline("Host [" . (self::$Configurations["DataBase"]["Host"] ?? "localhost") . "]: ") ?: 'localhost');
-        $name = ($force ? self::$Configurations["DataBase"]["Name"]??null : null) ?? (readline("Database name [" . (self::$Configurations["DataBase"]["Name"] ?? "localhost") . "]: ") ?: 'localhost');
+        self::$DataBaseSchemaFile = self::$Configurations["DataBase"]["SchemaFile"]??self::$DataBaseSchemaFile;
+        $sqlFile = __DIR__ . DIRECTORY_SEPARATOR . self::$DataBaseSchemaFile; // Your base schema
+        if (!file_exists($sqlFile)) {
+            echo "⚠️ There is no database schema to install!\n";
+            return null;
+        }
+        
+        $host = ($force ? self::$Configurations["DataBase"]["Host"]??null : null) ?? (readline("Database Host [" . (self::$Configurations["DataBase"]["Host"] ?? "localhost") . "]: ") ?: 'localhost');
+        $name = ($force ? self::$Configurations["DataBase"]["Name"]??null : null) ?? (readline("Database Name [" . (self::$Configurations["DataBase"]["Name"] ?? "localhost") . "]: ") ?: 'localhost');
         if (empty($name)) {
             echo "❌ Database name required.\n";
             return false;
         }
-        $username = ($force ? self::$Configurations["DataBase"]["Username"]??null : null) ?? (readline("usernamename [" . (self::$Configurations["DataBase"]["Username"] ?? "root") . "]: ") ?: 'root');
-        $password = ($force ? self::$Configurations["DataBase"]["Password"]??null : null) ?? (readline("passwordword [" . (self::$Configurations["DataBase"]["Password"] ?? "root") . "]: ") ?: 'root');
+        $username = ($force ? self::$Configurations["DataBase"]["Username"]??null : null) ?? (readline("Username [" . (self::$Configurations["DataBase"]["Username"] ?? "root") . "]: ") ?: 'root');
+        $password = ($force ? self::$Configurations["DataBase"]["Password"]??null : null) ?? (readline("Password [" . (self::$Configurations["DataBase"]["Password"] ?? "root") . "]: ") ?: 'root');
         $prefix = ($force ? self::$Configurations["DataBase"]["Prefix"]??null : null) ?? (readline("Table prefix [" . (self::$Configurations["DataBase"]["Prefix"] ?? "aseq_") . "]: ") ?: 'aseq_');
 
         self::$Configurations["DataBase"]["Host"] = $host;
@@ -50,12 +57,6 @@ class Installer
         self::$Configurations["DataBase"]["Password"] = $password;
         self::$Configurations["DataBase"]["Prefix"] = $prefix;
 
-        self::$DataBaseSchemaFile = self::$Configurations["DataBase"]["SchemaFile"]??self::$DataBaseSchemaFile;
-        $sqlFile = __DIR__ . DIRECTORY_SEPARATOR . self::$DataBaseSchemaFile; // Your base schema
-        if (!file_exists($sqlFile)) {
-            echo "⚠️ There is no database schema to install!\n";
-            return null;
-        }
 
         // try {
         //     $pdo = new \PDO("mysql:host=$host;charset=utf8mb4", $username, $password);
@@ -79,6 +80,7 @@ class Installer
             return true;
         } catch (\PDOException $e) {
             echo "❌ Connection failed: " . $e->getMessage() . "\n";
+            self::$Configurations["DataBase"] = [];
             return false;
         }
     }

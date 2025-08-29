@@ -10,10 +10,10 @@ $module->Image = grab($data, "Image")??"heart";
 $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
-$module->Items = grab($data, "Items")??compute("request/wishes", \Req::Receive());
-$module->ShowBill = 
-$module->ShowContact = 
-$module->ShowAddress = false;
+$module->Items = grab($data, "Items")??compute("request/wishes", receive());
+$module->AllowBill = 
+$module->AllowContact = 
+$module->AllowAddress = false;
 if(auth(\_::$Config->UserAccess)) $module->NextButton = Html::Button("Confirm", "/cart/options", ["class" => "btn main"]);
 else $module->NextButton = Html::Button("Confirm", "/cart/sign-in", ["class" => "btn main"]);
 swap($module, $data);

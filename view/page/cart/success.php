@@ -8,7 +8,7 @@ $module->Description = grab($data, "Description")??MiMFa\Library\Html::Success("
 $module->Content = grab($data, "Content");
 $module->Image = grab($data, "Image")??"tick";
 $module->Render();
-$id = \Req::Receive("Id");
+$id = receive("Id");
 if (compute("request/complete", ["PaymentId" => $id]))
-    \Res::Render(Html::Success("Your transaction verified successfully!"));
+    render(Html::Success("Your transaction verified successfully!"));
 ?>
