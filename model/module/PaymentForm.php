@@ -237,7 +237,7 @@ class PaymentForm extends Form
 				$this->QRCodeBox->ToString() .
 				Html::Division(
 					($this->Transaction->DestinationPath?Html::Link($content, $this->Transaction->DestinationPath):$content) . " " .
-					Html::Panel(Html::Icon("copy", "copy('$content');") .
+					Html::Part(Html::Icon("copy", "copy('$content');") .
 						Html::Tooltip("Copy to clipboard"))
 					,
 					["class" => "path"]
