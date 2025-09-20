@@ -80,11 +80,11 @@ class PaymentForm extends Form
 		$this->Transaction->Relation = get($data, "Relation")??$this->Transaction->Relation;
 		$this->Transaction->Transaction = get($data, "Transaction")??$this->Transaction->Transaction;
 		
-		$this->Transaction->Source = get($data, "Source") ?? $this->Transaction->Source ?? (is_null(\_::$Back->User) ? null : \_::$Back->User->Name);
+		$this->Transaction->Source = get($data, "Source") ?? $this->Transaction->Source ?? (is_null(\_::$User) ? null : \_::$User->Name);
 		$this->Transaction->SourceContent = get($data, "Content");
 		$this->Transaction->SourcePath = get($data, "Path");
-		$this->Transaction->SourceEmail = get($data, "Email") ?? (is_null(\_::$Back->User) ? null : \_::$Back->User->Email);
-		$this->Transaction->Others = $this->Contact = get($data, "Contact") ?? (is_null(\_::$Back->User) ? null : \_::$Back->User->GetValue("Contact"));
+		$this->Transaction->SourceEmail = get($data, "Email") ?? (is_null(\_::$User) ? null : \_::$User->Email);
+		$this->Transaction->Others = $this->Contact = get($data, "Contact") ?? (is_null(\_::$User) ? null : \_::$User->GetValue("Contact"));
 
 		$this->Transaction->Value = between($this->Transaction->Value, get($data, "Value"));
 		$this->Transaction->Unit = between($this->Transaction->Unit, get($data, "Unit"));
@@ -325,7 +325,7 @@ class PaymentForm extends Form
 						if (microtime(true) * 1000 - $this->ValidationTimeout > $code)
 							return self::GetError("Your time is out!");
 						elseif (microtime(true) * 1000 < $code)
-							return self::GetError("A problem is occured!");
+							return self::GetError("A problem is occurred!");
 					} elseif ($this->ValidationCode === $code)
 						return self::GetError("Your request is manipulated!");
 

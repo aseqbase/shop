@@ -21,7 +21,7 @@ if (($rid = get($data, "RequestId")) || ($mid = get($data, "MerchandiseId"))) {
                     [
                         ":Id" => $rid,
                         ":MerchandiseId" => $mid,
-                        ...(\_::$Back->User->Id ? ["UserId" => \_::$Back->User->Id] : []),
+                        ...(\_::$User->Id ? ["UserId" => \_::$User->Id] : []),
                         "Count" => $count = min($c, $count)
                     ]
                 )
@@ -36,7 +36,7 @@ if (($rid = get($data, "RequestId")) || ($mid = get($data, "MerchandiseId"))) {
                 [
                     ":Id" => $rid,
                     ":MerchandiseId" => $mid,
-                    ...(\_::$Back->User->Id ? ["UserId" => \_::$Back->User->Id] : []),
+                    ...(\_::$User->Id ? ["UserId" => \_::$User->Id] : []),
                     "Address" => $address
                 ]
             )

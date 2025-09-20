@@ -8,7 +8,7 @@ if ($mid = get($data,"MerchandiseId"))
         if (
             table("Request")->Insert([
                 "MerchandiseId" => $mid,
-                ...(\_::$Back->User->Id ? ["UserId" => \_::$Back->User->Id] : []),
+                ...(\_::$User->Id ? ["UserId" => \_::$User->Id] : []),
                 "UserCode" => getClientCode(),
                 "Request" => $request,
                 "Count" => $count

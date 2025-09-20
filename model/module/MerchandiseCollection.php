@@ -2,7 +2,7 @@
 namespace MiMFa\Module;
 use MiMFa\Library\Html;
 use MiMFa\Library\Convert;
-use MiMFa\Library\User;
+
 
 module("Collection");
 /**
@@ -350,7 +350,7 @@ class MerchandiseCollection extends Collection
                     yield "<div class='row'>";
                 yield "<div id='$uid' class='item col col-lg'" . ($this->Animation ? " data-aos-delay='" . ($i % $this->MaximumColumns * \_::$Front->AnimationSpeed) . "' data-aos='{$this->Animation}'" : "") . ">";
                 yield Html::Rack(
-                        ($this->AllowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
+                        ($this->AllowImage ? Html::Image($c_title, $c_image, \User::$DefaultImagePath, ["class" => "item-image"]) : "") .
                         Html::Division(($this->AllowTitle ? Html::Heading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
                         ($this->AllowSupplier ? $this->GetSupplier($item) : "")).
                         (isValid($meta)?Html::Sub($meta, ["class" => 'metadata']):"")
@@ -404,7 +404,7 @@ class MerchandiseCollection extends Collection
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
             $sup = $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown");
-            $del = Html::Image(null, $d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
+            $del = Html::Image(null, $d["Image"] ? $d["Image"] : \User::$DefaultImagePath) .
                     Html::Link(
                         $sup,
                         \_::$Aseq->UserRoute . $d["Id"]

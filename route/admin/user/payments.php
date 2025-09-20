@@ -20,7 +20,7 @@ use MiMFa\Library\Html;
                 else {
                     table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => 0]);
                     if ($res === false)
-                        response(Html::Error("There a problem is occured!"));
+                        response(Html::Error("Something went wrong!"));
                     else
                         response(Html::Warning("There was no requests to verify!"));
                 }

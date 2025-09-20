@@ -17,7 +17,7 @@ module("PrePage");
 
 $itemTable = table("Merchandise")->Name;
 $contentTable = $module->DataTable->Name;
-$userTable = \_::$Back->User->DataTable->Name;
+$userTable = \_::$User->DataTable->Name;
 $module->SelectQuery = "
     SELECT C_T.{$module->KeyColumn}, C_T.{$module->KeyColumn} AS 'Update', C_T.AuthorId AS 'AuthorId', M_T.Id AS 'MerchandiseId', M_T.SupplierId, C_T.Type AS 'Type', C_T.Image AS 'Image', C_T.Title AS 'Item', C_T.CategoryIds AS 'Category', U_T.Name AS 'Supplier', M_T.Count, M_T.CountUnit, M_T.Price, M_T.PriceUnit, M_T.Discount, M_T.Total, M_T.Volume, M_T.Access, M_T.Status, M_T.UpdateTime
     FROM $contentTable AS C_T
@@ -45,7 +45,7 @@ $module->CellsTypes = [
         $std->Type = $access ? "select" : "hidden";
         $std->Options = $users;
         if (!isValid($v))
-            $std->Value = \_::$Back->User->Id;
+            $std->Value = \_::$User->Id;
         return $std;
     },
     "Digital" => function ($t, $v) {
@@ -65,7 +65,7 @@ $module->CellsTypes = [
         $std->Type = auth(\_::$Config->SuperAccess) ? "select" : "hidden";
         $std->Options = $users;
         if (!isValid($v))
-            $std->Value = \_::$Back->User->Id;
+            $std->Value = \_::$User->Id;
         return $std;
     },
     "EditorId" => function ($t, $v) use ($users) {
@@ -74,7 +74,7 @@ $module->CellsTypes = [
         $std->Type = auth(\_::$Config->SuperAccess) ? "select" : "hidden";
         $std->Options = $users;
         if (!isValid($v))
-            $std->Value = \_::$Back->User->Id;
+            $std->Value = \_::$User->Id;
         return $std;
     },
     "Status" => [-1 => "Unpublished", 0 => "Drafted", 1 => "Published"],

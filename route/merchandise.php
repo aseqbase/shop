@@ -14,7 +14,7 @@ route("content", [
         "RootRoute" => "/item/",
         "CollectionRoute" => "/items/",
         "CheckAccess" => function ($item) {
-            return \_::$Back->User->Access(\_::$Config->AdminAccess) || \_::$Back->User->Access(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$Config->VisitAccess))));
+            return \_::$User->Access(\_::$Config->AdminAccess) || \_::$User->Access(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$Config->VisitAccess))));
         }
     ],
     "ErrorHandler" => "Could not find related merchandise"

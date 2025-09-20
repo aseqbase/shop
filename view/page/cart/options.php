@@ -35,14 +35,14 @@ $module->Description = Html::Style("
         ") .
     Html::Form(
         [
-            Html::Field(type: "Email", key: "Email", value: \_::$Back->User->GetMetaValue("Email")??\_::$Back->User->Email, description:$isDigital ? "Please put a correct email address to receive the digital items links" : "To inform your cart status changes...", attributes:["required"]),
-            Html::Field(type: "Tel", key: "Contact", value: \_::$Back->User->GetMetaValue("Contact")??\_::$Back->User->GetValue("Contact"), description:$isDigital ? "A phone or mobile numbers (use your country code)..." :  "An oncall phone or mobile numbers (use your country code)...", attributes:$isDigital ? []:["required"]),
+            Html::Field(type: "Email", key: "Email", value: \_::$User->GetMetaValue("Email")??\_::$User->Email, description:$isDigital ? "Please put a correct email address to receive the digital items links" : "To inform your cart status changes...", attributes:["required"]),
+            Html::Field(type: "Tel", key: "Contact", value: \_::$User->GetMetaValue("Contact")??\_::$User->GetValue("Contact"), description:$isDigital ? "A phone or mobile numbers (use your country code)..." :  "An oncall phone or mobile numbers (use your country code)...", attributes:$isDigital ? []:["required"]),
             ...($isDigital ? [] : [
-                Html::Field(type: "Text", key: "Country", value: \_::$Back->User->GetMetaValue("Country"), description:"Your country to send your cart there...", attributes:["required"]),
-                Html::Field(type: "Text", key: "Province", value: \_::$Back->User->GetMetaValue("Province"), description:"Your province to send your cart there...", attributes:["required"]),
-                Html::Field(type: "Text", key: "City", value: \_::$Back->User->GetMetaValue("City"), description:"Your city to send your cart there...", attributes:["required"]),
-                Html::Field(type: "Texts", key: "Address", value: \_::$Back->User->GetMetaValue("Address")??\_::$Back->User->GetValue("Address"), description:"A full address to send your cart there...", attributes:["required"]),
-                Html::Field(type: "Text", key: "PostalCode", value: \_::$Back->User->GetMetaValue("PostalCode"), description:"Your exact postal code (zipcode)")
+                Html::Field(type: "Text", key: "Country", value: \_::$User->GetMetaValue("Country"), description:"Your country to send your cart there...", attributes:["required"]),
+                Html::Field(type: "Text", key: "Province", value: \_::$User->GetMetaValue("Province"), description:"Your province to send your cart there...", attributes:["required"]),
+                Html::Field(type: "Text", key: "City", value: \_::$User->GetMetaValue("City"), description:"Your city to send your cart there...", attributes:["required"]),
+                Html::Field(type: "Texts", key: "Address", value: \_::$User->GetMetaValue("Address")??\_::$User->GetValue("Address"), description:"A full address to send your cart there...", attributes:["required"]),
+                Html::Field(type: "Text", key: "PostalCode", value: \_::$User->GetMetaValue("PostalCode"), description:"Your exact postal code (zipcode)")
             ]),
         ],
         null,

@@ -1,7 +1,7 @@
 <?php
 function RequestConditionQuery($tableName = null, $userId = null)
 {
-    $userId = $userId ?? \_::$Back->User->Id;
+    $userId = $userId ?? \_::$User->Id;
     if ($tableName)
         $tableName .= ".";
     return "(

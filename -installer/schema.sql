@@ -168,6 +168,24 @@ CREATE TABLE IF NOT EXISTS `%%PREFIX%%Payment` (
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
+--
+-- Table structure for table `%%PREFIX%%Account`
+--
+
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Account` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `UserId` int(11) DEFAULT NULL,
+  `Reference` tinytext DEFAULT NULL,
+  `ReferenceId` int(11) DEFAULT NULL,
+  `Amount` float DEFAULT 0,
+  `Unit` tinytext DEFAULT NULL,
+  `Status` tinytext DEFAULT NULL,
+  `Description` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `CreateTime` datetime NOT NULL DEFAULT current_timestamp(),
+  `MetaData` longtext DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */

@@ -6,7 +6,7 @@ if ($data) {
             "WHERE ".(\_::$Config->DigitalStore?"M.Digital IS FALSE":"(M.Digital IS FALSE OR M.Digital IS NULL)")." AND ".
             RequestConditionQuery(),
             [
-                ...(\_::$Back->User->Id ? ["UserId" => \_::$Back->User->Id] : []),
+                ...(\_::$User->Id ? ["UserId" => \_::$User->Id] : []),
                 ...$data
             ]
         );

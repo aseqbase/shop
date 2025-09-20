@@ -3,7 +3,7 @@ namespace MiMFa\Module;
 use MiMFa\Library\Html;
 use MiMFa\Library\Style;
 use MiMFa\Library\Convert;
-use MiMFa\Library\User;
+
 module("Content");
 /**
  * To show data as posts
@@ -256,7 +256,7 @@ class Merchandise extends Content
                if(isset($d["Id"])) $output .= Html::Division(
                     Html::Super("Supplier") .
                     Html::Division(
-                         Html::Image(null, $d["Image"]??User::$DefaultImagePath) .
+                         Html::Image(null, $d["Image"]??\User::$DefaultImagePath) .
                          Html::Link(
                               $d["Organization"]??$d["Name"]??"Unknown",
                               \_::$Aseq->UserRoute . $d["Id"]

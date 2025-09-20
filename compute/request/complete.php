@@ -95,7 +95,7 @@ if ($pid = get($data, "PaymentId")) {
             if (
                 Contact::SendHtmlEmail(
                     \_::$Info->SenderEmail,
-                    $isDigital ? $address : \_::$Back->User->Email,
+                    $isDigital ? $address : \_::$User->Email,
                     $subject,
                     $content
                 )

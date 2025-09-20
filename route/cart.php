@@ -13,34 +13,34 @@ use MiMFa\Library\Router;
         $received = receivePut();
         $address = [];
         if($v = get($received, "Email"))
-            \_::$Back->User->SetMetaValue("Email", $v);
+            \_::$User->SetMetaValue("Email", $v);
             if($v = get($received, "Contact"))
-            \_::$Back->User->SetMetaValue("Contact", $v);
+            \_::$User->SetMetaValue("Contact", $v);
 
         if($v = get($received, "Address")) {
-            \_::$Back->User->SetMetaValue("Address", $v);
+            \_::$User->SetMetaValue("Address", $v);
             $address[] = $v;
         }
         if($v = get($received, "PostalCode"))  {
-            \_::$Back->User->SetMetaValue("PostalCode", $v);
+            \_::$User->SetMetaValue("PostalCode", $v);
             $address[] = PHP_EOL.$v;
         }
         if($v = get($received, "City"))  {
-            \_::$Back->User->SetMetaValue("City", $v);
+            \_::$User->SetMetaValue("City", $v);
             $address[] = PHP_EOL.$v;
         }
         if($v = get($received, "Province")) {
-            \_::$Back->User->SetMetaValue("Province", $v);
+            \_::$User->SetMetaValue("Province", $v);
             $address[] = PHP_EOL.$v;
         }
         if($v = get($received, "Country")) {
-            \_::$Back->User->SetMetaValue("Country", $v);
+            \_::$User->SetMetaValue("Country", $v);
             $address[] = PHP_EOL.$v;
         }
         if($address) $address = join(", ", $address);
         else $address = null;
-        $uaddress = \_::$Back->User->GetValue("Address");
-        if($address && !$uaddress) \_::$Back->User->Set(["Address"=>get($received, "Address")]);
+        $uaddress = \_::$User->GetValue("Address");
+        if($address && !$uaddress) \_::$User->Set(["Address"=>get($received, "Address")]);
         $r = compute("request/update-physicals", ["Address"=>$address, "Contact"=> get($received, "Contact")])===null?null:true;
         $r = compute("request/update-digitals", ["Address"=> get($received, "Email"), "Contact"=> get($received, "Contact")])===null?$r:true;
         if($r) return renderSuccess("Your requests data updated successfully!");

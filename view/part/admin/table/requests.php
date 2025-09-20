@@ -41,7 +41,7 @@ $module->CellsTypes = [
         $std->Title = "User";
         $std->Type = auth(\_::$Config->SuperAccess)?"select":"hidden";
         $std->Options = $users;
-        if(!isValid($v)) $std->Value = \_::$Back->User->Id;
+        if(!isValid($v)) $std->Value = \_::$User->Id;
         return $std;
     },
     "MerchandiseId"=>!$superAccess?"disabled":function($t, $v) {

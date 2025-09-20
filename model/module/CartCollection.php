@@ -3,7 +3,7 @@ namespace MiMFa\Module;
 use MiMFa\Library\Html;
 use MiMFa\Library\Convert;
 use MiMFa\Library\Internal;
-use MiMFa\Library\User;
+
 
 module("MerchandiseCollection");
 /**
@@ -259,7 +259,7 @@ class CartCollection extends MerchandiseCollection
                 }
                
                 $r_description = getValid($item["Request"], 'Description', $this->DefaultDescription);
-                $r_contact = getValid($item["Request"], 'Contact', \_::$Back->User->GetValue("Contact"));
+                $r_contact = getValid($item["Request"], 'Contact', \_::$User->GetValue("Contact"));
 
                 $m_discount = get($item["Merchandise"], 'Discount');
                 $m_tprice = get($item["Request"], 'Price');//Total Price
@@ -297,7 +297,7 @@ class CartCollection extends MerchandiseCollection
 
                 yield Html::Rack(
                     Html::MediumSlot(
-                        ($this->AllowImage ? Html::Image($c_title, $c_image, User::$DefaultImagePath, ["class" => "item-image"]) : "") .
+                        ($this->AllowImage ? Html::Image($c_title, $c_image, \User::$DefaultImagePath, ["class" => "item-image"]) : "") .
                         Html::Division(
                             ($this->AllowTitle ? Html::SubHeading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
                             ($this->AllowSupplier ? $this->GetSupplier($item["Content"]) : "")
@@ -413,7 +413,7 @@ class CartCollection extends MerchandiseCollection
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
             $sup = $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown");
-            $del = Html::Image(null, $d["Image"] ? $d["Image"] : User::$DefaultImagePath) .
+            $del = Html::Image(null, $d["Image"] ? $d["Image"] : \User::$DefaultImagePath) .
                     Html::Link(
                         $sup,
                         \_::$Aseq->UserRoute . $d["Id"]

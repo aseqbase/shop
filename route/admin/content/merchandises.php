@@ -23,10 +23,10 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
                 if(table("Merchandise")->Insert([
                     "ContentId" => $received["Id"],
                     "SupplierId" => $received["AuthorId"],
-                    "AuthorId" => \_::$Back->User->Id,
+                    "AuthorId" => \_::$User->Id,
                     "Count" => 1
                 ])) return flipResponse(Html::Success("Your item sat as a Merchandise successfully!"));
-                else return renderError("A problem is occured in the process!");
+                else return renderError("A problem is occurred in the process!");
             } catch (Exception $ex) {
                 return renderError($ex);
             }
@@ -39,7 +39,7 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
                     ":Id" => $MerchandiseId,
                     ...(isset($received["Count"]) ? ["Count" => $received["Count"]] : []),
                     ...(isset($received["Price"]) ? ["Price" => $received["Price"]] : []),
-                    "EditorId" => \_::$Back->User->Id,
+                    "EditorId" => \_::$User->Id,
                     "UpdateTime" => Convert::ToDateTimeString()
                 ]);
                 return renderSuccess(Html::Icon("check"));
@@ -80,7 +80,7 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
                 $std->Type = $access ? "select" : "hidden";
                 $std->Options = $users;
                 if (!isValid($v))
-                    $std->Value = \_::$Back->User->Id;
+                    $std->Value = \_::$User->Id;
                 return $std;
             },
             "Type" => "enum",
@@ -94,7 +94,7 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
                 $std->Type = auth(\_::$Config->SuperAccess) ? "select" : "hidden";
                 $std->Options = $users;
                 if (!isValid($v))
-                    $std->Value = \_::$Back->User->Id;
+                    $std->Value = \_::$User->Id;
                 return $std;
             },
             "EditorId" => function ($t, $v) use ($users) {
@@ -103,7 +103,7 @@ $module->UpdateAccess = \_::$Config->AdminAccess;
                 $std->Type = auth(\_::$Config->SuperAccess) ? "select" : "hidden";
                 $std->Options = $users;
                 if (!isValid($v))
-                    $std->Value = \_::$Back->User->Id;
+                    $std->Value = \_::$User->Id;
                 return $std;
             },
             "Status" => [-1 => "Unpublished", 0 => "Drafted", 1 => "Published"],

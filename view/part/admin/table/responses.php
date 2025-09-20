@@ -68,7 +68,7 @@ $module->CellsTypes = [
         $std->Title = "User";
         $std->Type = $superAccess?"select":"hidden";
         $std->Options = $users;
-        if(!isValid($v)) $std->Value = \_::$Back->User->Id;
+        if(!isValid($v)) $std->Value = \_::$User->Id;
         return $std;
     },
     "MerchandiseId"=>!$superAccess?"disabled":function($t, $v) {
@@ -111,7 +111,7 @@ $module->CellsTypes = [
         $std->Title = "Responsible";
         $std->Type = "select";
         $std->Options = $users;
-        if(!isValid($v)) $std->Value = \_::$Back->User->Id;
+        if(!isValid($v)) $std->Value = \_::$User->Id;
         return $std;
     },
     "Subject"=>"varchar",
@@ -124,7 +124,7 @@ $module->CellsTypes = [
         $std->Title = "Editor";
         $std->Type = $superAccess?"select":"disabled";
         $std->Options = $users;
-        $std->Value = \_::$Back->User->Id;
+        $std->Value = \_::$User->Id;
         return $std;
     },
     "UpdateTime" =>function($t, $v){
