@@ -15,8 +15,8 @@ module("Collection");
 class MerchandiseCollection extends Collection
 {
     public $TitleTag = "h1";
-    public $RootRoute = "/item/";
-    public $CollectionRoute = "/items/";
+    public $Root = "/item/";
+    public $CollectionRoot = "/items/";
     public $MaximumColumns = 3;
 
     /**
@@ -351,7 +351,7 @@ class MerchandiseCollection extends Collection
                 yield "<div id='$uid' class='item col col-lg'" . ($this->Animation ? " data-aos-delay='" . ($i % $this->MaximumColumns * \_::$Front->AnimationSpeed) . "' data-aos='{$this->Animation}'" : "") . ">";
                 yield Html::Rack(
                         ($this->AllowImage ? Html::Image($c_title, $c_image, \User::$DefaultImagePath, ["class" => "item-image"]) : "") .
-                        Html::Division(($this->AllowTitle ? Html::Heading($c_title, $this->RootRoute . $c_id, ["class" => 'title']) : "").
+                        Html::Division(($this->AllowTitle ? Html::Heading($c_title, $this->Root . $c_id, ["class" => 'title']) : "").
                         ($this->AllowSupplier ? $this->GetSupplier($item) : "")).
                         (isValid($meta)?Html::Sub($meta, ["class" => 'metadata']):"")
                     , ["class" => 'header']);
@@ -407,7 +407,7 @@ class MerchandiseCollection extends Collection
             $del = Html::Image(null, $d["Image"] ? $d["Image"] : \User::$DefaultImagePath) .
                     Html::Link(
                         $sup,
-                        \_::$Aseq->UserRoute . $d["Id"]
+                        \_::$Base->UserRoot . $d["Id"]
                     );
         }else $del = Html::Icon(\_::$Info->LogoPath);
         $del .= $this->DeliveryLabel.Html::Icon($m_digital?"envelope":"map-marker").Html::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");

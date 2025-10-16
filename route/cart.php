@@ -1,5 +1,4 @@
 <?php
-use MiMFa\Library\Router;
 (new Router())
 ->On("cart/payment(?!/)")
     ->Put(fn() => response(compute("request/update", receive())))
@@ -73,6 +72,6 @@ use MiMFa\Library\Router;
 ->On("cart/.*")
     ->Get(
         fn () =>
-            view(\_::$Config->DefaultViewName, ["Name" => \_::$Direction,])
+            view(\_::$Config->DefaultViewName, ["Name" => \_::$Base->Direction,])
     )->Handle();
 ?>

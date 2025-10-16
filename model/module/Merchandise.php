@@ -14,8 +14,8 @@ module("Content");
  */
 class Merchandise extends Content
 {
-     public $RootRoute = "/item/";
-     public $CollectionRoute = "/items/";
+     public $Root = "/item/";
+     public $CollectionRoot = "/items/";
 
      public $AllowAuthor = false;
      /**
@@ -217,8 +217,8 @@ class Merchandise extends Content
                $this->GetImage() .
                Html::MediumSlot(
                     Html::Division(
-                         ($this->AllowTitle ? Html::ExternalHeading(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->RootRoute . $nameOrId : null, ['class' => 'heading']) : "") .
-                         $this->GetDetails($this->CollectionRoute . $nameOrId)
+                         ($this->AllowTitle ? Html::ExternalHeading(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->Root . $nameOrId : null, ['class' => 'heading']) : "") .
+                         $this->GetDetails($this->CollectionRoot . $nameOrId)
                     ) .
                     ($this->AllowDescription ? $this->GetExcerpt() : "")
                ) . $this->GetControls(),
@@ -259,7 +259,7 @@ class Merchandise extends Content
                          Html::Image(null, $d["Image"]??\User::$DefaultImagePath) .
                          Html::Link(
                               $d["Organization"]??$d["Name"]??"Unknown",
-                              \_::$Aseq->UserRoute . $d["Id"]
+                              \_::$Base->UserRoot . $d["Id"]
                          )
                     ),
                     ["class" => "supplier"]

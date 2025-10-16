@@ -12,8 +12,8 @@ route("contents", [
     ],
     "View" => [
         "Part" => "content/merchandises",
-        "RootRoute" => "/item/",
-        "CollectionRoute" => "/items/",
+        "Root" => "/item/",
+        "CollectionRoot" => "/items/",
         "DefaultTitle" => "All Merchandises",
         "Image" => "box",
         "Description" => "Browse between all merchandises",

@@ -87,7 +87,7 @@ if ($pid = get($data, "PaymentId")) {
         else {
             $row["Status"] = -2;// Physical Unavailable
         }
-        // Send Digital Information
+        // Send Digital Info
         if ($row["Status"] > 0 && $result) {
             $content = Convert::ToString($result);
             if ($isDigital)

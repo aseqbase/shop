@@ -51,7 +51,7 @@ $module->CellsValues = [
         return Html::Icon($r["Digital"]?"envelope":"truck")." ".$v;
     },
     "User"=>function($v, $k, $r){
-        return Html::Link($v,\_::$Address->UserRoute.$r["UserPath"], ["target"=>"blank"]);
+        return Html::Link($v,\_::$Base->UserRoot.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
         return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");

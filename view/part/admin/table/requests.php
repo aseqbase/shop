@@ -24,7 +24,7 @@ $module->CellsValues = [
         return \MiMFa\Library\Html::Link($v,"/item/".$r["ItemPath"], ["target"=>"blank"]);
     },
     "User"=>function($v, $k, $r){
-        return \MiMFa\Library\Html::Link($v,\_::$Address->UserRoute.$r["UserPath"], ["target"=>"blank"]);
+        return \MiMFa\Library\Html::Link($v,\_::$Base->UserRoot.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
         return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");

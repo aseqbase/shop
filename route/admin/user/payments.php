@@ -1,6 +1,6 @@
 <?php
 use MiMFa\Library\Html;
-(new MiMFa\Library\Router())
+(new Router())
 ->if(auth(\_::$Config->AdminAccess))
     ->Get(function () {
         view("part", [

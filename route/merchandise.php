@@ -11,8 +11,8 @@ route("content", [
     ],
     "View" => [
         "Part" => "content/merchandise",
-        "RootRoute" => "/item/",
-        "CollectionRoute" => "/items/",
+        "Root" => "/item/",
+        "CollectionRoot" => "/items/",
         "CheckAccess" => function ($item) {
             return \_::$User->Access(\_::$Config->AdminAccess) || \_::$User->Access(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$Config->VisitAccess))));
         }

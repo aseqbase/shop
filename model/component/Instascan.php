@@ -5,8 +5,8 @@ use \MiMFa\Library\Html;
 	Html::Script(null, 'https://rawgit.com/schmich/instascan-builds/master/instascan.min.js'),
 	Html::Script("
 			try{
-				if(!Instascan.Scanner)Html.script.load(null, '" . asset(\_::$Address->ScriptDirectory, "Instascan.js", optimize:true) . "');
-			}catch{Html.script.load(null, '" . asset(\_::$Address->ScriptDirectory, "Instascan.js", optimize:true) . "');}
+				if(!Instascan.Scanner)Html.script.load(null, '" . asset(\_::$Base->ScriptDirectory, "Instascan.js", optimize:true) . "');
+			}catch{Html.script.load(null, '" . asset(\_::$Base->ScriptDirectory, "Instascan.js", optimize:true) . "');}
 	")
 ];
 ?>

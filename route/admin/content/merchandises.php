@@ -8,7 +8,7 @@ $module = new Table("Content");
 $module->AllowServerSide = true;
 $module->Updatable = true;
 $module->UpdateAccess = \_::$Config->AdminAccess;
-(new MiMFa\Library\Router())
+(new Router())
     ->Get(function () {
         view("part", [
             "Name" => "admin/table/merchandises",

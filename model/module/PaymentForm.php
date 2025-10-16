@@ -50,7 +50,7 @@ class PaymentForm extends Form
 		$this->QRCodeScanner->ActiveAtBegining = false;
 		$this->QRCodeScanner->ActiveAtEnding = false;
 		$this->QRCodeScanner->Style = "border: var(--border-1) #8888; margin-top: var(--size-0);";
-		$this->Path = \_::$Url;
+		$this->Path = \_::$Base->Url;
 		$this->CancelLabel = "Cancel";
 		$this->SetTypes(...$transactions);
 	}
@@ -65,7 +65,7 @@ class PaymentForm extends Form
 			$data = Convert::FromJson(decrypt(array_key_first($data)));
 
 		if (count($data) > 0)
-			$this->Transaction = seek($transactions, fn($v) => $v->Unit == get($data, "Unit")) ??
+			$this->Transaction = take($transactions, fn($v) => $v->Unit == get($data, "Unit")) ??
 				new Transaction(
 					description: get($data, "Description"),
 					path: get($data, "DestinationPath"),
