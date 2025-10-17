@@ -1,6 +1,8 @@
 # Shop (Project)
 > aseqbase/shop
-To create a new Shop, with all accessibility and equipment, for an aseqbase website...
+
+The objective is to establish a fully functional and readily accessible Shop, complete with all necessary equipment and resources, specifically designed for seamless integration within the existing framework of the aseqbase website. This involves careful planning and execution to ensure that the new Shop is not only user-friendly but also adheres to the highest standards of accessibility, allowing all visitors to navigate and utilize its features effectively. The provision of appropriate equipment is paramount to the Shop's operational efficiency, guaranteeing a smooth and productive workflow for both administrators and customers alike, ultimately enhancing the overall user experience on the aseqbase website.
+
 ## Dependencies
 * <a href="http://github.com//aseqbase/aseqbase">aseqbase/aseqbase</a>
 <h2>Managements</h2>
