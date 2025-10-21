@@ -4,11 +4,11 @@
     ->Put(fn() => response(compute("request/update", receive())))
     ->Get(
     fn () =>
-        view(\_::$Config->DefaultViewName, ["Name" => "cart/payment"])
+        view(\_::$Front->DefaultViewName, ["Name" => "cart/payment"])
     )
 ->On("cart/options(?!/)")
     ->Put(function() {
-        if(!auth(\_::$Config->UserAccess)) return renderError("You don't have enough access!");
+        if(!\_::$User->GetAccess(\_::$User->UserAccess)) return renderError("You don't have enough access!");
         $received = receivePut();
         $address = [];
         if($v = get($received, "Email"))
@@ -47,19 +47,19 @@
     })
     ->Get(
     fn () =>
-        view(\_::$Config->DefaultViewName, ["Name" => "cart/options"])
+        view(\_::$Front->DefaultViewName, ["Name" => "cart/options"])
     )
 ->On("cart/all(?!/)")
     ->Get(
         fn () =>
-            view(\_::$Config->DefaultViewName, ["Name" => "cart/all"])
+            view(\_::$Front->DefaultViewName, ["Name" => "cart/all"])
     )
 ->On("cart/wish(?!/)")
     ->Put(fn() => response(compute("request/add-wish", receive())))
     ->Delete(fn() => response(compute("request/remove-wish", receive())))
     ->Get(
         fn () =>
-            view(\_::$Config->DefaultViewName, ["Name" => "cart/wish"])
+            view(\_::$Front->DefaultViewName, ["Name" => "cart/wish"])
     )
 ->On("(cart|(cart/current))(?!/)")
     ->Put(fn() => response(compute("request/add", receive())))
@@ -67,11 +67,11 @@
     ->Delete(fn() => response(compute("request/remove", receive())))
     ->Get(
         fn () =>
-            view(\_::$Config->DefaultViewName, ["Name" => "cart/current"])
+            view(\_::$Front->DefaultViewName, ["Name" => "cart/current"])
     )
 ->On("cart/.*")
     ->Get(
         fn () =>
-            view(\_::$Config->DefaultViewName, ["Name" => \_::$Base->Direction,])
+            view(\_::$Front->DefaultViewName, ["Name" => \_::$Address->Direction,])
     )->Handle();
 ?>

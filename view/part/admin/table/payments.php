@@ -1,5 +1,5 @@
 <?php
-inspect(\_::$Config->AdminAccess);
+inspect(\_::$User->AdminAccess);
 
 use MiMFa\Library\Convert;
 use MiMFa\Library\Html;
@@ -15,12 +15,12 @@ $module->ExcludeColumns = ["Unit", 'Verify'];
 $module->AllowServerSide = true;
 $module->Id = "_table_".getId(true);
 $module->Updatable = true;
-$module->UpdateAccess = \_::$Config->AdminAccess;
+$module->UpdateAccess = \_::$User->AdminAccess;
 $module->DeleteAccess = 
 $module->AddAccess = 
 $module->DuplicateAccess =
 $module->ModifyAccess =
-$module->DeleteAccess = \_::$Config->SuperAccess;
+$module->DeleteAccess = \_::$User->SuperAccess;
 renderStyle("
     .{$module->Name} tr:has(.verified){
         color: var(--color-green);
@@ -37,7 +37,7 @@ $module->CellsValues = [
     'CreateTime'
 ];
 $module->CellsTypes = [
-    "Id" => auth(\_::$Config->SuperAccess) ? "disabled" : false,
+    "Id" => \_::$User->GetAccess(\_::$User->SuperAccess) ? "disabled" : false,
     'Relation' => "string",
     'Verify' => "check",
     'Source' => "string",
@@ -56,12 +56,12 @@ $module->CellsTypes = [
     'Others' => "string",
     "UpdateTime" => function ($t, $v) {
         $std = new stdClass();
-        $std->Type = auth(\_::$Config->SuperAccess) ? "calendar" : "hidden";
+        $std->Type = \_::$User->GetAccess(\_::$User->SuperAccess) ? "calendar" : "hidden";
         $std->Value = Convert::ToDateTimeString();
         return $std;
     },
     "CreateTime" => function ($t, $v) {
-        return auth(\_::$Config->SuperAccess) ? "calendar" : (isValid($v) ? "hidden" : false);
+        return \_::$User->GetAccess(\_::$User->SuperAccess) ? "calendar" : (isValid($v) ? "hidden" : false);
     },
     "MetaData" => "json"
 ];

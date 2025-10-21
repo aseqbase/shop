@@ -50,7 +50,7 @@ class PaymentForm extends Form
 		$this->QRCodeScanner->ActiveAtBegining = false;
 		$this->QRCodeScanner->ActiveAtEnding = false;
 		$this->QRCodeScanner->Style = "border: var(--border-1) #8888; margin-top: var(--size-0);";
-		$this->Path = \_::$Base->Url;
+		$this->Path = \_::$Address->Url;
 		$this->CancelLabel = "Cancel";
 		$this->SetTypes(...$transactions);
 	}
@@ -80,11 +80,11 @@ class PaymentForm extends Form
 		$this->Transaction->Relation = get($data, "Relation")??$this->Transaction->Relation;
 		$this->Transaction->Transaction = get($data, "Transaction")??$this->Transaction->Transaction;
 		
-		$this->Transaction->Source = get($data, "Source") ?? $this->Transaction->Source ?? (is_null(\_::$User) ? null : \_::$User->Name);
+		$this->Transaction->Source = get($data, "Source") ?? $this->Transaction->Source ?? \_::$User->Name;
 		$this->Transaction->SourceContent = get($data, "Content");
 		$this->Transaction->SourcePath = get($data, "Path");
-		$this->Transaction->SourceEmail = get($data, "Email") ?? (is_null(\_::$User) ? null : \_::$User->Email);
-		$this->Transaction->Others = $this->Contact = get($data, "Contact") ?? (is_null(\_::$User) ? null : \_::$User->GetValue("Contact"));
+		$this->Transaction->SourceEmail = get($data, "Email") ?? \_::$User->Email;
+		$this->Transaction->Others = $this->Contact = get($data, "Contact") ?? \_::$User->GetValue("Contact");
 
 		$this->Transaction->Value = between($this->Transaction->Value, get($data, "Value"));
 		$this->Transaction->Unit = between($this->Transaction->Unit, get($data, "Unit"));
@@ -498,7 +498,7 @@ class Transaction
 
 	public function ToHtml()
 	{
-		return Html::Heading(__("Transaction" . ($this->DateTime ? " Succeed" : " Failed")), ["class" => "result" . ($this->DateTime ? " success" : " error")]) .
+		return Html::Heading3(__("Transaction" . ($this->DateTime ? " Succeed" : " Failed")), ["class" => "result" . ($this->DateTime ? " success" : " error")]) .
 			Html::Table([
 				[__("Traction Number") . ":", Html::Bold($this->Relation).Html::Icon("copy", "copy(".Script::Convert($this->Relation).")")],
 				[__("From") . ":", "{$this->Source} {$this->SourceEmail} {$this->SourceContent}"],

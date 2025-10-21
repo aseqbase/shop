@@ -1,5 +1,5 @@
 <?php
-inspect(\_::$Config->AdminAccess);
+inspect(\_::$User->AdminAccess);
 use MiMFa\Library\Convert;
 use MiMFa\Library\Html;
 use MiMFa\Module\Table;
@@ -20,10 +20,10 @@ $module->KeyColumns = ["Item", "User"];
 $module->IncludeColumns = ["User", "Item", "Status", "Address", "Collection", "Count", "Price", "UpdateTime"];
 $module->AllowServerSide = true;
 $module->Updatable = true;
-$module->UpdateAccess = \_::$Config->AdminAccess;
+$module->UpdateAccess = \_::$User->AdminAccess;
 $module->DeleteAccess = 
 $module->AddAccess = 
-$module->DuplicateAccess = \_::$Config->SuperAccess;
+$module->DuplicateAccess = \_::$User->SuperAccess;
 $users = table("User")->SelectPairs("Id" , "Name");
 $module->CellsValues = [
     "Item"=>function($v, $k, $r){
@@ -51,7 +51,7 @@ $module->CellsValues = [
         return Html::Icon($r["Digital"]?"envelope":"truck")." ".$v;
     },
     "User"=>function($v, $k, $r){
-        return Html::Link($v,\_::$Base->UserRoot.$r["UserPath"], ["target"=>"blank"]);
+        return Html::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
         return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");
@@ -60,7 +60,7 @@ $module->CellsValues = [
         return $v . \_::$Config->PriceUnit;
     }
 ];
-$superAccess = auth(\_::$Config->SuperAccess);
+$superAccess = \_::$User->GetAccess(\_::$User->SuperAccess);
 $module->CellsTypes = [
     "Id" => $superAccess?"disabled":false,
     "UserId" =>!$superAccess?"disabled":function($t, $v) use($users, $superAccess){
@@ -129,17 +129,17 @@ $module->CellsTypes = [
     },
     "UpdateTime" =>function($t, $v){
         $std = new stdClass();
-        $std->Type = auth(\_::$Config->SuperAccess)?"calendar":"hidden";
+        $std->Type = \_::$User->GetAccess(\_::$User->SuperAccess)?"calendar":"hidden";
         $std->Value = Convert::ToDateTimeString();
         return $std;
     },
     "CreateTime" => function($t, $v){
-        return auth(\_::$Config->SuperAccess)?"calendar":(isValid($v)?"hidden":false);
+        return \_::$User->GetAccess(\_::$User->SuperAccess)?"calendar":(isValid($v)?"hidden":false);
     },
     "MetaData" =>function ($t, $v, $k, $r) {
         $std = new stdClass();
         $std->Type = "json";
-        if(\_::$Config->AllowTranslate && !$r["Title"] && !$r["Content"]) $std->Value = "{\"lang\":\"".\_::$Back->Translate->Language."\"}";
+        if(\_::$Back->AllowTranslate && !$r["Title"] && !$r["Content"]) $std->Value = "{\"lang\":\"".\_::$Back->Translate->Language."\"}";
         return $std;
     }
 ];

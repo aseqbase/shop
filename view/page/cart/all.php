@@ -13,7 +13,7 @@ $module = new MiMFa\Module\CartCollection();
 $module->Items = grab($data, "Items")??compute("request/all", receive());
 $module->AllowContact = 
 $module->AllowAddress = false;
-if(auth(\_::$Config->UserAccess)) $module->NextButton = Html::Button("Confirm", "/cart/options", ["class" => "btn main"]);
+if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Html::Button("Confirm", "/cart/options", ["class" => "btn main"]);
 else $module->NextButton = Html::Button("Confirm", "/cart/sign-in", ["class" => "btn main"]);
 swap($module, $data);
 $module->Render();

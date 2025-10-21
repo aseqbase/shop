@@ -1,15 +1,15 @@
 <?php
 // To unset the default router sat at the bottom layers
-\_::$Aseq->On()->Reset();
+\_::$Router->On()->Reset();
 
 /**
  * Use your routers by below formats
- * \_::$Aseq->On("A Part Of Path?")->Default("Route Name");
+ * \_::$Router->On("A Part Of Path?")->Default("Route Name");
  */
-\_::$Aseq->On("cart")->Default("cart");
-\_::$Aseq->On("(item|merchandise)s")->Default("merchandises");
-\_::$Aseq->On("item|merchandise")->Default("merchandise");
+\_::$Router->On("cart")->Default("cart");
+\_::$Router->On("(item|merchandise)s")->Default("merchandises");
+\_::$Router->On("item|merchandise")->Default("merchandise");
 
 // To route other requests to the DefaultRouteName
-\_::$Aseq->On()->Default(\_::$Config->DefaultRouteName);
+\_::$Router->On()->Default(\_::$Router->DefaultRouteName);
 ?>

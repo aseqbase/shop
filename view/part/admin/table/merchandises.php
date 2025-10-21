@@ -5,13 +5,13 @@ use MiMFa\Library\Convert;
 use MiMFa\Module\PrePage;
 use MiMFa\Module\Table;
 
-inspect(\_::$Config->AdminAccess);
+inspect(\_::$User->AdminAccess);
 
 module("Table");
 $module = new Table("Content");
 $module->AllowServerSide = true;
 $module->Updatable = true;
-$module->UpdateAccess = \_::$Config->AdminAccess;
+$module->UpdateAccess = \_::$User->AdminAccess;
 
 module("PrePage");
 
@@ -28,7 +28,7 @@ $module->SelectQuery = "
 $module->KeyColumns = ["Image", "Item"];
 $module->IncludeColumns = ['Update', 'Image', 'Item', 'Category', 'Supplier', 'Count', 'Price', 'Total', 'Volume', 'Access', 'UpdateTime'];
 $module->Set("Merchandise");
-$access = auth(\_::$Config->AdminAccess);
+$access = \_::$User->GetAccess(\_::$User->AdminAccess);
 $users = table("User")->SelectPairs("Id", "Name");
 $module->CellsTypes = [
     "Id" => $access ? "disabled" : false,
@@ -62,7 +62,7 @@ $module->CellsTypes = [
     "AuthorId" => function ($t, $v) use ($users) {
         $std = new stdClass();
         $std->Title = "Author";
-        $std->Type = auth(\_::$Config->SuperAccess) ? "select" : "hidden";
+        $std->Type = \_::$User->GetAccess(\_::$User->SuperAccess) ? "select" : "hidden";
         $std->Options = $users;
         if (!isValid($v))
             $std->Value = \_::$User->Id;
@@ -71,7 +71,7 @@ $module->CellsTypes = [
     "EditorId" => function ($t, $v) use ($users) {
         $std = new stdClass();
         $std->Title = "Editor";
-        $std->Type = auth(\_::$Config->SuperAccess) ? "select" : "hidden";
+        $std->Type = \_::$User->GetAccess(\_::$User->SuperAccess) ? "select" : "hidden";
         $std->Options = $users;
         if (!isValid($v))
             $std->Value = \_::$User->Id;
@@ -81,17 +81,17 @@ $module->CellsTypes = [
     "Access" => function () {
         $std = new stdClass();
         $std->Type = "number";
-        $std->Attributes = ["min" => \_::$Config->BanAccess, "max" => \_::$Config->SuperAccess];
+        $std->Attributes = ["min" => \_::$User->BanAccess, "max" => \_::$User->SuperAccess];
         return $std;
     },
     "UpdateTime" => function ($t, $v) {
         $std = new stdClass();
-        $std->Type = auth(\_::$Config->SuperAccess) ? "calendar" : "hidden";
+        $std->Type = \_::$User->GetAccess(\_::$User->SuperAccess) ? "calendar" : "hidden";
         $std->Value = Convert::ToDateTimeString();
         return $std;
     },
     "CreateTime" => function ($t, $v) {
-        return auth(\_::$Config->SuperAccess) ? "calendar" : (isValid($v) ? "hidden" : false);
+        return \_::$User->GetAccess(\_::$User->SuperAccess) ? "calendar" : (isValid($v) ? "hidden" : false);
     },
     "MetaData" => "json"
 ];
@@ -132,12 +132,12 @@ $module->CellsValues = [
         return Html::Link($v, "/item/" . $r["Id"], ["target"=>"blank"]);
     },
     "Supplier" => function ($v, $k, $r) {
-        return $r["SupplierId"] ? Html::Link($v, \_::$Base->UserRoot . $r["SupplierId"], ["target"=>"blank"]) : $v;
+        return $r["SupplierId"] ? Html::Link($v, \_::$Address->UserRoot . $r["SupplierId"], ["target"=>"blank"]) : $v;
     },
     "Category" => function ($v, $k, $r) {
         $val = trim(\_::$Back->Query->GetCategoryRoute(first(Convert::FromJson($v))) ?? "", "/\\");
         if (isValid($val))
-            return Html::Link($val, \_::$Base->CategoryRoot . $val, ["target"=>"blank"]);
+            return Html::Link($val, \_::$Address->CategoryRoot . $val, ["target"=>"blank"]);
         return $v;
     },
     "Count" => function ($v, $k, $r) {

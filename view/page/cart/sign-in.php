@@ -22,6 +22,6 @@ $sign->RecoverPath = "/cart/recover";
 $sign->Welcome = fn()=>load("/cart/options");
 $module->Content = $sign;
 $module->BackButton = Html::Button("Cart", "/cart", ["class" => "col-sm-4"]);
-if(auth(\_::$Config->UserAccess)) $module->NextButton = Html::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
+if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Html::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
 $module->Render();
 ?>

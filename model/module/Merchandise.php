@@ -217,7 +217,7 @@ class Merchandise extends Content
                $this->GetImage() .
                Html::MediumSlot(
                     Html::Division(
-                         ($this->AllowTitle ? Html::ExternalHeading(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->Root . $nameOrId : null, ['class' => 'heading']) : "") .
+                         ($this->AllowTitle ? Html::Heading1(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->Root . $nameOrId : null, ['class' => 'heading']) : "") .
                          $this->GetDetails($this->CollectionRoot . $nameOrId)
                     ) .
                     ($this->AllowDescription ? $this->GetExcerpt() : "")
@@ -256,10 +256,10 @@ class Merchandise extends Content
                if(isset($d["Id"])) $output .= Html::Division(
                     Html::Super("Supplier") .
                     Html::Division(
-                         Html::Image(null, $d["Image"]??\User::$DefaultImagePath) .
+                         Html::Image(null, $d["Image"]??\_::$User->DefaultImagePath) .
                          Html::Link(
                               $d["Organization"]??$d["Name"]??"Unknown",
-                              \_::$Base->UserRoot . $d["Id"]
+                              \_::$Address->UserRoot . $d["Id"]
                          )
                     ),
                     ["class" => "supplier"]

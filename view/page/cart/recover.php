@@ -21,6 +21,6 @@ $sign->SignUpPath = "/cart/sign-up";
 $sign->SignInPath = "/cart/sign-in";
 $module->Content = $sign;
 $module->BackButton = Html::Button("Cart", "/cart", ["class" => "col-sm-4"]);
-if(auth(\_::$Config->UserAccess)) $module->NextButton = Html::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
+if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Html::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
 $module->Render();
 ?>

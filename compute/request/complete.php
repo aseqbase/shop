@@ -39,7 +39,7 @@ if ($pid = get($data, "PaymentId")) {
         $res = null;
         do {
             if ($res = get($row, "PrivateTitle"))
-                $result[] = Html::Heading($subject = Convert::FromDynamicString($res));
+                $result[] = Html::Heading3($subject = Convert::FromDynamicString($res));
             if ($res = get($row, "PrivateMessage"))
                 $result[] = Convert::FromDynamicString($res);
             if ($res = get($row, "PrivateAttach"))
@@ -105,7 +105,7 @@ if ($pid = get($data, "PaymentId")) {
 
             if ($title || $description || $content) {
                 render(Html::Page(
-                    ($title ? Html::SuperHeading($title) : "") .
+                    ($title ? Html::Heading2($title) : "") .
                     ($description ? Html::Paragraph($description) : "") .
                     $content
                 ));
