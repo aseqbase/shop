@@ -3,7 +3,7 @@
 use MiMFa\Library\Contact;
 use MiMFa\Library\Convert;
 use MiMFa\Library\Html;
-function RequestToResponse($row)
+function RequestToRender($row)
 {
     unset($row["Like"]);
     unset($row["Request"]);
@@ -13,7 +13,7 @@ compute("request/base");
 if ($pid = get($data, "PaymentId")) {
     $collection = table("Payment")->SelectValue("Relation", "Verify IS TRUE AND Id=:Id", [":Id" => $pid]);
     if (isEmpty($collection)) {
-        renderWarning("Your order will be shipped to you once your transaction is confirmed!" . Html::$Break . "This may take up to 24 hours.");
+        warning("Your order will be shipped to you once your transaction is confirmed!" . Html::$Break . "This may take up to 24 hours.");
         return false;
     }
     $rows = table("Request")->As("R")->Join(table("Merchandise")->As("M"))
@@ -27,7 +27,7 @@ if ($pid = get($data, "PaymentId")) {
         $subject = get($row, "Subject");
         $title = get($row, "Subject");
         $description = get($row, "Description");
-        $id = grab($row, "Id");
+        $id = pop($row, "Id");
         $mId = get($row, "MerchandiseId");
         $count = get($row, "Count");
         $mCount = get($row, "MerchandiseCount");
@@ -45,7 +45,7 @@ if ($pid = get($data, "PaymentId")) {
             if ($res = get($row, "PrivateAttach"))
                 $result[] = Html::Items(Convert::FromJson($res));
             if ($res = get($row, "PrivateGenerator")) {
-                $result[] = !isUrl($res) ? (isScript($res) ? eval ($res) : $res) : sendPost(getFullUrl($res), $row);
+                $result[] = !isUrl($res) ? (isScript($res) ? Html::Script($res) : $res) : sendPost(getFullUrl($res), $row);
                 $result[] = Html::$BreakLine;
             }
         } while ($res && --$c > 0);
@@ -58,7 +58,7 @@ if ($pid = get($data, "PaymentId")) {
                 else
                     $row["Status"] = -3;// Defected
             } else {
-                $rrow = RequestToResponse($row);// Response Row
+                $rrow = RequestToRender($row);// Response Row
                 $mrow = [":Id" => $mid, "Count" => 0];// Merchandise Row
                 $price = $row["Price"] / $count;
                 $row["Status"] = 1;// Accepted
@@ -115,7 +115,7 @@ if ($pid = get($data, "PaymentId")) {
             if ($content)
                 $row["Content"] = $content;
         }
-        $row = RequestToResponse($row);
+        $row = RequestToRender($row);
         if (
             \_::$Back->DataBase->Transaction([
                 table("Request")->DeleteQuery("Id=:Id"),

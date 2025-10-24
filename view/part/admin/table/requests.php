@@ -81,6 +81,6 @@ $module->CellsTypes = [
         return $std;
     }
 ];
-swap($module, $data);
+dip($module, $data);
 $module->Render();
 ?>

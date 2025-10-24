@@ -3,14 +3,14 @@ use MiMFa\Library\Html;
 
 module("PrePage");
 $module = new MiMFa\Module\PrePage();
-$module->Title = grab($data, "Title") ?? "Delivery";
-$module->Description = grab($data, "Description");
-$module->Content = grab($data, "Content");
-$module->Image = grab($data, "Image") ?? "truck";
+$module->Title = pop($data, "Title") ?? "Delivery";
+$module->Description = pop($data, "Description");
+$module->Content = pop($data, "Content");
+$module->Image = pop($data, "Image") ?? "truck";
 $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
-$module->Items = grab($data, "Items")??compute("request/currents", receive());
+$module->Items = pop($data, "Items")??compute("request/currents", receive());
 $isDigital = \_::$Config->DigitalStore;
 foreach ($module->Items as $k => $v) 
     if(!(get($v, "MerchandiseDigital")??\_::$Config->DigitalStore)){
@@ -51,6 +51,6 @@ $module->Description = Html::Style("
 $module->BackButton = Html::Button("Cart", "submitForm('#$id', (d,e)=>load('/cart'), (d,e)=>load('/cart'));", ["class" => "col-sm-4"]);
 if($isDigital == \_::$Config->DigitalStore) $module->NextButton = Html::Button("Payment", "submitForm('#$id', (d,e)=>load('/cart/payment'));", ["class" => "btn main col-sm"]);
 else $module->NextButton = Html::Button("Preview", "submitForm('#$id', (d,e)=>load('/cart/preview'));", ["class" => "btn main col-sm"]);
-swap($module, $data);
+dip($module, $data);
 $module->Render();
 ?>

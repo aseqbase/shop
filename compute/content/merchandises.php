@@ -1,15 +1,15 @@
 <?php
 compute("request/base");
-$ctable = grab($data, "Table")??grab($data, "ContentTable");
+$ctable = pop($data, "Table")??pop($data, "ContentTable");
 $ctable = $ctable instanceof MiMFa\Library\DataTable?$ctable:table($ctable ?? "Content");
-$rtable = grab($data, "RequestTable");
+$rtable = pop($data, "RequestTable");
 $rtable = $rtable instanceof MiMFa\Library\DataTable?$rtable:table($rtable ?? "Request");
-$mtable = grab($data, "MerchandiseTable");
+$mtable = pop($data, "MerchandiseTable");
 $mtable = $mtable instanceof MiMFa\Library\DataTable?$mtable:table($mtable ?? "Merchandise");
 
-$condition = grab($data, "Condition");
-$filter = grab($data, "Filter")??[];
-$columns = grab($filter, "Columns");
+$condition = pop($data, "Condition");
+$filter = pop($data, "Filter")??[];
+$columns = pop($filter, "Columns");
 return compute("content/all", [
     "Filter"=>[
         "Columns"=>$columns??

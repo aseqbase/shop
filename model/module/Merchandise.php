@@ -287,12 +287,12 @@ class Merchandise extends Content
           $count = $this->Item["RequestCount"]??0;
           $countScript = "{$this->Name}_CurrentCount('$shownId')";
           $successScript = "(data,err)=>{$this->Name}_CartUpdated(data, err, '$shownId', $count, $maxCount)";
-          $output .= $this->AddButtonLabel ? Html::Button($this->AddButtonLabel, "sendPut('/cart',{MerchandiseId:$merchandiseId,Request:true}, '#$shownId', $successScript)", ["class" => "btn main btn order" . ($count ? " hide" : "")]) : "";
+          $output .= $this->AddButtonLabel ? Html::Button($this->AddButtonLabel, "sendPutRequest('/cart',{MerchandiseId:$merchandiseId,Request:true}, '#$shownId', $successScript)", ["class" => "btn main btn order" . ($count ? " hide" : "")]) : "";
           $output .= Html::Division(
-               ($this->RemoveButtonLabel ? Html::Button($this->RemoveButtonLabel, "sendDelete('/cart',{MerchandiseId:$merchandiseId}, '#$shownId', $successScript)", ["class" => "btn delete"]) : "") .
-               ($this->DecreaseButtonLabel ? Html::Button($this->DecreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn decrease" . ($count > 1 ? "" : " hide")]) : "") .
+               ($this->RemoveButtonLabel ? Html::Button($this->RemoveButtonLabel, "sendDeleteRequest('/cart',{MerchandiseId:$merchandiseId}, '#$shownId', $successScript)", ["class" => "btn delete"]) : "") .
+               ($this->DecreaseButtonLabel ? Html::Button($this->DecreaseButtonLabel, "sendPatchRequest('/cart',{MerchandiseId:$merchandiseId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn decrease" . ($count > 1 ? "" : " hide")]) : "") .
                Html::Division($count, ["class" => "numbers"]) .
-               ($this->IncreaseButtonLabel ? Html::Button($this->IncreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn increase" . ($maxCount > $count ? "" : " hide")]) : "") .
+               ($this->IncreaseButtonLabel ? Html::Button($this->IncreaseButtonLabel, "sendPatchRequest('/cart',{MerchandiseId:$merchandiseId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn increase" . ($maxCount > $count ? "" : " hide")]) : "") .
                ($this->CartButtonLabel ? Html::Button($this->CartButtonLabel, "/cart#$shownId", ["class" => "btn main btn cart"]) : "")
                ,
                ["class" => "btns" . ($count ? "" : " hide")]

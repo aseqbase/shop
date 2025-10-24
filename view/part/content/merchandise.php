@@ -5,7 +5,7 @@ $module = new \MiMFa\Module\Merchandise();
 $name = $module->Name;
 $module->Item = $data;
 $module->CommentForm->SubjectLabel = null;
-swap($module, $data);
+dip($module, $data);
 $module->Name = $name;// To do not change the name of module
 $module->Render();
 ?>

@@ -13,19 +13,19 @@ use MiMFa\Library\Html;
         function () {
             $id = receivePut("Id");
             if (!$id)
-                response(Html::Error("It is not a valid transaction!"));
+                deliver(Html::Error("It is not a valid transaction!"));
             if (table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => true]))
                 if ($res = compute("request/complete", ["PaymentId" => $id]))
-                    flipResponse(Html::Success("The transaction verified successfully!"));
+                    deliverSpark(Html::Success("The transaction verified successfully!"));
                 else {
                     table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => 0]);
                     if ($res === false)
-                        response(Html::Error("Something went wrong!"));
+                        deliver(Html::Error("Something went wrong!"));
                     else
-                        response(Html::Warning("There was no requests to verify!"));
+                        deliver(Html::Warning("There was no requests to verify!"));
                 }
             else
-                response(Html::Error("We could not verify your transaction!"));
+                deliver(Html::Error("We could not verify your transaction!"));
         }
     )
     ->Default(function () {

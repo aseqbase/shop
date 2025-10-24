@@ -95,7 +95,7 @@ $module->CellsTypes = [
     },
     "MetaData" => "json"
 ];
-renderStyle(".{$module->Name} tr td input{
+style(".{$module->Name} tr td input{
     background-color: var(--back-color-input);
     color: var(--fore-color-input);
     max-width: 100px;
@@ -107,7 +107,7 @@ $module->CellsValues = [
         $selector = "'table:nth-child(1)'";
         if ($MerchandiseId = $r["MerchandiseId"]) {
             $fid = "F_$MerchandiseId";
-            $onsubmit = "sendPatch(null, {
+            $onsubmit = "sendPatchRequest(null, {
                     MerchandiseId:$MerchandiseId,
                     Count:document.querySelector('#$fid>[name=Count]').value,
                     Price:document.querySelector('#$fid>[name=Price]').value
@@ -122,11 +122,11 @@ $module->CellsValues = [
                 Html::Icon("check", $onsubmit, ["name"=>"Submit"]) . " " .
                 Html::Icon("ellipsis-h", "sendRequest(" . Script::Convert($module->ExclusiveMethod) . ", 'null',
             {{$module->SecretKey}:".Script::Convert($module->ModifySecret).",{$module->KeyColumn}:$id,MerchandiseId:$MerchandiseId}, '#$fid');") . " " .
-            Html::Icon("close", "if(confirm('Are you sure to delete \"{$r["Item"]}\" from the merchandaises?')) sendDelete(null, {MerchandiseId:$MerchandiseId}, '#$fid');")
+            Html::Icon("close", "if(confirm('Are you sure to delete \"{$r["Item"]}\" from the merchandaises?')) sendDeleteRequest(null, {MerchandiseId:$MerchandiseId}, '#$fid');")
             , ["id" => $fid]
             );
         } else
-            return Html::Division($r["Type"] . " " . Html::Icon("box", "sendPut(null, {Id:$id, AuthorId:".$r["AuthorId"]."}, $selector);"));
+            return Html::Division($r["Type"] . " " . Html::Icon("box", "sendPutRequest(null, {Id:$id, AuthorId:".$r["AuthorId"]."}, $selector);"));
     },
     "Item" => function ($v, $k, $r) {
         return Html::Link($v, "/item/" . $r["Id"], ["target"=>"blank"]);

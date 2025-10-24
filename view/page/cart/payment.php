@@ -4,14 +4,14 @@ use MiMFa\Library\Html;
 
 module("PrePage");
 $module = new MiMFa\Module\PrePage();
-$module->Title = grab($data, "Title") ?? "Payment";
-$module->Description = grab($data, "Description");
-$module->Content = grab($data, "Content");
-$module->Image = grab($data, "Image") ?? "credit-card";
+$module->Title = pop($data, "Title") ?? "Payment";
+$module->Description = pop($data, "Description");
+$module->Content = pop($data, "Content");
+$module->Image = pop($data, "Image") ?? "credit-card";
 $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
-$module->Items = grab($data, "Items") ?? compute("request/fix-currents", receive());
+$module->Items = pop($data, "Items") ?? compute("request/fix-currents", receive());
 $module->AllowItems = false;
 $bill = $module->ComputeBill();
 $transaction = Convert::ToJson([

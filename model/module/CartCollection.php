@@ -255,7 +255,7 @@ class CartCollection extends MerchandiseCollection
             foreach ($bill["Items"] as $item) {
                 if ($meta = getValid($item["Content"], 'MetaData', null)) {
                     $meta = Convert::FromJson($meta);
-                    swap($this, $meta);
+                    dip($this, $meta);
                 }
                
                 $r_description = getValid($item["Request"], 'Description', $this->DefaultDescription);

@@ -25,10 +25,10 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                     "SupplierId" => $received["AuthorId"],
                     "AuthorId" => \_::$User->Id,
                     "Count" => 1
-                ])) return flipResponse(Html::Success("Your item sat as a Merchandise successfully!"));
-                else return renderError("A problem is occurred in the process!");
+                ])) return deliverSpark(Html::Success("Your item sat as a Merchandise successfully!"));
+                else return error("A problem is occurred in the process!");
             } catch (Exception $ex) {
-                return renderError($ex);
+                return error($ex);
             }
     })
     ->Patch(function () {// Update Item
@@ -42,11 +42,11 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                     "EditorId" => \_::$User->Id,
                     "UpdateTime" => Convert::ToDateTimeString()
                 ]);
-                return renderSuccess(Html::Icon("check"));
+                return success(Html::Icon("check"));
             } catch (Exception $ex) {
-                return renderError($ex);
+                return error($ex);
             }
-        return renderError(Html::Icon("close"));
+        return error(Html::Icon("close"));
     })
     ->Delete(function () {// Delete Item
         $received = receiveDelete();
@@ -55,13 +55,13 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                 table("Merchandise")->Delete("`Id`=:Id", [
                     ":Id" => $MerchandiseId
                 ]);
-                return renderSuccess(Html::Icon("check"));
+                return success(Html::Icon("check"));
             } catch (Exception $ex) {
-                return renderError($ex);
+                return error($ex);
             }
-        return renderError(Html::Icon("close"));
+        return error(Html::Icon("close"));
     })
-    ->if(receive("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
+    ->if(getReceived("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
         $module->Set("Merchandise");
         $access = \_::$User->GetAccess(\_::$User->AdminAccess);
         $users = table("User")->SelectPairs("Id", "Name");

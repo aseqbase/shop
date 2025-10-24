@@ -14,6 +14,6 @@ foreach ((is_array(first($jsd)) ? $jsd : [$jsd]) as $key => $value) {
     $ts[] = $t;
 }
 $module = new MiMFa\Module\PaymentForm(...$ts);
-swap($module, $data);
+dip($module, $data);
 $module->Render();
 ?>

@@ -21,13 +21,13 @@ $module->AddAccess =
 $module->DuplicateAccess =
 $module->ModifyAccess =
 $module->DeleteAccess = \_::$User->SuperAccess;
-renderStyle("
+style("
     .{$module->Name} tr:has(.verified){
         color: var(--color-green);
     }
 ");
 $module->CellsValues = [
-    'Relation' => fn($v, $k, $r) => $r['Verify'] ? Html::Span($v, ["class" => "be verified"]) : Html::Span($v . " " . Html::Icon("check", "sendPut(null,{Id:" . Script::Convert($r["Id"]) . "}, '#{$module->Id}')")),
+    'Relation' => fn($v, $k, $r) => $r['Verify'] ? Html::Span($v, ["class" => "be verified"]) : Html::Span($v . " " . Html::Icon("check", "sendPutRequest(null,{Id:" . Script::Convert($r["Id"]) . "}, '#{$module->Id}')")),
     'Value' => function ($v, $k, $r) {
         return (\_::$Config->StandardPrice)($v, $r['Unit']) . \_::$Config->PriceUnit;
     },
@@ -65,6 +65,6 @@ $module->CellsTypes = [
     },
     "MetaData" => "json"
 ];
-swap($module, $data);
+dip($module, $data);
 $module->Render();
 ?>
