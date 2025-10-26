@@ -10,5 +10,5 @@ $module->Image = pop($data, "Image")??"check";
 $module->Render();
 $id = getReceived("Id");
 if (compute("request/complete", ["PaymentId" => $id]))
-    render(Html::Success("Your transaction verified successfully!"));
+    response(Html::Success("Your transaction verified successfully!"));
 ?>

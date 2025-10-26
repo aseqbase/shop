@@ -311,7 +311,7 @@ class PaymentForm extends Form
 
 	public function Handler($received = null)
 	{
-		render(Html::Page(Html::Container(function () use ($received) {
+		response(Html::Page(Html::Container(function () use ($received) {
 			if ($code = get($received, $this->ValidationRequest))
 				try {
 					$code = \_::$Back->Cryptograph->Decrypt($code, $this->ValidationKey, true);

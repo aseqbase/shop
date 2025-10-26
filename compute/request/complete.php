@@ -104,7 +104,7 @@ if ($pid = get($data, "PaymentId")) {
                 $row["Status"] = 3;// Digital Sent
 
             if ($title || $description || $content) {
-                render(Html::Page(
+                response(Html::Page(
                     ($title ? Html::Heading2($title) : "") .
                     ($description ? Html::Paragraph($description) : "") .
                     $content
