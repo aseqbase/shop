@@ -51,6 +51,6 @@ $module->Description = Html::Style("
 $module->BackButton = Html::Button("Cart", "submitForm('#$id', (d,e)=>load('/cart'), (d,e)=>load('/cart'));", ["class" => "col-sm-4"]);
 if($isDigital == \_::$Config->DigitalStore) $module->NextButton = Html::Button("Payment", "submitForm('#$id', (d,e)=>load('/cart/payment'));", ["class" => "btn main col-sm"]);
 else $module->NextButton = Html::Button("Preview", "submitForm('#$id', (d,e)=>load('/cart/preview'));", ["class" => "btn main col-sm"]);
-dip($module, $data);
+pod($module, $data);
 $module->Render();
 ?>

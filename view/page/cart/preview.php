@@ -15,6 +15,6 @@ $module->AllowContact =
 $module->AllowAddress = true;
 $module->NextButton = Html::Button("Payment", "/cart/payment", ["class" => "btn main col-sm"]);
 $module->BackButton = Html::Button("Options", "/cart/options", ["class" => "col-sm-4"]);
-dip($module, $data);
+pod($module, $data);
 $module->Render();
 ?>

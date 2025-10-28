@@ -12,7 +12,7 @@ $module->AllowRoot = false;
 $module->Description = pop($data, "Description");
 $module->Class .= " page";
 $module->Items = $nav->GetItems();
-dip($module, $data);
+pod($module, $data);
 $module->Render();
 $nav->Render();
 ?>

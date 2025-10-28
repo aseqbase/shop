@@ -15,6 +15,6 @@ $module->AllowContact =
 $module->AllowAddress = false;
 if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Html::Button("Confirm", "/cart/options", ["class" => "btn main"]);
 else $module->NextButton = Html::Button("Confirm", "/cart/sign-in", ["class" => "btn main"]);
-dip($module, $data);
+pod($module, $data);
 $module->Render();
 ?>

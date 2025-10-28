@@ -310,7 +310,7 @@ class MerchandiseCollection extends Collection
             foreach (Convert::ToItems($items ?? $this->Items) as $k => $item) {
                 if ($meta = getValid($item, 'MetaData', null)) {
                     $meta = Convert::FromJson($meta);
-                    dip($this, $meta);
+                    pod($this, $meta);
                 }
 
                 $m_discount = get($item, 'MerchandiseDiscount');
