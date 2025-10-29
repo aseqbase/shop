@@ -43,6 +43,7 @@
             "MiMFa\\Bootstrap::Uninstall"
         ],
         "dev:update": [
+            "composer update",
             "composer update aseqbase/shop",
             "MiMFa\\Bootstrap::Update"
         ],
