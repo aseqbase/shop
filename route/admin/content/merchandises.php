@@ -25,7 +25,7 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                     "SupplierId" => $received["AuthorId"],
                     "AuthorId" => \_::$User->Id,
                     "Count" => 1
-                ])) return deliverSpark(Html::Success("Your item sat as a Merchandise successfully!"));
+                ])) return deliverBreaker(Html::Success("Your item sat as a Merchandise successfully!"));
                 else return error("A problem is occurred in the process!");
             } catch (Exception $ex) {
                 return error($ex);

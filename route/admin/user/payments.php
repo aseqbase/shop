@@ -16,7 +16,7 @@ use MiMFa\Library\Html;
                 deliver(Html::Error("It is not a valid transaction!"));
             if (table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => true]))
                 if ($res = compute("request/complete", ["PaymentId" => $id]))
-                    deliverSpark(Html::Success("The transaction verified successfully!"));
+                    deliverBreaker(Html::Success("The transaction verified successfully!"));
                 else {
                     table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => 0]);
                     if ($res === false)
