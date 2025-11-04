@@ -107,7 +107,7 @@ $module->CellsValues = [
         $selector = "'table:nth-child(1)'";
         if ($MerchandiseId = $r["MerchandiseId"]) {
             $fid = "F_$MerchandiseId";
-            $onsubmit = "sendPatchRequest(null, {
+            $onsubmit = "sendPatch(null, {
                     MerchandiseId:$MerchandiseId,
                     Count:document.querySelector('#$fid>[name=Count]').value,
                     Price:document.querySelector('#$fid>[name=Price]').value
@@ -120,13 +120,13 @@ $module->CellsValues = [
                 Html::FloatInput("Count", $r["Count"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => 1]) . ($r["CountUnit"]??\_::$Config->CountUnit)." $forLabel " .
                 Html::FloatInput("Price", $r["Price"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => $r["Price"] ?? 10 / 10]) . ($r["PriceUnit"]??\_::$Config->PriceUnit)." $eachLabel " .
                 Html::Icon("check", $onsubmit, ["name"=>"Submit"]) . " " .
-                Html::Icon("ellipsis-h", "sendRequest(" . Script::Convert($module->ExclusiveMethod) . ", 'null',
+                Html::Icon("ellipsis-h", "send(" . Script::Convert($module->ExclusiveMethod) . ", 'null',
             {{$module->SecretKey}:".Script::Convert($module->ModifySecret).",{$module->KeyColumn}:$id,MerchandiseId:$MerchandiseId}, '#$fid');") . " " .
-            Html::Icon("close", "if(confirm('Are you sure to delete \"{$r["Item"]}\" from the merchandaises?')) sendDeleteRequest(null, {MerchandiseId:$MerchandiseId}, '#$fid');")
+            Html::Icon("close", "if(confirm('Are you sure to delete \"{$r["Item"]}\" from the merchandaises?')) sendDelete(null, {MerchandiseId:$MerchandiseId}, '#$fid');")
             , ["id" => $fid]
             );
         } else
-            return Html::Division($r["Type"] . " " . Html::Icon("box", "sendPutRequest(null, {Id:$id, AuthorId:".$r["AuthorId"]."}, $selector);"));
+            return Html::Division($r["Type"] . " " . Html::Icon("box", "sendPut(null, {Id:$id, AuthorId:".$r["AuthorId"]."}, $selector);"));
     },
     "Item" => function ($v, $k, $r) {
         return Html::Link($v, "/item/" . $r["Id"], ["target"=>"blank"]);

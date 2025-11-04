@@ -27,7 +27,7 @@ style("
     }
 ");
 $module->CellsValues = [
-    'Relation' => fn($v, $k, $r) => $r['Verify'] ? Html::Span($v, ["class" => "be verified"]) : Html::Span($v . " " . Html::Icon("check", "sendPutRequest(null,{Id:" . Script::Convert($r["Id"]) . "}, '#{$module->Id}')")),
+    'Relation' => fn($v, $k, $r) => $r['Verify'] ? Html::Span($v, ["class" => "be verified"]) : Html::Span($v . " " . Html::Icon("check", "sendPut(null,{Id:" . Script::Convert($r["Id"]) . "}, '#{$module->Id}')")),
     'Value' => function ($v, $k, $r) {
         return (\_::$Config->StandardPrice)($v, $r['Unit']) . \_::$Config->PriceUnit;
     },
