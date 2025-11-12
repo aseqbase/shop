@@ -1,5 +1,5 @@
 <?php
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 module("PrePage");
 $module = new MiMFa\Module\PrePage();
 $module->Title = "Payment";

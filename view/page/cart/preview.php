@@ -1,5 +1,5 @@
 <?php
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 
 module("PrePage");
 $module = new MiMFa\Module\PrePage();
@@ -13,8 +13,8 @@ $module = new MiMFa\Module\CartCollection();
 $module->Items = pop($data, "Items")??compute("request/currents", receive());
 $module->AllowContact = 
 $module->AllowAddress = true;
-$module->NextButton = Html::Button("Payment", "/cart/payment", ["class" => "btn main col-sm"]);
-$module->BackButton = Html::Button("Options", "/cart/options", ["class" => "col-sm-4"]);
+$module->NextButton = Struct::Button("Payment", "/cart/payment", ["class" => "btn main col-sm"]);
+$module->BackButton = Struct::Button("Options", "/cart/options", ["class" => "col-sm-4"]);
 pod($module, $data);
 $module->Render();
 ?>

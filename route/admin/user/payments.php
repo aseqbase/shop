@@ -1,5 +1,5 @@
 <?php
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 (new Router())
 ->if(\_::$User->GetAccess(\_::$User->AdminAccess))
     ->Get(function () {
@@ -13,19 +13,19 @@ use MiMFa\Library\Html;
         function () {
             $id = receivePut("Id");
             if (!$id)
-                deliver(Html::Error("It is not a valid transaction!"));
+                deliver(Struct::Error("It is not a valid transaction!"));
             if (table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => true]))
                 if ($res = compute("request/complete", ["PaymentId" => $id]))
-                    deliverBreaker(Html::Success("The transaction verified successfully!"));
+                    deliverBreaker(Struct::Success("The transaction verified successfully!"));
                 else {
                     table("Payment")->Update("Id=:Id", [":Id" => $id, "Verify" => 0]);
                     if ($res === false)
-                        deliver(Html::Error("Something went wrong!"));
+                        deliver(Struct::Error("Something went wrong!"));
                     else
-                        deliver(Html::Warning("There was no requests to verify!"));
+                        deliver(Struct::Warning("There was no requests to verify!"));
                 }
             else
-                deliver(Html::Error("We could not verify your transaction!"));
+                deliver(Struct::Error("We could not verify your transaction!"));
         }
     )
     ->Default(function () {

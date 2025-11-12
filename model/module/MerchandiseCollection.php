@@ -1,6 +1,6 @@
 <?php
 namespace MiMFa\Module;
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Library\Convert;
 
 
@@ -137,7 +137,7 @@ class MerchandiseCollection extends Collection
 
     public function GetStyle()
     {
-        return Html::Style("
+        return Struct::Style("
 			.{$this->Name} div.item {
 				height: fit-attach;
                 width: -webkit-fill-available;
@@ -330,7 +330,7 @@ class MerchandiseCollection extends Collection
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
-                                    $meta .= Html::Span(Convert::ToShownDateTimeString($val), ["class" => 'createtime']);
+                                    $meta .= Struct::Span(Convert::ToShownDateTimeString($val), ["class" => 'createtime']);
                             },
                             $item,
                             'MerchandiseCreateTime'
@@ -339,7 +339,7 @@ class MerchandiseCollection extends Collection
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
-                                    $meta .= Html::Span(Convert::ToShownDateTimeString($val), ["class" => 'updatetime']);
+                                    $meta .= Struct::Span(Convert::ToShownDateTimeString($val), ["class" => 'updatetime']);
                             },
                             $item,
                             'MerchandiseUpdateTime'
@@ -349,24 +349,24 @@ class MerchandiseCollection extends Collection
                 if ($i % $this->MaximumColumns === 0)
                     yield "<div class='row'>";
                 yield "<div id='$uid' class='item col col-lg'" . ($this->Animation ? " data-aos-delay='" . ($i % $this->MaximumColumns * \_::$Front->AnimationSpeed) . "' data-aos='{$this->Animation}'" : "") . ">";
-                yield Html::Rack(
-                        ($this->AllowImage ? Html::Image($c_title, $c_image, \_::$User->DefaultImagePath, ["class" => "item-image"]) : "") .
-                        Html::Division(($this->AllowTitle ? Html::Heading3($c_title, $this->Root . $c_id, ["class" => 'title']) : "").
+                yield Struct::Rack(
+                        ($this->AllowImage ? Struct::Image($c_title, $c_image, \_::$User->DefaultImagePath, ["class" => "item-image"]) : "") .
+                        Struct::Division(($this->AllowTitle ? Struct::Heading3($c_title, $this->Root . $c_id, ["class" => 'title']) : "").
                         ($this->AllowSupplier ? $this->GetSupplier($item) : "")).
-                        (isValid($meta)?Html::Sub($meta, ["class" => 'metadata']):"")
+                        (isValid($meta)?Struct::Sub($meta, ["class" => 'metadata']):"")
                     , ["class" => 'header']);
                 if ($this->AllowDescription && $c_description)
-                    yield Html::Division(Html::Convert($this->AutoExcerpt?Convert::ToExcerpt($c_description,0,$this->ExcerptLength,$this->ExcerptSign):$c_description), ["class" => 'description']);
-                yield Html::Frame(Html::Row(
-                    Html::MediumSlot(
-                        ($m_discount?Html::Division(
-                            Html::Span($m_discount . "%", null, ["class" => "value"]) . " " .
-                            Html::Strike($m_price) . " ", ["class" => "discount"])
+                    yield Struct::Division(Struct::Convert($this->AutoExcerpt?Convert::ToExcerpt($c_description,0,$this->ExcerptLength,$this->ExcerptSign):$c_description), ["class" => 'description']);
+                yield Struct::Frame(Struct::Row(
+                    Struct::MediumSlot(
+                        ($m_discount?Struct::Division(
+                            Struct::Span($m_discount . "%", null, ["class" => "value"]) . " " .
+                            Struct::Strike($m_price) . " ", ["class" => "discount"])
                             : "") .
-                        Html::Bold($m_fprice . \_::$Config->PriceUnit),
+                        Struct::Bold($m_fprice . \_::$Config->PriceUnit),
                         ["class" => 'col-md-4 price']
                     ).
-                    ($this->AllowButtons?Html::MediumSlot(
+                    ($this->AllowButtons?Struct::MediumSlot(
                         $this->GetButtons($uid, $item),
                         ["class" => 'controls']):"")
                 ), ["class"=>"footer"]);
@@ -386,13 +386,13 @@ class MerchandiseCollection extends Collection
         $count = min(get($item, 'RequestCount')??0, $maxCount);
         $countScript = "{$this->Name}_CurrentCount('$shownId')";
         $successScript = "(data,err)=>{$this->Name}_CartUpdated(data, err, '$shownId', $count, $maxCount)";
-        $controls = $this->AddButtonLabel?Html::Button($this->AddButtonLabel, "sendPut('/cart',{MerchandiseId:$merchandiseId, Request:true}, '#$shownId', ".($count?"()=>load()":$successScript).")", ["class" => "btn main btn order".($count?" hide":"")]):"";
-        $controls .= Html::Division(
-            ($this->RemoveButtonLabel?Html::Button($this->RemoveButtonLabel, "sendDelete('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId}, '#$shownId', $successScript)", ["class" => "btn delete"]):"").
-            ($this->DecreaseButtonLabel?Html::Button($this->DecreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn decrease".($count > 1?"":" hide")]):"").
-            Html::Division($count, ["class" => "numbers"]).
-            ($this->IncreaseButtonLabel?Html::Button($this->IncreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn increase".($maxCount > $count?"":" hide")]):"").
-            ($this->CartButtonLabel?Html::Button($this->CartButtonLabel, "/cart#$shownId", ["class" => "btn main btn cart"]):"")
+        $controls = $this->AddButtonLabel?Struct::Button($this->AddButtonLabel, "sendPut('/cart',{MerchandiseId:$merchandiseId, Request:true}, '#$shownId', ".($count?"()=>load()":$successScript).")", ["class" => "btn main btn order".($count?" hide":"")]):"";
+        $controls .= Struct::Division(
+            ($this->RemoveButtonLabel?Struct::Button($this->RemoveButtonLabel, "sendDelete('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId}, '#$shownId', $successScript)", ["class" => "btn delete"]):"").
+            ($this->DecreaseButtonLabel?Struct::Button($this->DecreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn decrease".($count > 1?"":" hide")]):"").
+            Struct::Division($count, ["class" => "numbers"]).
+            ($this->IncreaseButtonLabel?Struct::Button($this->IncreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, RequestId:$requestId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn increase".($maxCount > $count?"":" hide")]):"").
+            ($this->CartButtonLabel?Struct::Button($this->CartButtonLabel, "/cart#$shownId", ["class" => "btn main btn cart"]):"")
         ,["class"=>"btns".($count?"":" hide")]);
         $controls .= Convert::By($this->DefaultButtons, $item);
         return $controls;
@@ -404,17 +404,17 @@ class MerchandiseCollection extends Collection
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
             $sup = $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown");
-            $del = Html::Image(null, $d["Image"] ? $d["Image"] : \_::$User->DefaultImagePath) .
-                    Html::Link(
+            $del = Struct::Image(null, $d["Image"] ? $d["Image"] : \_::$User->DefaultImagePath) .
+                    Struct::Link(
                         $sup,
                         \_::$Address->UserRoot . $d["Id"]
                     );
-        }else $del = Html::Icon(\_::$Info->LogoPath);
-        $del .= $this->DeliveryLabel.Html::Icon($m_digital?"envelope":"map-marker").Html::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
-        return Html::Division($del, ["class" => "supplier"]);
+        }else $del = Struct::Icon(\_::$Info->LogoPath);
+        $del .= $this->DeliveryLabel.Struct::Icon($m_digital?"envelope":"map-marker").Struct::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
+        return Struct::Division($del, ["class" => "supplier"]);
     }
     public function GetScript(){
-        return Html::Script("
+        return Struct::Script("
             function {$this->Name}_CurrentCount(shownId){
                 return parseFloat(document.querySelector(`#\${shownId} .numbers`).innerText)??1;
             }

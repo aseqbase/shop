@@ -1,7 +1,7 @@
 <?php
-inspect(\_::$User->AdminAccess);
+auth(\_::$User->AdminAccess);
 use MiMFa\Library\Convert;
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Module\Table;
 module("Table");
 $module = new Table("Response");
@@ -27,7 +27,7 @@ $module->DuplicateAccess = \_::$User->SuperAccess;
 $users = table("User")->SelectPairs("Id" , "Name");
 $module->CellsValues = [
     "Item"=>function($v, $k, $r){
-        return Html::Link($v,"/item/".$r["ItemPath"], ["target"=>"blank"]);
+        return Struct::Link($v,"/item/".$r["ItemPath"], ["target"=>"blank"]);
     },
     "Status"=>function($v){
         $status = $v;
@@ -45,13 +45,13 @@ $module->CellsValues = [
             case -5: $status = __("Rejected"); break;
             default: $status = __("Undefined"); break;
         }
-        return Html::Span($status,["class"=>$v>0?"success":($v<0?"error":""), "style"=>"color:rgba(".(128-$v*127/5).", ".(128+$v*127/5).", 0)"]);
+        return Struct::Span($status,["class"=>$v>0?"success":($v<0?"error":""), "style"=>"color:rgba(".(128-$v*127/5).", ".(128+$v*127/5).", 0)"]);
     },
     "Address"=>function($v, $k, $r){
-        return Html::Icon($r["Digital"]?"envelope":"truck")." ".$v;
+        return Struct::Icon($r["Digital"]?"envelope":"truck")." ".$v;
     },
     "User"=>function($v, $k, $r){
-        return Html::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
+        return Struct::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
         return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");

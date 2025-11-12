@@ -1,8 +1,8 @@
 <?php
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Library\Convert;
 use MiMFa\Module\Table;
-inspect(\_::$User->AdminAccess);
+auth(\_::$User->AdminAccess);
 module("Table");
 $module = new Table("Content");
 $module->AllowServerSide = true;
@@ -25,7 +25,7 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                     "SupplierId" => $received["AuthorId"],
                     "AuthorId" => \_::$User->Id,
                     "Count" => 1
-                ])) return deliverBreaker(Html::Success("Your item sat as a Merchandise successfully!"));
+                ])) return deliverBreaker(Struct::Success("Your item sat as a Merchandise successfully!"));
                 else return error("A problem is occurred in the process!");
             } catch (Exception $ex) {
                 return error($ex);
@@ -42,11 +42,11 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                     "EditorId" => \_::$User->Id,
                     "UpdateTime" => Convert::ToDateTimeString()
                 ]);
-                return success(Html::Icon("check"));
+                return success(Struct::Icon("check"));
             } catch (Exception $ex) {
                 return error($ex);
             }
-        return error(Html::Icon("close"));
+        return error(Struct::Icon("close"));
     })
     ->Delete(function () {// Delete Item
         $received = receiveDelete();
@@ -55,11 +55,11 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                 table("Merchandise")->Delete("`Id`=:Id", [
                     ":Id" => $MerchandiseId
                 ]);
-                return success(Html::Icon("check"));
+                return success(Struct::Icon("check"));
             } catch (Exception $ex) {
                 return error($ex);
             }
-        return error(Html::Icon("close"));
+        return error(Struct::Icon("close"));
     })
     ->if(getReceived("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
         $module->Set("Merchandise");

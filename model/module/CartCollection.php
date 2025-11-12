@@ -1,6 +1,6 @@
 <?php
 namespace MiMFa\Module;
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Library\Convert;
 use MiMFa\Library\Internal;
 
@@ -54,17 +54,17 @@ class CartCollection extends MerchandiseCollection
     {
         parent::__construct();
         if(is_null($this->EmptyHandler))
-            $this->EmptyHandler = Html::Container([
-                Html::Media("heart-broken", ["style"=>"font-size:20vmin; color: #8888;"]),
-                Html::Center("You haven't selected aAll right lobbynything yet!"),
-                Html::$Break,
-                [Html::Button("Add something...", $this->CollectionRoot, ["class"=>"main be fit"])]
+            $this->EmptyHandler = Struct::Container([
+                Struct::Media("heart-broken", ["style"=>"font-size:20vmin; color: #8888;"]),
+                Struct::Center("You haven't selected aAll right lobbynything yet!"),
+                Struct::$Break,
+                [Struct::Button("Add something...", $this->CollectionRoot, ["class"=>"main be fit"])]
             ], ["class"=>"be align center"]);
     }
 
     public function GetStyle()
     {
-        return Html::Style("
+        return Struct::Style("
             .{$this->Name} div.item {
                 height: fit-attach;
                 width: -webkit-fill-available;
@@ -276,7 +276,7 @@ class CartCollection extends MerchandiseCollection
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
-                                    $meta .= Html::Span(Convert::ToShownDateTimeString($val), ["class" => 'createtime']);
+                                    $meta .= Struct::Span(Convert::ToShownDateTimeString($val), ["class" => 'createtime']);
                             },
                             $item["Content"],
                             'CreateTime'
@@ -285,7 +285,7 @@ class CartCollection extends MerchandiseCollection
                         doValid(
                             function ($val) use (&$meta) {
                                 if (isValid($val))
-                                    $meta .= Html::Span(Convert::ToShownDateTimeString($val), ["class" => 'updatetime']);
+                                    $meta .= Struct::Span(Convert::ToShownDateTimeString($val), ["class" => 'updatetime']);
                             },
                             $item["Content"],
                             'UpdateTime'
@@ -295,40 +295,40 @@ class CartCollection extends MerchandiseCollection
                 if ($i % $this->MaximumColumns === 0) yield "<div class='row'>";
                 yield "<div id='$uid' class='item col col-lg'" . ($this->Animation ? " data-aos-delay='" . ($i % $this->MaximumColumns * \_::$Front->AnimationSpeed) . "' data-aos='{$this->Animation}'" : "") . ">";
 
-                yield Html::Rack(
-                    Html::MediumSlot(
-                        ($this->AllowImage ? Html::Image($c_title, $c_image, \_::$User->DefaultImagePath, ["class" => "item-image"]) : "") .
-                        Html::Division(
-                            ($this->AllowTitle ? Html::Heading4($c_title, $this->Root . $c_id, ["class" => 'title']) : "").
+                yield Struct::Rack(
+                    Struct::MediumSlot(
+                        ($this->AllowImage ? Struct::Image($c_title, $c_image, \_::$User->DefaultImagePath, ["class" => "item-image"]) : "") .
+                        Struct::Division(
+                            ($this->AllowTitle ? Struct::Heading4($c_title, $this->Root . $c_id, ["class" => 'title']) : "").
                             ($this->AllowSupplier ? $this->GetSupplier($item["Content"]) : "")
                         ), ["class" => 'item-title']) .
-                    Html::MediumSlot(
-                        Html::Division($m_discount?
-                            Html::Span($m_discount . "%", null, ["class" => "value"]) . " " .
-                            Html::Strike($m_tprice) . " "
+                    Struct::MediumSlot(
+                        Struct::Division($m_discount?
+                            Struct::Span($m_discount . "%", null, ["class" => "value"]) . " " .
+                            Struct::Strike($m_tprice) . " "
                             : "", ["class" => "discount"]) .
-                        Html::Bold($m_price . \_::$Config->PriceUnit),
+                        Struct::Bold($m_price . \_::$Config->PriceUnit),
                         ["class" => 'col-md-3 price']
                     )
                 );
                 if ($this->AllowDescription && $r_description)
-                    yield Html::Division(Html::Convert($this->AutoExcerpt?Convert::ToExcerpt($r_description,0,$this->ExcerptLength,$this->ExcerptSign):$r_description), ["class" => 'detail description']);
+                    yield Struct::Division(Struct::Convert($this->AutoExcerpt?Convert::ToExcerpt($r_description,0,$this->ExcerptLength,$this->ExcerptSign):$r_description), ["class" => 'detail description']);
                 if ($this->AllowContact && $r_contact)
-                    yield Html::Division([Html::Icon("phone"), $r_contact], ["class" => 'detail contact']);
-                yield Html::Rack(
-                        (isValid($meta)?Html::MediumSlot($meta, ["class" => 'col-md-8 metadata']):"").
-                    ($this->AllowButtons?Html::MediumSlot($this->GetButtons($uid, $item["Content"]), ["class" => 'col-md controls']):"")
+                    yield Struct::Division([Struct::Icon("phone"), $r_contact], ["class" => 'detail contact']);
+                yield Struct::Rack(
+                        (isValid($meta)?Struct::MediumSlot($meta, ["class" => 'col-md-8 metadata']):"").
+                    ($this->AllowButtons?Struct::MediumSlot($this->GetButtons($uid, $item["Content"]), ["class" => 'col-md controls']):"")
                 , ["class"=>"footer"]);
                 yield "</div>";
                 if (++$i % $this->MaximumColumns === 0) yield "</div>";
             }
             if ($i % $this->MaximumColumns !== 0) yield "</div>";
-            yield ($this->MoreButtonLabel?Html::$Break.Html::Center(Html::Button($this->MoreButtonLabel, $this->CollectionRoot)):"");
+            yield ($this->MoreButtonLabel?Struct::$Break.Struct::Center(Struct::Button($this->MoreButtonLabel, $this->CollectionRoot)):"");
         })()));
 
-        return !$bill["Variety"]? __($this->EmptyHandler, styling:true, referring:true) : Html::Rack(
-            ($this->AllowBill?Html::Aside($this->GetBill( $bill), ["class" => "col-lg col-lg-4"]):"") .
-            Html::Section(
+        return !$bill["Variety"]? __($this->EmptyHandler, styling:true, referring:true) : Struct::Rack(
+            ($this->AllowBill?Struct::Aside($this->GetBill( $bill), ["class" => "col-lg col-lg-4"]):"") .
+            Struct::Section(
                 $this->GetTitle().
                 $this->GetDescription().
                 ($this->AllowItems?$cartItems:"").
@@ -396,13 +396,13 @@ class CartCollection extends MerchandiseCollection
     public function GetBill($bill=null)
     {
         $bill = $bill??$this->ComputeBill();
-        return Html::Frame([
-            [...($bill["Variety"] ? [$bill["Variety"] . \_::$Config->MerchandiseUnit, Html::Span($bill["Count"] . \_::$Config->CountUnit)] : ["", Html::Span($bill["Count"] . \_::$Config->CountUnit)])],
-            Html::$BreakLine,
-            ...loop($bill["Params"], fn($v,$k) => [Html::Small($k), Html::Small($v . \_::$Config->PriceUnit)]),
-            Html::$BreakLine,
-            [Html::Label("Total:"), Html::Bold($bill["Price"] . \_::$Config->PriceUnit)],
-            Html::$Break,
+        return Struct::Frame([
+            [...($bill["Variety"] ? [$bill["Variety"] . \_::$Config->MerchandiseUnit, Struct::Span($bill["Count"] . \_::$Config->CountUnit)] : ["", Struct::Span($bill["Count"] . \_::$Config->CountUnit)])],
+            Struct::$BreakLine,
+            ...loop($bill["Params"], fn($v,$k) => [Struct::Small($k), Struct::Small($v . \_::$Config->PriceUnit)]),
+            Struct::$BreakLine,
+            [Struct::Label("Total:"), Struct::Bold($bill["Price"] . \_::$Config->PriceUnit)],
+            Struct::$Break,
             $this->NextButton.$this->BackButton
         ], ["class" => "bill be sticky"]);
     }
@@ -413,20 +413,20 @@ class CartCollection extends MerchandiseCollection
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
             $sup = $d["Organization"] ? $d["Organization"] : ($d["Name"] ? $d["Name"] : "Unknown");
-            $del = Html::Image(null, $d["Image"] ? $d["Image"] : \_::$User->DefaultImagePath) .
-                    Html::Link(
+            $del = Struct::Image(null, $d["Image"] ? $d["Image"] : \_::$User->DefaultImagePath) .
+                    Struct::Link(
                         $sup,
                         \_::$Address->UserRoot . $d["Id"]
                     );
-        }else $del = Html::Icon(\_::$Info->LogoPath);
-        $del .= $this->DeliveryLabel.Html::Icon($m_digital?"envelope":"map-marker").Html::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
+        }else $del = Struct::Icon(\_::$Info->LogoPath);
+        $del .= $this->DeliveryLabel.Struct::Icon($m_digital?"envelope":"map-marker").Struct::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
         $r_address = get($item, 'RequestAddress');
         if ($this->AllowAddress && $r_address) $del .= $r_address;
-        return Html::Division($del, ["class" => "supplier"]);
+        return Struct::Division($del, ["class" => "supplier"]);
     }
     
     public function GetScript(){
-        return Html::Script("
+        return Struct::Script("
             function {$this->Name}_CurrentCount(shownId){
                 return parseFloat(document.querySelector(`#\${shownId} .numbers`).innerText)??1;
             }

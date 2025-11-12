@@ -61,4 +61,3 @@ if(!\_::$Info->Shortcuts) \_::$Info->Shortcuts = [
     array("Name" => "MERCHANDISES", "Path" => "/items", "Image" => "box"),
     array("Name" => "CONTACT", "Path" => "/contact", "Image" => "envelope")
 ];
-?>

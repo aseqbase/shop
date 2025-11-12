@@ -1,5 +1,5 @@
 <?php
-inspect(\_::$User->AdminAccess);
+auth(\_::$User->AdminAccess);
 use MiMFa\Library\Convert;
 use MiMFa\Module\Table;
 module("Table");
@@ -21,10 +21,10 @@ $module->UpdateAccess = \_::$User->AdminAccess;
 $users = table("User")->SelectPairs("Id" , "Name" );
 $module->CellsValues = [
     "Item"=>function($v, $k, $r){
-        return \MiMFa\Library\Html::Link($v,"/item/".$r["ItemPath"], ["target"=>"blank"]);
+        return \MiMFa\Library\Struct::Link($v,"/item/".$r["ItemPath"], ["target"=>"blank"]);
     },
     "User"=>function($v, $k, $r){
-        return \MiMFa\Library\Html::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
+        return \MiMFa\Library\Struct::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
         return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");

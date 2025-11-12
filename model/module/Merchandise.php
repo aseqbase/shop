@@ -1,6 +1,6 @@
 <?php
 namespace MiMFa\Module;
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Library\Style;
 use MiMFa\Library\Convert;
 
@@ -70,7 +70,7 @@ class Merchandise extends Content
 
      public function GetStyle()
      {
-          return parent::GetStyle() . Html::Style("
+          return parent::GetStyle() . Struct::Style("
                .{$this->Name} .controls{
                     background-color: var(--back-color-input);
                     color: var(--fore-color-input);
@@ -169,7 +169,7 @@ class Merchandise extends Content
      }
      public function GetScript()
      {
-          return Html::Script("
+          return Struct::Script("
               function {$this->Name}_CurrentCount(shownId){
                   return parseFloat(document.querySelector(`#\${shownId} .numbers`).innerText)??1;
               }
@@ -213,11 +213,11 @@ class Merchandise extends Content
                if (isValid($catDir))
                     $nameOrId = trim($catDir, "/\\") . "/" . ($p_name ?? $p_id);
           }
-          return Html::Rack(
+          return Struct::Rack(
                $this->GetImage() .
-               Html::MediumSlot(
-                    Html::Division(
-                         ($this->AllowTitle ? Html::Heading1(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->Root . $nameOrId : null, ['class' => 'heading']) : "") .
+               Struct::MediumSlot(
+                    Struct::Division(
+                         ($this->AllowTitle ? Struct::Heading1(getValid($this->Item, 'Title', $this->Title), $this->LinkedTitle ? $this->Root . $nameOrId : null, ['class' => 'heading']) : "") .
                          $this->GetDetails($this->CollectionRoot . $nameOrId)
                     ) .
                     ($this->AllowDescription ? $this->GetExcerpt() : "")
@@ -230,7 +230,7 @@ class Merchandise extends Content
           if (!$this->AllowImage)
                return null;
           $p_image = getValid($this->Item, 'Image', $this->Image);
-          return isValid($p_image) ? Html::MediumSlot(Html::Image(getValid($this->Item, 'Title', $this->Title), $p_image), ["class" => "col-lg-4", "style" => "text-align: center;"]) : "";
+          return isValid($p_image) ? Struct::MediumSlot(Struct::Image(getValid($this->Item, 'Title', $this->Title), $p_image), ["class" => "col-lg-4", "style" => "text-align: center;"]) : "";
      }
      public function GetButtons()
      {
@@ -238,9 +238,9 @@ class Merchandise extends Content
                return null;
           $paths = Convert::FromJson(getValid($this->Item, 'Path', $this->Path));
           $p_morebuttontext = __(Convert::FromSwitch($this->ButtonsLabel, get($this->Item, 'Type')));
-          return Html::Division(
+          return Struct::Division(
                loop($paths, function ($v,$k) use ($p_morebuttontext) {
-                    return Html::Button(is_numeric($k) ? $p_morebuttontext : $k, $v, ["class" => "btn outline"]);
+                    return Struct::Button(is_numeric($k) ? $p_morebuttontext : $k, $v, ["class" => "btn outline"]);
                }),
                attributes: ["class" => "buttons view md-hide"]
           );
@@ -253,18 +253,18 @@ class Merchandise extends Content
           $output = $this->GetButtons();
           if (isValid($this->Item["MerchandiseSupplierId"])) {
                $d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $this->Item["MerchandiseSupplierId"]]);
-               if(isset($d["Id"])) $output .= Html::Division(
-                    Html::Super("Supplier") .
-                    Html::Division(
-                         Html::Image(null, $d["Image"]??\_::$User->DefaultImagePath) .
-                         Html::Link(
+               if(isset($d["Id"])) $output .= Struct::Division(
+                    Struct::Super("Supplier") .
+                    Struct::Division(
+                         Struct::Image(null, $d["Image"]??\_::$User->DefaultImagePath) .
+                         Struct::Link(
                               $d["Organization"]??$d["Name"]??"Unknown",
                               \_::$Address->UserRoot . $d["Id"]
                          )
                     ),
                     ["class" => "supplier"]
                );
-               $output .= Html::$BreakLine;
+               $output .= Struct::$BreakLine;
           }
           $discount = $this->Item["MerchandiseDiscount"] ?? 0;
           $priceUnit = $this->Item["MerchandisePriceUnit"] ?? \_::$Config->PriceUnit;
@@ -272,34 +272,34 @@ class Merchandise extends Content
           if ($price) {
                $price = (\_::$Config->StandardPrice)($price, $priceUnit);
                $fprice = $price - $discount * $price / 100;
-               $output .= Html::Division(
-                    ($fprice != $price ? Html::Super(Html::Division($discount . "%", ["class" => "value"]) . Html::Strike($price), ["class" => "discount"]) : "") .
-                    Html::Division($fprice . $priceUnit, ["class" => "value"]),
+               $output .= Struct::Division(
+                    ($fprice != $price ? Struct::Super(Struct::Division($discount . "%", ["class" => "value"]) . Struct::Strike($price), ["class" => "discount"]) : "") .
+                    Struct::Division($fprice . $priceUnit, ["class" => "value"]),
                     ["class" => "price"]
                );
           }
           $maxCount = $this->Item["MerchandiseCount"]??0;
           if (\_::$Config->MinimumSupply ?? $maxCount >= $maxCount)
-               $output .= Html::Division(
+               $output .= Struct::Division(
                     $maxCount . ($this->Item["MerchandiseCountUnit"] ?? \_::$Config->CountUnit) . " remained",
                     ["class" => "count"]
                );
           $count = $this->Item["RequestCount"]??0;
           $countScript = "{$this->Name}_CurrentCount('$shownId')";
           $successScript = "(data,err)=>{$this->Name}_CartUpdated(data, err, '$shownId', $count, $maxCount)";
-          $output .= $this->AddButtonLabel ? Html::Button($this->AddButtonLabel, "sendPut('/cart',{MerchandiseId:$merchandiseId,Request:true}, '#$shownId', $successScript)", ["class" => "btn main btn order" . ($count ? " hide" : "")]) : "";
-          $output .= Html::Division(
-               ($this->RemoveButtonLabel ? Html::Button($this->RemoveButtonLabel, "sendDelete('/cart',{MerchandiseId:$merchandiseId}, '#$shownId', $successScript)", ["class" => "btn delete"]) : "") .
-               ($this->DecreaseButtonLabel ? Html::Button($this->DecreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn decrease" . ($count > 1 ? "" : " hide")]) : "") .
-               Html::Division($count, ["class" => "numbers"]) .
-               ($this->IncreaseButtonLabel ? Html::Button($this->IncreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn increase" . ($maxCount > $count ? "" : " hide")]) : "") .
-               ($this->CartButtonLabel ? Html::Button($this->CartButtonLabel, "/cart#$shownId", ["class" => "btn main btn cart"]) : "")
+          $output .= $this->AddButtonLabel ? Struct::Button($this->AddButtonLabel, "sendPut('/cart',{MerchandiseId:$merchandiseId,Request:true}, '#$shownId', $successScript)", ["class" => "btn main btn order" . ($count ? " hide" : "")]) : "";
+          $output .= Struct::Division(
+               ($this->RemoveButtonLabel ? Struct::Button($this->RemoveButtonLabel, "sendDelete('/cart',{MerchandiseId:$merchandiseId}, '#$shownId', $successScript)", ["class" => "btn delete"]) : "") .
+               ($this->DecreaseButtonLabel ? Struct::Button($this->DecreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript-1}, '#$shownId', $successScript)", ["class" => "btn decrease" . ($count > 1 ? "" : " hide")]) : "") .
+               Struct::Division($count, ["class" => "numbers"]) .
+               ($this->IncreaseButtonLabel ? Struct::Button($this->IncreaseButtonLabel, "sendPatch('/cart',{MerchandiseId:$merchandiseId, Count:$countScript+1}, '#$shownId', $successScript)", ["class" => "btn increase" . ($maxCount > $count ? "" : " hide")]) : "") .
+               ($this->CartButtonLabel ? Struct::Button($this->CartButtonLabel, "/cart#$shownId", ["class" => "btn main btn cart"]) : "")
                ,
                ["class" => "btns" . ($count ? "" : " hide")]
           );
           $output .= Convert::By($this->DefaultButtons, $item);
 
-          return Html::LargeSlot($output, ["id" => $shownId, "class" => "controls col-lg-3"]);
+          return Struct::LargeSlot($output, ["id" => $shownId, "class" => "controls col-lg-3"]);
      }
 }
 ?>

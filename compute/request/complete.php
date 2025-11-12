@@ -2,7 +2,7 @@
 
 use MiMFa\Library\Contact;
 use MiMFa\Library\Convert;
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 function RequestToRender($row)
 {
     unset($row["Like"]);
@@ -13,7 +13,7 @@ compute("request/base");
 if ($pid = get($data, "PaymentId")) {
     $collection = table("Payment")->SelectValue("Relation", "Verify IS TRUE AND Id=:Id", [":Id" => $pid]);
     if (isEmpty($collection)) {
-        warning("Your order will be shipped to you once your transaction is confirmed!" . Html::$Break . "This may take up to 24 hours.");
+        warning("Your order will be shipped to you once your transaction is confirmed!" . Struct::$Break . "This may take up to 24 hours.");
         return false;
     }
     $rows = table("Request")->As("R")->Join(table("Merchandise")->As("M"))
@@ -39,14 +39,14 @@ if ($pid = get($data, "PaymentId")) {
         $res = null;
         do {
             if ($res = get($row, "PrivateTitle"))
-                $result[] = Html::Heading3($subject = Convert::FromDynamicString($res));
+                $result[] = Struct::Heading3($subject = Convert::FromDynamicString($res));
             if ($res = get($row, "PrivateMessage"))
                 $result[] = Convert::FromDynamicString($res);
             if ($res = get($row, "PrivateAttach"))
-                $result[] = Html::Items(Convert::FromJson($res));
+                $result[] = Struct::Items(Convert::FromJson($res));
             if ($res = get($row, "PrivateGenerator")) {
-                $result[] = !isUrl($res) ? (isScript($res) ? Html::Script($res) : $res) : sendPost(getFullUrl($res), $row);
-                $result[] = Html::$BreakLine;
+                $result[] = !isUrl($res) ? (isScript($res) ? Struct::Script($res) : $res) : sendPost(getFullUrl($res), $row);
+                $result[] = Struct::$BreakLine;
             }
         } while ($res && --$c > 0);
         // Checkout
@@ -104,9 +104,9 @@ if ($pid = get($data, "PaymentId")) {
                 $row["Status"] = 3;// Digital Sent
 
             if ($title || $description || $content) {
-                response(Html::Page(
-                    ($title ? Html::Heading2($title) : "") .
-                    ($description ? Html::Paragraph($description) : "") .
+                response(Struct::Page(
+                    ($title ? Struct::Heading2($title) : "") .
+                    ($description ? Struct::Paragraph($description) : "") .
                     $content
                 ));
                 if ($isDigital)

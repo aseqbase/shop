@@ -1,8 +1,8 @@
 <?php
-inspect(\_::$User->AdminAccess);
+auth(\_::$User->AdminAccess);
 
 use MiMFa\Library\Convert;
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Library\Script;
 use MiMFa\Module\Table;
 
@@ -27,7 +27,7 @@ style("
     }
 ");
 $module->CellsValues = [
-    'Relation' => fn($v, $k, $r) => $r['Verify'] ? Html::Span($v, ["class" => "be verified"]) : Html::Span($v . " " . Html::Icon("check", "sendPut(null,{Id:" . Script::Convert($r["Id"]) . "}, '#{$module->Id}')")),
+    'Relation' => fn($v, $k, $r) => $r['Verify'] ? Struct::Span($v, ["class" => "be verified"]) : Struct::Span($v . " " . Struct::Icon("check", "sendPut(null,{Id:" . Script::Convert($r["Id"]) . "}, '#{$module->Id}')")),
     'Value' => function ($v, $k, $r) {
         return (\_::$Config->StandardPrice)($v, $r['Unit']) . \_::$Config->PriceUnit;
     },

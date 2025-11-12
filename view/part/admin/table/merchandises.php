@@ -1,11 +1,11 @@
 <?php
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Library\Script;
 use MiMFa\Library\Convert;
 use MiMFa\Module\PrePage;
 use MiMFa\Module\Table;
 
-inspect(\_::$User->AdminAccess);
+auth(\_::$User->AdminAccess);
 
 module("Table");
 $module = new Table("Content");
@@ -116,28 +116,28 @@ $module->CellsValues = [
                 , '#$fid', (data, err)=>document.querySelector('#$fid>[name=Submit]').innerHTML = data??err
             );";
             $onkeydown = "if(event.key === 'Enter'){event.preventDefault(); $onsubmit}";
-            return Html::Division(
-                Html::FloatInput("Count", $r["Count"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => 1]) . ($r["CountUnit"]??\_::$Config->CountUnit)." $forLabel " .
-                Html::FloatInput("Price", $r["Price"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => $r["Price"] ?? 10 / 10]) . ($r["PriceUnit"]??\_::$Config->PriceUnit)." $eachLabel " .
-                Html::Icon("check", $onsubmit, ["name"=>"Submit"]) . " " .
-                Html::Icon("ellipsis-h", "send(" . Script::Convert($module->ExclusiveMethod) . ", 'null',
+            return Struct::Division(
+                Struct::FloatInput("Count", $r["Count"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => 1]) . ($r["CountUnit"]??\_::$Config->CountUnit)." $forLabel " .
+                Struct::FloatInput("Price", $r["Price"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => $r["Price"] ?? 10 / 10]) . ($r["PriceUnit"]??\_::$Config->PriceUnit)." $eachLabel " .
+                Struct::Icon("check", $onsubmit, ["name"=>"Submit"]) . " " .
+                Struct::Icon("ellipsis-h", "send(" . Script::Convert($module->ExclusiveMethod) . ", 'null',
             {{$module->SecretKey}:".Script::Convert($module->ModifySecret).",{$module->KeyColumn}:$id,MerchandiseId:$MerchandiseId}, '#$fid');") . " " .
-            Html::Icon("close", "if(confirm('Are you sure to delete \"{$r["Item"]}\" from the merchandaises?')) sendDelete(null, {MerchandiseId:$MerchandiseId}, '#$fid');")
+            Struct::Icon("close", "if(confirm('Are you sure to delete \"{$r["Item"]}\" from the merchandaises?')) sendDelete(null, {MerchandiseId:$MerchandiseId}, '#$fid');")
             , ["id" => $fid]
             );
         } else
-            return Html::Division($r["Type"] . " " . Html::Icon("box", "sendPut(null, {Id:$id, AuthorId:".$r["AuthorId"]."}, $selector);"));
+            return Struct::Division($r["Type"] . " " . Struct::Icon("box", "sendPut(null, {Id:$id, AuthorId:".$r["AuthorId"]."}, $selector);"));
     },
     "Item" => function ($v, $k, $r) {
-        return Html::Link($v, "/item/" . $r["Id"], ["target"=>"blank"]);
+        return Struct::Link($v, "/item/" . $r["Id"], ["target"=>"blank"]);
     },
     "Supplier" => function ($v, $k, $r) {
-        return $r["SupplierId"] ? Html::Link($v, \_::$Address->UserRoot . $r["SupplierId"], ["target"=>"blank"]) : $v;
+        return $r["SupplierId"] ? Struct::Link($v, \_::$Address->UserRoot . $r["SupplierId"], ["target"=>"blank"]) : $v;
     },
     "Category" => function ($v, $k, $r) {
         $val = trim(\_::$Back->Query->GetCategoryRoute(first(Convert::FromJson($v))) ?? "", "/\\");
         if (isValid($val))
-            return Html::Link($val, \_::$Address->CategoryRoot . $val, ["target"=>"blank"]);
+            return Struct::Link($val, \_::$Address->CategoryRoot . $val, ["target"=>"blank"]);
         return $v;
     },
     "Count" => function ($v, $k, $r) {

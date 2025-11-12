@@ -1,6 +1,6 @@
 <?php
 use MiMFa\Library\Convert;
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 
 module("PrePage");
 $module = new MiMFa\Module\PrePage();
@@ -26,7 +26,7 @@ $transaction = Convert::ToJson([
 $id = "payment_method_" . getId(true);
 $methods = compute("get/payment-methods//");
 $mc = count($methods) - 1;
-$module->Content = Html::Style("
+$module->Content = Struct::Style("
             #$id .button{
                 background-color: var(--back-color);
                 color: var(--fore-color);
@@ -73,17 +73,17 @@ $module->Content = Html::Style("
                 color: #888;
             }
         ") .
-    Html::Frame(
+    Struct::Frame(
         join(
             "",
             loop($methods, function ($v, $k) use ($mc, $transaction) {
                 $trans = $transaction;
                 if (isset($v["Transaction"])) set($trans, $v["Transaction"]);
                 $path = get($v, "Path") . "?" . urlencode(encrypt($trans));
-                return ($k % 2 === 0 ? "<div class='row'>" : "") . Html::Button(
-                    Html::Label(
-                        Html::Media(get($v, "Image")) . Html::Division(Html::Big(get($v, "Title")) . Html::Small(get($v, "Description")), ["class" => "name"]),
-                        Html::RadioInput("PayMethod", get($v, "IsDefault") ?? $k == 0, ["data-value" => $path])
+                return ($k % 2 === 0 ? "<div class='row'>" : "") . Struct::Button(
+                    Struct::Label(
+                        Struct::Media(get($v, "Image")) . Struct::Division(Struct::Big(get($v, "Title")) . Struct::Small(get($v, "Description")), ["class" => "name"]),
+                        Struct::RadioInput("PayMethod", get($v, "IsDefault") ?? $k == 0, ["data-value" => $path])
                     ), $path
                     , ["class" => "col-md"]
                 ) . ((($k + 1) % 2 === 0) || $k >= $mc ? "</div>" : "");
@@ -91,8 +91,8 @@ $module->Content = Html::Style("
         ),
         ["id" => $id]
     );
-$module->BackButton = Html::Button("Options", "/cart/options", ["class" => "col-sm-4"]);
-$module->NextButton = Html::Button("Pay", "
+$module->BackButton = Struct::Button("Options", "/cart/options", ["class" => "col-sm-4"]);
+$module->NextButton = Struct::Button("Pay", "
         method = document.querySelector('#$id .input[name=\\'PayMethod\\']:checked');
         load(method.getAttribute('data-value'));
     ", ["class" => "btn main col-sm"]);

@@ -1,5 +1,5 @@
 <?php
-use MiMFa\Library\Html;
+use MiMFa\Library\Struct;
 use MiMFa\Library\Style;
 
 module("PrePage");
@@ -20,7 +20,7 @@ $sign->ContentClass = "col-lg";
 $sign->SignUpPath = "/cart/sign-up";
 $sign->SignInPath = "/cart/sign-in";
 $module->Content = $sign;
-$module->BackButton = Html::Button("Cart", "/cart", ["class" => "col-sm-4"]);
-if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Html::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
+$module->BackButton = Struct::Button("Cart", "/cart", ["class" => "col-sm-4"]);
+if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Struct::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
 $module->Render();
 ?>
