@@ -1,7 +1,7 @@
 <?php
 use MiMFa\Library\Struct;
 (new Router())
-->if(\_::$User->GetAccess(\_::$User->AdminAccess))
+->if(\_::$User->HasAccess(\_::$User->AdminAccess))
     ->Get(function () {
         view("part", [
             "Name" => "admin/table/payments",

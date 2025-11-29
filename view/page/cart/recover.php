@@ -21,6 +21,6 @@ $sign->SignUpPath = "/cart/sign-up";
 $sign->SignInPath = "/cart/sign-in";
 $module->Content = $sign;
 $module->BackButton = Struct::Button("Cart", "/cart", ["class" => "col-sm-4"]);
-if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Struct::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
+if(\_::$User->HasAccess(\_::$User->UserAccess)) $module->NextButton = Struct::Button("Continue", "/cart/options", ["class" => "btn main col-sm"]);
 $module->Render();
 ?>

@@ -33,13 +33,13 @@ $module->CellsValues = [
         return $v . \_::$Config->PriceUnit;
     }
 ];
-$superAccess = \_::$User->GetAccess(\_::$User->SuperAccess);
+$superAccess = \_::$User->HasAccess(\_::$User->SuperAccess);
 $module->CellsTypes = [
     "Id" => $superAccess?"disabled":false,
     "UserId" =>!$superAccess?"disabled":function($t, $v) use($users){
         $std = new stdClass();
         $std->Title = "User";
-        $std->Type = \_::$User->GetAccess(\_::$User->SuperAccess)?"select":"hidden";
+        $std->Type = \_::$User->HasAccess(\_::$User->SuperAccess)?"select":"hidden";
         $std->Options = $users;
         if(!isValid($v)) $std->Value = \_::$User->Id;
         return $std;
@@ -67,12 +67,12 @@ $module->CellsTypes = [
     "Attach" =>"json",
     "UpdateTime" =>function($t, $v){
         $std = new stdClass();
-        $std->Type = \_::$User->GetAccess(\_::$User->SuperAccess)?"calendar":"hidden";
+        $std->Type = \_::$User->HasAccess(\_::$User->SuperAccess)?"calendar":"hidden";
         $std->Value = Convert::ToDateTimeString();
         return $std;
     },
     "CreateTime" => function($t, $v){
-        return \_::$User->GetAccess(\_::$User->SuperAccess)?"calendar":(isValid($v)?"hidden":false);
+        return \_::$User->HasAccess(\_::$User->SuperAccess)?"calendar":(isValid($v)?"hidden":false);
     },
     "MetaData" =>function ($t, $v, $k, $r) {
         $std = new stdClass();

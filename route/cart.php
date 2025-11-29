@@ -8,7 +8,7 @@
     )
 ->On("cart/options(?!/)")
     ->Put(function() {
-        if(!\_::$User->GetAccess(\_::$User->UserAccess)) return error("You don't have enough access!");
+        if(!\_::$User->HasAccess(\_::$User->UserAccess)) return error("You don't have enough access!");
         $received = receivePut();
         $address = [];
         if($v = get($received, "Email"))

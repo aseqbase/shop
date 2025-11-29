@@ -14,7 +14,7 @@ $module->Items = pop($data, "Items")??compute("request/wishes", receive());
 $module->AllowBill = 
 $module->AllowContact = 
 $module->AllowAddress = false;
-if(\_::$User->GetAccess(\_::$User->UserAccess)) $module->NextButton = Struct::Button("Confirm", "/cart/options", ["class" => "btn main"]);
+if(\_::$User->HasAccess(\_::$User->UserAccess)) $module->NextButton = Struct::Button("Confirm", "/cart/options", ["class" => "btn main"]);
 else $module->NextButton = Struct::Button("Confirm", "/cart/sign-in", ["class" => "btn main"]);
 pod($module, $data);
 $module->Render();
