@@ -51,7 +51,7 @@ $module->CellsValues = [
         return Struct::Icon($r["Digital"]?"envelope":"truck")." ".$v;
     },
     "User"=>function($v, $k, $r){
-        return Struct::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
+        return Struct::Link($v,\_::$Router->UserRoot.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
         return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");
@@ -139,7 +139,7 @@ $module->CellsTypes = [
     "MetaData" =>function ($t, $v, $k, $r) {
         $std = new stdClass();
         $std->Type = "json";
-        if(\_::$Back->AllowTranslate && !$r["Title"] && !$r["Content"]) $std->Value = "{\"lang\":\"".\_::$Back->Translate->Language."\"}";
+        if(\_::$Front->AllowTranslate && !$r["Title"] && !$r["Content"]) $std->Value = "{\"lang\":\"".\_::$Front->Translate->Language."\"}";
         return $std;
     }
 ];

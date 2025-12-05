@@ -50,7 +50,7 @@ class PaymentForm extends Form
 		$this->QRCodeScanner->ActiveAtBegining = false;
 		$this->QRCodeScanner->ActiveAtEnding = false;
 		$this->QRCodeScanner->Style = "border: var(--border-1) #8888; margin-top: var(--size-0);";
-		$this->Path = \_::$Address->Url;
+		$this->Path = \_::$User->Url;
 		$this->CancelLabel = "Cancel";
 		$this->SetTypes(...$transactions);
 	}
@@ -65,13 +65,13 @@ class PaymentForm extends Form
 			$data = Convert::FromJson(decrypt(array_key_first($data)));
 
 		if (count($data) > 0)
-			$this->Transaction = take($transactions, fn($v) => $v->Unit == get($data, "Unit")) ??
+			$this->Transaction = take($transactions, fn($v) => $v->Unit == get($data, "Currency")) ??
 				new Transaction(
 					description: get($data, "Description"),
 					path: get($data, "DestinationPath"),
 					content: get($data, "DestinationContent"),
 					value: get($data, "Value"),
-					unit: get($data, "Unit"),
+					unit: get($data, "Currency"),
 					network: get($data, "Network")
 				);
 		else
@@ -87,7 +87,7 @@ class PaymentForm extends Form
 		$this->Transaction->Others = $this->Contact = get($data, "Contact") ?? \_::$User->GetValue("Contact");
 
 		$this->Transaction->Value = between($this->Transaction->Value, get($data, "Value"));
-		$this->Transaction->Unit = between($this->Transaction->Unit, get($data, "Unit"));
+		$this->Transaction->Unit = between($this->Transaction->Unit, get($data, "Currency"));
 		$this->Transaction->Identifier = between($this->Transaction->Identifier, get($data, "Identifier"));
 		$this->Transaction->Network = between($this->Transaction->Network, get($data, "Network"));
 		$this->Transaction->Description = between($this->Transaction->Description, get($data, "Description"));
@@ -333,7 +333,7 @@ class PaymentForm extends Form
 					$this->Transaction->Transaction = get($received, "Transaction")??$this->Transaction->Transaction;
 					
 					$this->Transaction->Value = between($this->Transaction->Value, get($received, "Value"));
-					$this->Transaction->Unit = between($this->Transaction->Unit, get($received, "Unit"));
+					$this->Transaction->Unit = between($this->Transaction->Unit, get($received, "Currency"));
 					$this->Transaction->Identifier = between($this->Transaction->Identifier, get($received, "Identifier"));
 					$this->Transaction->Network = between($this->Transaction->Network, get($received, "Network"));
 					$this->Transaction->Description = between($this->Transaction->Description, get($received, "Description"));
@@ -364,7 +364,7 @@ class PaymentForm extends Form
 							"SourceEmail" => $this->Transaction->SourceEmail,
 							"Value" => $this->Transaction->Value,
 							"Verify" => Convert::By($this->Transaction->Verify, $this->Transaction)?1:0,
-							"Unit" => $this->Transaction->Unit,
+							"Currency" => $this->Transaction->Unit,
 							"Network" => $this->Transaction->Network,
 							"Identifier" => $this->Transaction->Identifier,
 							"Destination" => $this->Transaction->Destination,

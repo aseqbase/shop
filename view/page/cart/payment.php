@@ -19,7 +19,7 @@ $transaction = Convert::ToJson([
     "Relation" => "CU".\_::$User->Id . "N" . count($module->Items) . "T" . first(preg_split("/\./", microtime(true))),
     "Source" => \_::$User->Name,
     "Value" => $bill["Price"],
-    "Unit" => \_::$Config->PriceUnit,
+    "Currency" => \_::$Config->PriceUnit,
     "SuccessPath" => "/cart/success",
     "FailPath" => "/cart/fail"
 ]);

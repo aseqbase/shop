@@ -29,7 +29,7 @@ return compute("content/get", [
     ".\_::$Back->DataBase->ConditionNormalization([
         ...($condition?[$condition]:[]),
         //"$mtable->Name.Count > 0",
-        \_::$Back->GetAccessCondition(tableName:$mtable->Name)
+        authCondition(tableName:$mtable->Name)
     ]),
     "Table"=>$ctable,
     ...$data

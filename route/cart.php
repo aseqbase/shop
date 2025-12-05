@@ -72,6 +72,6 @@
 ->On("cart/.*")
     ->Get(
         fn () =>
-            view(\_::$Front->DefaultViewName, ["Name" => \_::$Address->Direction,])
+            view(\_::$Front->DefaultViewName, ["Name" => \_::$User->Direction,])
     )->Handle();
 ?>
