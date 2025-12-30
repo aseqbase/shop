@@ -94,7 +94,7 @@ if ($pid = get($data, "PaymentId")) {
                 $row["Status"] = 2;// Digital Prepared
             if (
                 Contact::SendHtmlEmail(
-                    \_::$Info->SenderEmail,
+                    \_::$Front->SenderEmail,
                     $isDigital ? $address : \_::$User->Email,
                     $subject,
                     $content

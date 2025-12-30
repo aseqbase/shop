@@ -15,11 +15,11 @@ $module->Items = pop($data, "Items") ?? compute("request/fix-currents", receive(
 $module->AllowItems = false;
 $bill = $module->ComputeBill();
 $transaction = Convert::ToJson([
-    "Description" => "Buy from " . \_::$Info->FullOwner,
+    "Description" => "Buy from " . \_::$Front->FullOwner,
     "Relation" => "CU".\_::$User->Id . "N" . count($module->Items) . "T" . first(preg_split("/\./", microtime(true))),
     "Source" => \_::$User->Name,
     "Value" => $bill["Price"],
-    "Currency" => \_::$Config->PriceUnit,
+    "Currency" => \_::$Back->PriceUnit,
     "SuccessPath" => "/cart/success",
     "FailPath" => "/cart/fail"
 ]);

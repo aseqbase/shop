@@ -24,13 +24,13 @@ $module->CellsValues = [
         return \MiMFa\Library\Struct::Link($v,"/item/".$r["ItemPath"], ["target"=>"blank"]);
     },
     "User"=>function($v, $k, $r){
-        return \MiMFa\Library\Struct::Link($v,\_::$Router->UserRoot.$r["UserPath"], ["target"=>"blank"]);
+        return \MiMFa\Library\Struct::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
-        return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");
+        return $v . ($v?$r["CountUnit"]??\_::$Back->CountUnit:"");
     },
     "Price" => function ($v, $k, $r) {
-        return $v . \_::$Config->PriceUnit;
+        return $v . \_::$Back->PriceUnit;
     }
 ];
 $superAccess = \_::$User->HasAccess(\_::$User->SuperAccess);

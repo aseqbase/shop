@@ -1,11 +1,11 @@
 <?php
-\_::$Config->DecimalPercision = 2;
-\_::$Config->MerchandiseUnit = " merchandises";
-\_::$Config->DigitalStore = true;
-\_::$Config->CountUnit = " items";
-\_::$Config->PriceUnit = "$";
-\_::$Config->Task = "$";
-\_::$Config->ComputePrice = function ($price = 0, $discount=null, $metadata = null, $id = null, &$effectiveDiscounts = []) {
+\_::$Back->DecimalPercision = 2;
+\_::$Back->MerchandiseUnit = " merchandises";
+\_::$Back->DigitalStore = true;
+\_::$Back->CountUnit = " items";
+\_::$Back->PriceUnit = "$";
+\_::$Back->Task = "$";
+\_::$Back->ComputePrice = function ($price = 0, $discount=null, $metadata = null, $id = null, &$effectiveDiscounts = []) {
     if ($discount) $effectiveDiscounts['Discount'] = ($effectiveDiscounts['Discount']??0)-$discount * $price /100;
     else $discount = 0;
     if (isset($metadata["Price"]))
@@ -21,7 +21,7 @@
         }
     return $discount ? $price - $discount * $price / 100 : $price;
 };
-\_::$Config->StandardPrice = function($price = 0, $unit = null){
+\_::$Back->StandardPrice = function($price = 0, $unit = null){
     switch (trim(strtolower($unit??""))) {
         case 'usd':
         case 'usdt':
@@ -48,16 +48,27 @@ $menus = array(
     )
 );
 
-\_::$Info->Payment = \_::$Info->Payment??null;
-\_::$Info->MainMenus = [...\_::$Info->MainMenus,...$menus];
-\_::$Info->SideMenus = [...\_::$Info->SideMenus,...$menus];
+\_::$Front->Payment = \_::$Front->Payment??null;
+\_::$Front->MainMenus = [...\_::$Front->MainMenus,...$menus];
+\_::$Front->SideMenus = [...\_::$Front->SideMenus,...$menus];
 
-if(!\_::$Info->Services) \_::$Info->Services = \_::$Info->MainMenus;
+if(!\_::$Front->Services) \_::$Front->Services = \_::$Front->MainMenus;
 
-if(!\_::$Info->Shortcuts) \_::$Info->Shortcuts = [
+if(!\_::$Front->Shortcuts) \_::$Front->Shortcuts = [
     array("Name" => "MENU", "Path" => "viewSideMenu()", "Image" => "bars"),
     array("Name" => "CART", "Path" => "/cart", "Image" => "shopping-cart"),
-    array("Name" => "HOME", "Path" => \_::$Info->HomePath, "Image" => "home"),
+    array("Name" => "HOME", "Path" => \_::$Front->HomePath, "Image" => "home"),
     array("Name" => "MERCHANDISES", "Path" => "/items", "Image" => "box"),
     array("Name" => "CONTACT", "Path" => "/contact", "Image" => "envelope")
 ];
+
+// To unset the default router sat at the bottom layers
+\_::$Router->On()->Reset();
+
+/**
+ * Use your routers by below formats
+ * \_::$Router->On("A Part Of Path?")->Default("Route Name");
+ */
+\_::$Router->On("cart")->Default("cart");
+\_::$Router->On("(item|merchandise)s")->Default("merchandises");
+\_::$Router->On("item|merchandise")->Default("merchandise");

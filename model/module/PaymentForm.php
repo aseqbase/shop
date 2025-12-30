@@ -264,12 +264,12 @@ class PaymentForm extends Form
 		$res[] = Struct::$Break;
 		$res[] = Struct::Success("Your transaction recorded successfully", $attr);
 		if (isValid($this->Transaction->DestinationEmail))
-			if (Contact::SendHtmlEmail(\_::$Info->SenderEmail, $this->Transaction->DestinationEmail, __($this->SuccessSubject) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->SourceEmail, $this->Transaction->DestinationEmail == \_::$Info->ReceiverEmail ? null : \_::$Info->ReceiverEmail))
+			if (Contact::SendHtmlEmail(\_::$Front->SenderEmail, $this->Transaction->DestinationEmail, __($this->SuccessSubject) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->SourceEmail, $this->Transaction->DestinationEmail == \_::$Front->ReceiverEmail ? null : \_::$Front->ReceiverEmail))
 				$res[] = Struct::Success("Your transaction received", $attr);
 			else
 				$res[] = Struct::Warning("We could not receive your transaction details, please notify us!", $attr);
 		if (isValid($this->Transaction->SourceEmail))
-			if (Contact::SendHtmlEmail(\_::$Info->SenderEmail, $this->Transaction->SourceEmail, __($this->SuccessSubject) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->DestinationEmail))
+			if (Contact::SendHtmlEmail(\_::$Front->SenderEmail, $this->Transaction->SourceEmail, __($this->SuccessSubject) . " - " . $this->Transaction->Relation, $doc, $this->Transaction->DestinationEmail))
 				$res[] = Struct::Success("A notification to '{$this->Transaction->SourceEmail}' has been sent!", $attr);
 			else
 				$res[] = Struct::Warning("Could not send a notification to '{$this->Transaction->SourceEmail}'!", $attr);
@@ -481,17 +481,17 @@ class Transaction
 	{
 		$this->Relation = "_".rand(0,999999999)."_".first(preg_split("/\./", microtime(true)));
 		$this->Transaction = $transaction;
-		$this->Title = $title ?? \_::$Info->FullName;
+		$this->Title = $title ?? \_::$Front->FullName;
 		$this->Description = $description;
 		$this->Value = $value;
 		$this->Unit = $unit;
 		$this->Network = $network;
 		$this->Identifier = $identifier;
 		$this->Source = $source;
-		$this->Destination = $destination ?? \_::$Info->FullOwner;
+		$this->Destination = $destination ?? \_::$Front->FullOwner;
 		$this->DestinationPath = $path;
 		$this->DestinationContent = $content;
-		$this->DestinationEmail = $destinationEmail ?? \_::$Info->ReceiverEmail;
+		$this->DestinationEmail = $destinationEmail ?? \_::$Front->ReceiverEmail;
 		$this->Rate = $rate;
 		$this->Verify = $verify;
 	}

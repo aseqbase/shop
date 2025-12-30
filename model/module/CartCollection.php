@@ -307,7 +307,7 @@ class CartCollection extends MerchandiseCollection
                             Struct::Span($m_discount . "%", null, ["class" => "value"]) . " " .
                             Struct::Strike($m_tprice) . " "
                             : "", ["class" => "discount"]) .
-                        Struct::Bold($m_price . \_::$Config->PriceUnit),
+                        Struct::Bold($m_price . \_::$Back->PriceUnit),
                         ["class" => 'col-md-3 price']
                     )
                 );
@@ -350,18 +350,18 @@ class CartCollection extends MerchandiseCollection
             $r_count = get($item, 'RequestCount');
 
             $m_id = get($item, 'MerchandiseId');
-            $m_digital = get($item, 'MerchandiseDigital')??\_::$Config->DigitalStore;
+            $m_digital = get($item, 'MerchandiseDigital')??\_::$Back->DigitalStore;
             $m_count = get($item, 'MerchandiseCount');
             $m_count = min(get($item, 'MerchandiseLimit')??$m_count, $m_count);
             $r_count = min($r_count, $m_count);
             $m_discount = get($item, 'MerchandiseDiscount');
             $m_priceunit = get($item, 'MerchandisePriceUnit');//Unit Price
-            $m_tprice = $r_count * (\_::$Config->StandardPrice)(get($item, 'MerchandisePrice'), $m_priceunit);//Total Price
+            $m_tprice = $r_count * (\_::$Back->StandardPrice)(get($item, 'MerchandisePrice'), $m_priceunit);//Total Price
             $m_price = $m_tprice - $m_discount *  $m_tprice /100;
             $m_metadata = Convert::FromJson(get($item, 'MerchandiseMetaData'));
 
             $priceParams['Price'] += $m_tprice;
-            $totalPrice += (\_::$Config->ComputePrice)($m_tprice, $m_discount, $m_metadata, $m_id, $priceParams);
+            $totalPrice += (\_::$Back->ComputePrice)($m_tprice, $m_discount, $m_metadata, $m_id, $priceParams);
             $totalCount += $r_count;
 
             $requests[] = [
@@ -397,18 +397,18 @@ class CartCollection extends MerchandiseCollection
     {
         $bill = $bill??$this->ComputeBill();
         return Struct::Frame([
-            [...($bill["Variety"] ? [$bill["Variety"] . \_::$Config->MerchandiseUnit, Struct::Span($bill["Count"] . \_::$Config->CountUnit)] : ["", Struct::Span($bill["Count"] . \_::$Config->CountUnit)])],
+            [...($bill["Variety"] ? [$bill["Variety"] . \_::$Back->MerchandiseUnit, Struct::Span($bill["Count"] . \_::$Back->CountUnit)] : ["", Struct::Span($bill["Count"] . \_::$Back->CountUnit)])],
             Struct::$BreakLine,
-            ...loop($bill["Params"], fn($v,$k) => [Struct::Small($k), Struct::Small($v . \_::$Config->PriceUnit)]),
+            ...loop($bill["Params"], fn($v,$k) => [Struct::Small($k), Struct::Small($v . \_::$Back->PriceUnit)]),
             Struct::$BreakLine,
-            [Struct::Label("Total:"), Struct::Bold($bill["Price"] . \_::$Config->PriceUnit)],
+            [Struct::Label("Total:"), Struct::Bold($bill["Price"] . \_::$Back->PriceUnit)],
             Struct::$Break,
             $this->NextButton.$this->BackButton
         ], ["class" => "bill be sticky"]);
     }
     public function GetSupplier($item){
-        $m_digital = get($item, 'MerchandiseDigital')??\_::$Config->DigitalStore;
-        $sup = \_::$Info->Name;
+        $m_digital = get($item, 'MerchandiseDigital')??\_::$Back->DigitalStore;
+        $sup = \_::$Front->Name;
         $del = "";
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
@@ -416,9 +416,9 @@ class CartCollection extends MerchandiseCollection
             $del = Struct::Image(null, $d["Image"] ? $d["Image"] : \_::$User->DefaultImagePath) .
                     Struct::Link(
                         $sup,
-                        \_::$Router->UserRoot . $d["Id"]
+                        \_::$Address->UserRoot . $d["Id"]
                     );
-        }else $del = Struct::Icon(\_::$Info->LogoPath);
+        }else $del = Struct::Icon(\_::$Front->LogoPath);
         $del .= $this->DeliveryLabel.Struct::Icon($m_digital?"envelope":"map-marker").Struct::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
         $r_address = get($item, 'RequestAddress');
         if ($this->AllowAddress && $r_address) $del .= $r_address;
@@ -432,7 +432,7 @@ class CartCollection extends MerchandiseCollection
             }
             function {$this->Name}_CartUpdated(data, err, shownId, count, maxCount){
                 d = parseFloat(data?data:0);
-                $(`#\${shownId} .numbers`)?.html(d);
+                _(`#\${shownId} .numbers`)?.html(d);
                 if(d<=0) {
                     document.querySelector(`#\${shownId} .btns`)?.classList.add('hide');
                     document.querySelector(`#\${shownId} .btn.order`)?.classList.remove('hide');

@@ -55,7 +55,7 @@ class Merchandise extends Content
      function __construct()
      {
           parent::__construct();
-          $this->CommentForm->Access = \_::$Config->WriteCommentAccess;
+          $this->CommentForm->Access = \_::$Back->WriteCommentAccess;
           $this->CommentForm->Title = $this->CommentTitle;
           $this->CommentForm->Description = $this->CommentDescription;
           $this->CommentForm->NameLabel = "Name";
@@ -176,7 +176,7 @@ class Merchandise extends Content
               function {$this->Name}_CartUpdated(data, err, shownId, count, maxCount){
                   if(err) load();
                   d = parseFloat(data?data:0);
-                  $(`#\${shownId} .numbers`)?.html(d);
+                  _(`#\${shownId} .numbers`)?.html(d);
                   if(d<=0) {
                       document.querySelector(`#\${shownId} .btns`)?.classList.add('hide');
                       document.querySelector(`#\${shownId} .btn.order`)?.classList.remove('hide');
@@ -259,7 +259,7 @@ class Merchandise extends Content
                          Struct::Image(null, $d["Image"]??\_::$User->DefaultImagePath) .
                          Struct::Link(
                               $d["Organization"]??$d["Name"]??"Unknown",
-                              \_::$Router->UserRoot . $d["Id"]
+                              \_::$Address->UserRoot . $d["Id"]
                          )
                     ),
                     ["class" => "supplier"]
@@ -267,10 +267,10 @@ class Merchandise extends Content
                $output .= Struct::$BreakLine;
           }
           $discount = $this->Item["MerchandiseDiscount"] ?? 0;
-          $priceUnit = $this->Item["MerchandisePriceUnit"] ?? \_::$Config->PriceUnit;
+          $priceUnit = $this->Item["MerchandisePriceUnit"] ?? \_::$Back->PriceUnit;
           $price = $this->Item["MerchandisePrice"];
           if ($price) {
-               $price = (\_::$Config->StandardPrice)($price, $priceUnit);
+               $price = (\_::$Back->StandardPrice)($price, $priceUnit);
                $fprice = $price - $discount * $price / 100;
                $output .= Struct::Division(
                     ($fprice != $price ? Struct::Super(Struct::Division($discount . "%", ["class" => "value"]) . Struct::Strike($price), ["class" => "discount"]) : "") .
@@ -279,9 +279,9 @@ class Merchandise extends Content
                );
           }
           $maxCount = $this->Item["MerchandiseCount"]??0;
-          if (\_::$Config->MinimumSupply ?? $maxCount >= $maxCount)
+          if (\_::$Back->MinimumSupply ?? $maxCount >= $maxCount)
                $output .= Struct::Division(
-                    $maxCount . ($this->Item["MerchandiseCountUnit"] ?? \_::$Config->CountUnit) . " remained",
+                    $maxCount . ($this->Item["MerchandiseCountUnit"] ?? \_::$Back->CountUnit) . " remained",
                     ["class" => "count"]
                );
           $count = $this->Item["RequestCount"]??0;

@@ -52,7 +52,7 @@ $module->CellsTypes = [
         $std = new stdClass();
         $std->Description = "Is a digital item";
         $std->Type = "bool";
-        $std->Value = $v??\_::$Config->DigitalStore;
+        $std->Value = $v??\_::$Back->DigitalStore;
         return $std;
     },
     "PrivatePath" => "string",
@@ -117,8 +117,8 @@ $module->CellsValues = [
             );";
             $onkeydown = "if(event.key === 'Enter'){event.preventDefault(); $onsubmit}";
             return Struct::Division(
-                Struct::FloatInput("Count", $r["Count"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => 1]) . ($r["CountUnit"]??\_::$Config->CountUnit)." $forLabel " .
-                Struct::FloatInput("Price", $r["Price"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => $r["Price"] ?? 10 / 10]) . ($r["PriceUnit"]??\_::$Config->PriceUnit)." $eachLabel " .
+                Struct::FloatInput("Count", $r["Count"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => 1]) . ($r["CountUnit"]??\_::$Back->CountUnit)." $forLabel " .
+                Struct::FloatInput("Price", $r["Price"], ["min" => 0, "onkeydown" => $onkeydown, "max" => 99999999, "step" => $r["Price"] ?? 10 / 10]) . ($r["PriceUnit"]??\_::$Back->PriceUnit)." $eachLabel " .
                 Struct::Icon("check", $onsubmit, ["name"=>"Submit"]) . " " .
                 Struct::Icon("ellipsis-h", "send(" . Script::Convert($module->ExclusiveMethod) . ", 'null',
             {{$module->SecretKey}:".Script::Convert($module->ModifySecret).",{$module->KeyColumn}:$id,MerchandiseId:$MerchandiseId}, '#$fid');") . " " .
@@ -132,28 +132,28 @@ $module->CellsValues = [
         return Struct::Link($v, "/item/" . $r["Id"], ["target"=>"blank"]);
     },
     "Supplier" => function ($v, $k, $r) {
-        return $r["SupplierId"] ? Struct::Link($v, \_::$Router->UserRoot . $r["SupplierId"], ["target"=>"blank"]) : $v;
+        return $r["SupplierId"] ? Struct::Link($v, \_::$Address->UserRoot . $r["SupplierId"], ["target"=>"blank"]) : $v;
     },
     "Category" => function ($v, $k, $r) {
         $val = trim(\_::$Back->Query->GetCategoryRoute(first(Convert::FromJson($v))) ?? "", "/\\");
         if (isValid($val))
-            return Struct::Link($val, \_::$Router->CategoryRoot . $val, ["target"=>"blank"]);
+            return Struct::Link($val, \_::$Address->CategoryRoot . $val, ["target"=>"blank"]);
         return $v;
     },
     "Count" => function ($v, $k, $r) {
-        return $v . ($v?$r["CountUnit"]??\_::$Config->CountUnit:"");
+        return $v . ($v?$r["CountUnit"]??\_::$Back->CountUnit:"");
     },
     "Price" => function ($v, $k, $r) {
-        return $v . ($v?$r["PriceUnit"]??\_::$Config->PriceUnit:"");
+        return $v . ($v?$r["PriceUnit"]??\_::$Back->PriceUnit:"");
     },
     "Discount" => function ($v, $k, $r) {
         return $v ? "$v%" : "";
     },
     "Total" => function ($v, $k, $r) {
-        return $v ? $v . ($r["CountUnit"]??\_::$Config->CountUnit) : "";
+        return $v ? $v . ($r["CountUnit"]??\_::$Back->CountUnit) : "";
     },
     "Volume" => function ($v, $k, $r) {
-        return $v ? $v . ($r["PriceUnit"]??\_::$Config->PriceUnit) : "";
+        return $v ? $v . ($r["PriceUnit"]??\_::$Back->PriceUnit) : "";
     }
 ];
 $module->Render();

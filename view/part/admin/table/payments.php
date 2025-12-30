@@ -29,7 +29,7 @@ style("
 $module->CellsValues = [
     'Relation' => fn($v, $k, $r) => $r['Verify'] ? Struct::Span($v, ["class" => "be verified"]) : Struct::Span($v . " " . Struct::Icon("check", "sendPut(null,{Id:" . Script::Convert($r["Id"]) . "}, '#{$module->Id}')")),
     'Value' => function ($v, $k, $r) {
-        return (\_::$Config->StandardPrice)($v, $r['Unit']) . \_::$Config->PriceUnit;
+        return (\_::$Back->StandardPrice)($v, $r['Unit']) . \_::$Back->PriceUnit;
     },
     'Source',
     'Destination',

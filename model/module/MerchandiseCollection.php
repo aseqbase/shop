@@ -315,7 +315,7 @@ class MerchandiseCollection extends Collection
 
                 $m_discount = get($item, 'MerchandiseDiscount');
                 $m_priceunit = get($item, 'MerchandisePriceUnit');//Unit Price
-                $m_price = (\_::$Config->StandardPrice)(get($item, 'MerchandisePrice'), $m_priceunit);//Total Price
+                $m_price = (\_::$Back->StandardPrice)(get($item, 'MerchandisePrice'), $m_priceunit);//Total Price
                 $m_fprice = $m_price - $m_discount *  $m_price /100;
 
                 $c_id = get($item, 'Id');
@@ -363,7 +363,7 @@ class MerchandiseCollection extends Collection
                             Struct::Span($m_discount . "%", null, ["class" => "value"]) . " " .
                             Struct::Strike($m_price) . " ", ["class" => "discount"])
                             : "") .
-                        Struct::Bold($m_fprice . \_::$Config->PriceUnit),
+                        Struct::Bold($m_fprice . \_::$Back->PriceUnit),
                         ["class" => 'col-md-4 price']
                     ).
                     ($this->AllowButtons?Struct::MediumSlot(
@@ -398,8 +398,8 @@ class MerchandiseCollection extends Collection
         return $controls;
     }
     public function GetSupplier($item){
-        $m_digital = get($item, 'MerchandiseDigital')??\_::$Config->DigitalStore;
-        $sup = \_::$Info->Name;
+        $m_digital = get($item, 'MerchandiseDigital')??\_::$Back->DigitalStore;
+        $sup = \_::$Front->Name;
         $del = "";
         if (isValid($item["MerchandiseSupplierId"]) && ($d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $item["MerchandiseSupplierId"]])))
         {
@@ -407,9 +407,9 @@ class MerchandiseCollection extends Collection
             $del = Struct::Image(null, $d["Image"] ? $d["Image"] : \_::$User->DefaultImagePath) .
                     Struct::Link(
                         $sup,
-                        \_::$Router->UserRoot . $d["Id"]
+                        \_::$Address->UserRoot . $d["Id"]
                     );
-        }else $del = Struct::Icon(\_::$Info->LogoPath);
+        }else $del = Struct::Icon(\_::$Front->LogoPath);
         $del .= $this->DeliveryLabel.Struct::Icon($m_digital?"envelope":"map-marker").Struct::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");
         return Struct::Division($del, ["class" => "supplier"]);
     }
@@ -421,7 +421,7 @@ class MerchandiseCollection extends Collection
             function {$this->Name}_CartUpdated(data, err, shownId, count, maxCount){
                 if(err) load();
                 d = parseFloat(data?data:0);
-                $(`#\${shownId} .numbers`)?.html(d);
+                _(`#\${shownId} .numbers`)?.html(d);
                 if(d<=0) {
                     document.querySelector(`#\${shownId} .btns`)?.classList.add('hide');
                     document.querySelector(`#\${shownId} .btn.order`)?.classList.remove('hide');

@@ -1,8 +1,8 @@
 <?php
 use \MiMFa\Library\Convert;
-if (!isValid(\_::$Info->Payment))
+if (!isValid(\_::$Front->Payment))
     return;
-$jsd = is_string(\_::$Info->Payment) ? Convert::FromJson(mb_convert_encoding(\_::$Info->Payment ?? "{}", "UTF-8")) : Convert::ToSequence(\_::$Info->Payment);
+$jsd = is_string(\_::$Front->Payment) ? Convert::FromJson(mb_convert_encoding(\_::$Front->Payment ?? "{}", "UTF-8")) : Convert::ToSequence(\_::$Front->Payment);
 if (isEmpty($jsd))
     return;
 module("PaymentForm");

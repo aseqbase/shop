@@ -11,9 +11,9 @@ $module->Render();
 module("CartCollection");
 $module = new MiMFa\Module\CartCollection();
 $module->Items = pop($data, "Items")??compute("request/currents", receive());
-$isDigital = \_::$Config->DigitalStore;
+$isDigital = \_::$Back->DigitalStore;
 foreach ($module->Items as $k => $v) 
-    if(!(get($v, "MerchandiseDigital")??\_::$Config->DigitalStore)){
+    if(!(get($v, "MerchandiseDigital")??\_::$Back->DigitalStore)){
         $isDigital = false;
         break;
     }
@@ -49,7 +49,7 @@ $module->Description = Struct::Style("
         ["Id" => $id, "method" => "PUT"]
     );
 $module->BackButton = Struct::Button("Cart", "submitForm('#$id', (d,e)=>load('/cart'), (d,e)=>load('/cart'));", ["class" => "col-sm-4"]);
-if($isDigital == \_::$Config->DigitalStore) $module->NextButton = Struct::Button("Payment", "submitForm('#$id', (d,e)=>load('/cart/payment'));", ["class" => "btn main col-sm"]);
+if($isDigital == \_::$Back->DigitalStore) $module->NextButton = Struct::Button("Payment", "submitForm('#$id', (d,e)=>load('/cart/payment'));", ["class" => "btn main col-sm"]);
 else $module->NextButton = Struct::Button("Preview", "submitForm('#$id', (d,e)=>load('/cart/preview'));", ["class" => "btn main col-sm"]);
 pod($module, $data);
 $module->Render();
