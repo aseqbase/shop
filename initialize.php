@@ -5,7 +5,7 @@
 \_::$Back->CountUnit = " items";
 \_::$Back->PriceUnit = "$";
 \_::$Back->Task = "$";
-\_::$Back->ComputePrice = function ($price = 0, $discount=null, $metadata = null, $id = null, &$effectiveDiscounts = []) {
+\_::$Front->ComputePrice = function ($price = 0, $discount=null, $metadata = null, $id = null, &$effectiveDiscounts = []) {
     if ($discount) $effectiveDiscounts['Discount'] = ($effectiveDiscounts['Discount']??0)-$discount * $price /100;
     else $discount = 0;
     if (isset($metadata["Price"]))

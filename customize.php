@@ -13,4 +13,4 @@ if(\_::$User->HasAccess(\_::$User->AdminAccess) && isset(\_::$Front->MainMenus["
 }
 
 // To route other requests to the DefaultRouteName
-\_::$Router->On()->Default(\_::$Router->DefaultRouteName);
+\_::$Router->On()->Default(\_::$Front->DefaultRouteName);

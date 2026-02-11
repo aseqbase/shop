@@ -25,7 +25,7 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                     "SupplierId" => $received["AuthorId"],
                     "AuthorId" => \_::$User->Id,
                     "Count" => 1
-                ])) return deliverBreaker(Struct::Success("Your item sat as a Merchandise successfully!"));
+                ])) return deliverRedirect(Struct::Success("Your item sat as a Merchandise successfully!"));
                 else return error("A problem is occurred in the process!");
             } catch (Exception $ex) {
                 return error($ex);
@@ -61,7 +61,7 @@ $module->UpdateAccess = \_::$User->AdminAccess;
             }
         return error(Struct::Icon("close"));
     })
-    ->if(getReceived("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
+    ->if(received("ContentId"))->Set($module->ExclusiveMethod)->Route(function () use ($module) {
         $module->Set("Merchandise");
         $access = \_::$User->HasAccess(\_::$User->AdminAccess);
         $users = table("User")->SelectPairs("Id", "Name");
@@ -84,8 +84,8 @@ $module->UpdateAccess = \_::$User->AdminAccess;
                 return $std;
             },
             "Type" => "enum",
-            "PrivatePath" => "string",
-            "PrivateTitle" => "string",
+            "PrivatePath" => "text",
+            "PrivateTitle" => "text",
             "PrivateMessage" => "content",
             "PrivateAttach" => "json",
             "AuthorId" => function ($t, $v) use ($users) {

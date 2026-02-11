@@ -361,7 +361,7 @@ class CartCollection extends MerchandiseCollection
             $m_metadata = Convert::FromJson(get($item, 'MerchandiseMetaData'));
 
             $priceParams['Price'] += $m_tprice;
-            $totalPrice += (\_::$Back->ComputePrice)($m_tprice, $m_discount, $m_metadata, $m_id, $priceParams);
+            $totalPrice += (\_::$Front->ComputePrice)($m_tprice, $m_discount, $m_metadata, $m_id, $priceParams);
             $totalCount += $r_count;
 
             $requests[] = [
@@ -416,7 +416,7 @@ class CartCollection extends MerchandiseCollection
             $del = Struct::Image(null, $d["Image"] ? $d["Image"] : \_::$User->DefaultImagePath) .
                     Struct::Link(
                         $sup,
-                        \_::$Address->UserRoot . $d["Id"]
+                        \_::$Address->UserRootPath . $d["Id"]
                     );
         }else $del = Struct::Icon(\_::$Front->LogoPath);
         $del .= $this->DeliveryLabel.Struct::Icon($m_digital?"envelope":"map-marker").Struct::Tooltip($m_digital?"$sup will deliver to your email":"$sup will deliver to your location");

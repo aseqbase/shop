@@ -51,7 +51,7 @@ $module->CellsValues = [
         return Struct::Icon($r["Digital"]?"envelope":"truck")." ".$v;
     },
     "User"=>function($v, $k, $r){
-        return Struct::Link($v,\_::$Address->UserRoot.$r["UserPath"], ["target"=>"blank"]);
+        return Struct::Link($v,\_::$Address->UserRootPath.$r["UserPath"], ["target"=>"blank"]);
     },
     "Count" => function ($v, $k, $r) {
         return $v . ($v?$r["CountUnit"]??\_::$Back->CountUnit:"");

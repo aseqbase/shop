@@ -8,7 +8,7 @@ $module->Description = pop($data, "Description")??MiMFa\Library\Struct::Success(
 $module->Content = pop($data, "Content");
 $module->Image = pop($data, "Image")??"check";
 $module->Render();
-$id = getReceived("Id");
+$id = received("Id");
 if (compute("request/complete", ["PaymentId" => $id]))
     response(Struct::Success("Your transaction verified successfully!"));
 ?>

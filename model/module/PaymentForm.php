@@ -50,7 +50,7 @@ class PaymentForm extends Form
 		$this->QRCodeScanner->ActiveAtBegining = false;
 		$this->QRCodeScanner->ActiveAtEnding = false;
 		$this->QRCodeScanner->Style = "border: var(--border-1) #8888; margin-top: var(--size-0);";
-		$this->Path = \_::$User->Url;
+		$this->Path = \_::$Address->Url;
 		$this->CancelLabel = "Cancel";
 		$this->SetTypes(...$transactions);
 	}
