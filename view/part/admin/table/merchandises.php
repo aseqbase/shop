@@ -132,12 +132,12 @@ $module->CellsValues = [
         return Struct::Link($v, "/item/" . $r["Id"], ["target"=>"blank"]);
     },
     "Supplier" => function ($v, $k, $r) {
-        return $r["SupplierId"] ? Struct::Link($v, \_::$Address->UserRootPath . $r["SupplierId"], ["target"=>"blank"]) : $v;
+        return $r["SupplierId"] ? Struct::Link($v, \_::$Address->UserRootUrlPath . $r["SupplierId"], ["target"=>"blank"]) : $v;
     },
     "Category" => function ($v, $k, $r) {
         $val = trim(\_::$Back->Query->GetCategoryRoute(first(Convert::FromJson($v))) ?? "", "/\\");
         if (isValid($val))
-            return Struct::Link($val, \_::$Address->CategoryRootPath . $val, ["target"=>"blank"]);
+            return Struct::Link($val, \_::$Address->CategoryRootUrlPath . $val, ["target"=>"blank"]);
         return $v;
     },
     "Count" => function ($v, $k, $r) {

@@ -259,7 +259,7 @@ class Merchandise extends Content
                          Struct::Image(null, $d["Image"]??\_::$User->DefaultImagePath) .
                          Struct::Link(
                               $d["Organization"]??$d["Name"]??"Unknown",
-                              \_::$Address->UserRootPath . $d["Id"]
+                              \_::$Address->UserRootUrlPath . $d["Id"]
                          )
                     ),
                     ["class" => "supplier"]
