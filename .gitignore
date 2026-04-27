@@ -404,6 +404,7 @@ FodyWeavers.xsd
 
 # aseqbase
 ~*
+!*
 .htaccess
 /private
 /public
@@ -412,13 +413,15 @@ FodyWeavers.xsd
 /temp
 /vendor
 /MiMFa aseqbase.sln
-/global.php
 /Config.php
 /Info.php
 /Back.php
 /Router.php
 /Front.php
 /User.php
+/global.php
+/index.php
 bootstrap.json
+*.revise
 *.zip
 *.rar

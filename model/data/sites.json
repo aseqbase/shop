@@ -1,0 +1,22 @@
+{
+    "Asia": {
+        "Iran": {
+            "Tehran": [
+                "Tehran",
+                "Other"
+            ],
+            "Yazd": [
+                "Yazd",
+                "Taft",
+                "Mehriz",
+                "Ardakan",
+                "Meybod"
+            ]
+        }
+    },
+    "Africa": {
+        "Egypt":[
+            "Qahere"
+        ]
+    }
+}

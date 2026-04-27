@@ -1,0 +1,13 @@
+{
+    "Image":"shop",
+    "Name":"Shop",
+    "Description":"To have a strong shop",
+    "Content":"To create and manage a shop...",
+    "Access": 900000000,
+    "Reference": "aseqbase/shop",
+    "PreInstalls": [
+        "aseqbase/finance"
+    ],
+    "PostInstalls": [],
+    "MetaData":[]
+}
