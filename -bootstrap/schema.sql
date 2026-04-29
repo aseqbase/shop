@@ -32,10 +32,10 @@ USE `%%DATABASE%%`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `%%PREFIX%%Request`
+-- Table structure for table `%%PREFIX%%Shop_Request`
 --
 
-CREATE TABLE IF NOT EXISTS `%%PREFIX%%Request` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Shop_Request` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `MerchandiseId` int(11) DEFAULT NULL COMMENT 'Requested item id',
     `UserId` int(11) DEFAULT NULL COMMENT 'Requester user`s id',
@@ -58,10 +58,10 @@ CREATE TABLE IF NOT EXISTS `%%PREFIX%%Request` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `%%PREFIX%%Request`
+-- Table structure for table `%%PREFIX%%Shop_Request`
 --
 
-CREATE TABLE IF NOT EXISTS `%%PREFIX%%Response` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Shop_Response` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `MerchandiseId` int(11) DEFAULT NULL COMMENT 'Requested item id',
     `UserId` int(11) DEFAULT NULL COMMENT 'Requester user`s id',
@@ -88,10 +88,10 @@ CREATE TABLE IF NOT EXISTS `%%PREFIX%%Response` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `%%PREFIX%%Merchandise`
+-- Table structure for table `%%PREFIX%%Shop_Merchandise`
 --
 
-CREATE TABLE IF NOT EXISTS `%%PREFIX%%Merchandise` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Shop_Merchandise` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `ContentId` int(11) DEFAULT NULL COMMENT 'Related item id',
     `SupplierId` int(11) DEFAULT NULL COMMENT 'Related owner or supplier user`s id',
@@ -127,10 +127,10 @@ CREATE TABLE IF NOT EXISTS `%%PREFIX%%Merchandise` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `%%PREFIX%%Discount`
+-- Table structure for table `%%PREFIX%%Shop_Discount`
 --
 
-CREATE TABLE IF NOT EXISTS `%%PREFIX%%Discount` (
+CREATE TABLE IF NOT EXISTS `%%PREFIX%%Shop_Discount` (
     `Id` int(11) NOT NULL AUTO_INCREMENT,
     `Name` varchar(256) NOT NULL COMMENT 'Discount code',
     `Title` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Discount code title',

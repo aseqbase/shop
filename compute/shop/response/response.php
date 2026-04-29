@@ -8,13 +8,13 @@ $id = received("Id");
 $state = received("State");
 $desc = received("Description");
 
-$res = table("Response")->Get($id);
+$res = table("Shop_Response")->Get($id);
 $status = get($res, "Status");
 $msg = null;
 switch ($state) {
     case 1:
         $si = \_::$Joint->Shop->StatusToIInt($status);
-        $row = table("Merchandise")->Get($res["MerchandiseId"]);
+        $row = table("Shop_Merchandise")->Get($res["MerchandiseId"]);
         $d = $row["Digital"] ?? \_::$Joint->Shop->DigitalStore;
         if (
             ($d && $si >= \_::$Joint->Shop->StatusToIInt(\_::$Joint->Shop->DigitalResponseStatus)) ||
@@ -60,7 +60,7 @@ switch ($state) {
 if ($id) {
     $md = Convert::FromJson(get($res, "MetaData"));
     library("MetaDataTable");
-    $MDT = new MetaDataTable(null, "Response");
+    $MDT = new MetaDataTable(null, "Shop_Response");
     $MDT->AddProcedure($res, $md, $status, $desc);
     if (
         $MDT->Set($id, [

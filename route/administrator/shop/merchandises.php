@@ -5,7 +5,7 @@ use MiMFa\Library\Struct;
 use MiMFa\Module\Table;
 auth(\_::$Joint->Shop->SellingAccess);
 module("Table");
-$module = new Table("Merchandise");
+$module = new Table("Shop_Merchandise");
 $module->AllowServerSide = true;
 $module->Updatable = true;
 $module->RemoveIcon = "close";
@@ -132,7 +132,7 @@ $data = $data ?? [];
         if ($received["Id"])
             try {
                 if (
-                    table("Merchandise")->Insert([
+                    table("Shop_Merchandise")->Insert([
                         "ContentId" => $received["Id"],
                         "SupplierId" => $received["AuthorId"],
                         "AuthorId" => \_::$User->Id,
@@ -150,7 +150,7 @@ $data = $data ?? [];
         $received = receivePatch();
         if ($MerchandiseId = $received["MerchandiseId"])
             try {
-                table("Merchandise")->Update("`Id`=:Id", [
+                table("Shop_Merchandise")->Update("`Id`=:Id", [
                     ":Id" => $MerchandiseId,
                     ...(isset($received["Count"]) ? ["Count" => $received["Count"]] : []),
                     "Amount" => $received["Amount"],
@@ -168,7 +168,7 @@ $data = $data ?? [];
     //     $received = receiveDelete();
     //     if ($MerchandiseId = $received["MerchandiseId"])
     //         try {
-    //             table("Merchandise")->Delete("`Id`=:Id", [
+    //             table("Shop_Merchandise")->Delete("`Id`=:Id", [
     //                 ":Id" => $MerchandiseId
     //             ]);
     //             return redirect(Struct::Success(Struct::Icon("check")));

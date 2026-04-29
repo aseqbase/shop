@@ -1,6 +1,6 @@
 <?php
 $items = compute("shop/request/currents");
-if($items) table("Request")->Update("Id=:Id", 
+if($items) table("Shop_Request")->Update("Id=:Id", 
     loop(
         $items,
         fn($item)=>[

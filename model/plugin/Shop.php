@@ -712,14 +712,14 @@ class Shop extends \MiMFa\Library\Revise
     }
     public function UseDiscount($code = null)
     {
-        $n = table("Discount")->SelectValue("Number", "Name=:Name", [":Name" => $code = $code ?: $this->PopDiscountCode()]);
+        $n = table("Shop_Discount")->SelectValue("Number", "Name=:Name", [":Name" => $code = $code ?: $this->PopDiscountCode()]);
         if (is_null($n))
             return false;
-        return table("Discount")->Update("Name=:Name", [":Name" => $code, ":Number" => ++$n]);
+        return table("Shop_Discount")->Update("Name=:Name", [":Name" => $code, ":Number" => ++$n]);
     }
     public function GetDiscount($code = null)
     {
-        $discountRecord = table("Discount")->SelectRow("*", "Name=:Name", [":Name" => $code = $code ?: $this->GetDiscountCode()]);
+        $discountRecord = table("Shop_Discount")->SelectRow("*", "Name=:Name", [":Name" => $code = $code ?: $this->GetDiscountCode()]);
         if ($discountRecord) {
             if ($discountRecord["Condition"])
                 $discountRecord["Condition"] = Convert::FromJson($discountRecord["Condition"]);

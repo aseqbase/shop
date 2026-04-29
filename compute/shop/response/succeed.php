@@ -23,7 +23,7 @@ if (!$collection)
     else
         return page(\_::$Joint->Shop->PaymentUrlPath, $data);
 $items = compute("shop/request/fixed");
-if ($items && table("Request")->SetValue(loop($items, fn($v) => $v["RequestId"]), "Collection", $collection))
+if ($items && table("Shop_Request")->SetValue(loop($items, fn($v) => $v["RequestId"]), "Collection", $collection))
     if (compute("shop/response/complete", ["Collection" => $collection]))
         return deliverRedirect(Struct::Success("Your transaction verified successfully!"),  "/finance/". $transaction["Relation"] . "?id=" . $transaction["RelationId"]);
     else

@@ -5,10 +5,10 @@ auth(\_::$Joint->Shop->SellingAccess);
 $data = $data ?? [];
 $routeHandler = function ($data) {
     module("Table");
-    $module = new Table("Discount");
-    $module->SelectQuery = table("Discount")->As("D")
+    $module = new Table("Shop_Discount");
+    $module->SelectQuery = table("Shop_Discount")->As("D")
         ->Join(table("User")->As("U"), "D.UserId=U.Id")
-        ->Join(table("Merchandise")->As("M"), "D.MerchandiseId=M.Id")
+        ->Join(table("Shop_Merchandise")->As("M"), "D.MerchandiseId=M.Id")
         ->Join(table("Content")->As("C"), "M.ContentId=C.Id")
         ->OrderBy("D.Number ASC, D.StartTime DESC, D.EndTime DESC")
         ->SelectQuery("D.Id AS Id, D.Name AS 'Name', COALESCE(M.Title, C.Title) AS 'Item', D.MerchandiseId AS 'ItemPath',

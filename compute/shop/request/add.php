@@ -2,14 +2,14 @@
 if ($mid = get($data, "MerchandiseId")) {
     $request = get($data, "Request");
     $rid = get($data, "RequestId");
+    if (\_::$User->Id)
+        $rid = table("Shop_Request")->SelectValue("Id", "MerchandiseId=:MerchandiseId AND " . \_::$Joint->Shop->CartCondition(), [":MerchandiseId" => $mid]);
     $like = get($data, "Group");
-    $count = get($data, "Count") ?: ($request ? 1 : ($rid ? table("Request")->GetValue($rid, "Count", 0) : 0));
+    $count = get($data, "Count") ?: ($request ? 1 : ($rid ? table("Shop_Request")->GetValue($rid, "Count", 0) : 0));
     $count = $count ?: ($like ? 0 : 1);
-    $merch = table("Merchandise")->Get($mid);
+    $merch = table("Shop_Merchandise")->Get($mid);
     if ($count)
         $count = min($count, min($merch["Count"], isEmpty($merch["Limit"]) ? $merch["Count"] : $merch["Limit"]));
-    if (\_::$User->Id)
-        $rid = table("Request")->SelectValue("Id", "MerchandiseId=:MerchandiseId AND " . \_::$Joint->Shop->CartCondition(), [":MerchandiseId" => $mid]);
     $amount = \_::$Joint->Shop->ComputeAmount(
         null,
         \_::$Joint->Finance->StandardCurrency(
@@ -24,7 +24,7 @@ if ($mid = get($data, "MerchandiseId")) {
     );
     if ($rid) {
         if (
-            table("Request")->Set($rid, [
+            table("Shop_Request")->Set($rid, [
                 "MerchandiseId" => $mid,
                 ...(\_::$User->Id ? ["UserId" => \_::$User->Id] : []),
                 "UserCode" => getClientCode(),
@@ -35,7 +35,7 @@ if ($mid = get($data, "MerchandiseId")) {
         )
             return is_null($like) ? $count : ($like ? "true" : "false");
     } elseif (
-        table("Request")->Insert([
+        table("Shop_Request")->Insert([
             "MerchandiseId" => $mid,
             ...(\_::$User->Id ? ["UserId" => \_::$User->Id] : []),
             "UserCode" => getClientCode(),

@@ -8,10 +8,10 @@ auth(\_::$Joint->Shop->AmbassadorsAccess);
 $data = $data ?? [];
 $routeHandler = function ($data) {
     module("Table");
-    $module = new Table("Response");
-    $module->SelectQuery = table("Response")->As("R")
+    $module = new Table("Shop_Response");
+    $module->SelectQuery = table("Shop_Response")->As("R")
         ->Join(table("User")->As("U"), "R.UserId=U.Id")
-        ->Join(table("Merchandise")->As("M"), "R.MerchandiseId=M.Id")
+        ->Join(table("Shop_Merchandise")->As("M"), "R.MerchandiseId=M.Id")
         ->Join(table("Content")->As("C"), "M.ContentId=C.Id")
         ->OrderBy("R.Collection ASC, R.UserId ASC, R.CreateTime DESC")
         ->SelectQuery("*, R.Id AS 'Id', R.Id AS 'Code', R.Status AS 'Status',
@@ -90,7 +90,7 @@ $routeHandler = function ($data) {
             $std = new stdClass();
             $std->Title = "Merchandise";
             $std->Type = "disabled";
-            $std->Value = table("Merchandise")->As("M")
+            $std->Value = table("Shop_Merchandise")->As("M")
                 ->Join(table("Content")->As("C"))
                 ->SelectValue("C.Title", "M.Id=:Id", [":Id" => $v]);
             return $std;
@@ -170,7 +170,7 @@ $routeHandler = function ($data) {
         $desc = receivePatch("Description");
         if ($id) {
             library("MetaDataTable");
-            $MDT = new MetaDataTable(null, "Response");
+            $MDT = new MetaDataTable(null, "Shop_Response");
             $MDT->AddProcedure($id, $md, $status, $desc);
             if (
                 $MDT->Set($id, [

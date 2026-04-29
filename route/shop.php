@@ -7,8 +7,8 @@ use MiMFa\Library\Struct;
             "Compute" => [
                 "ComputeName" => "shop/content/merchandise",
                 "ContentTable" => table("Content"),
-                "MerchandiseTable" => table("Merchandise"),
-                "RequestTable" => table("Request"),
+                "MerchandiseTable" => table("Shop_Merchandise"),
+                "RequestTable" => table("Shop_Request"),
             ],
             "View" => [
                 "Part" => "shop/content/merchandise",
@@ -26,8 +26,8 @@ use MiMFa\Library\Struct;
             "Compute" => [
                 "ComputeName" => "shop/content/merchandises",
                 "ContentTable" => $ctable = table("Content"),
-                "MerchandiseTable" => table("Merchandise"),
-                "RequestTable" => table("Request"),
+                "MerchandiseTable" => table("Shop_Merchandise"),
+                "RequestTable" => table("Shop_Request"),
                 "Order" => "$ctable->Name.`UpdateTime` DESC"
             ],
             "View" => [

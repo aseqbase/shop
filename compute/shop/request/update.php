@@ -1,13 +1,13 @@
 <?php
 if (($rid = get($data, "RequestId")) || ($mid = get($data, "MerchandiseId"))) {
     if (($count = get($data, "Count")) !== null) {
-        $mid = $mid ?? table("Request")->SelectValue("MerchandiseId", "`Id`=:Id AND " . \_::$Joint->Shop->CartCondition(), [":Id" => $rid]);
-        $merch = table("Merchandise")->get($mid);
+        $mid = $mid ?? table("Shop_Request")->SelectValue("MerchandiseId", "`Id`=:Id AND " . \_::$Joint->Shop->CartCondition(), [":Id" => $rid]);
+        $merch = table("Shop_Merchandise")->get($mid);
         $count = min($count, min($merch["Count"], isEmpty($merch["Limit"]) ? $merch["Count"] : $merch["Limit"]));
         if ($count <= 0)
             return compute("shop/request/remove", $data);
         elseif (
-            table("Request")->Update(
+            table("Shop_Request")->Update(
                 "(`Id`=:Id OR `MerchandiseId`=:MerchandiseId) AND " . \_::$Joint->Shop->CartCondition(),
                 [
                     ":Id" => $rid,
@@ -33,7 +33,7 @@ if (($rid = get($data, "RequestId")) || ($mid = get($data, "MerchandiseId"))) {
     }
     if (($address = get($data, "Address")) !== null) {
         if (
-            table("Request")->Update(
+            table("Shop_Request")->Update(
                 "(`Id`=:Id OR `MerchandiseId`=:MerchandiseId) AND " . \_::$Joint->Shop->CartCondition(),
                 [
                     ":Id" => $rid,

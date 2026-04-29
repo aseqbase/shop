@@ -2,9 +2,9 @@
 $ctable = pop($data, "ContentTable");
 $ctable = $ctable instanceof MiMFa\Library\DataTable?$ctable:table($ctable ?? "Content");
 $rtable = pop($data, "RequestTable");
-$rtable = $rtable instanceof MiMFa\Library\DataTable?$rtable:table($rtable ?? "Request");
+$rtable = $rtable instanceof MiMFa\Library\DataTable?$rtable:table($rtable ?? "Shop_Request");
 $mtable = pop($data, "Table")??pop($data, "MerchandiseTable");
-$mtable = $mtable instanceof MiMFa\Library\DataTable?$mtable:table($mtable ?? "Merchandise");
+$mtable = $mtable instanceof MiMFa\Library\DataTable?$mtable:table($mtable ?? "Shop_Merchandise");
 
 $condition = pop($data, "Condition");
 $filter = pop($data, "Filter")??[];

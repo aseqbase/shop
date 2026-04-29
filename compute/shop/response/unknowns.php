@@ -30,11 +30,11 @@ $piId = table("Invoice")->Insert([
         ]
     ]
 ]);
-$rows = table("Request")->Get($data);
+$rows = table("Shop_Request")->Get($data);
 foreach ($rows as $key => $value) 
     $rows[$key]["Status"] = \_::$Joint->Shop->UncheckedStatus;
-if(table("Response")->Insert($rows))
-    table("Request")->Del($data);
+if(table("Shop_Response")->Insert($rows))
+    table("Shop_Request")->Del($data);
 
 $rel = \_::$Joint->Finance->InvoiceUrlPath . "?Id=" . $piId;
 return [
