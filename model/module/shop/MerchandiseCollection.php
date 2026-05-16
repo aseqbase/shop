@@ -148,6 +148,7 @@ class MerchandiseCollection extends \MiMFa\Module\Collection
         $this->DefaultImage = \_::$Joint->Shop->ItemDefaultImagePath;
         $this->DefaultTitle = \_::$Joint->Shop->ItemDefaultTitle;
         $this->DefaultDescription = \_::$Joint->Shop->ItemDefaultDescription;
+        $this->AllowSupplier = \_::$Joint->Shop->ItemsShowSupplier;
     }
 
     public function GetStyle()

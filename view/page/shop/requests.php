@@ -6,7 +6,7 @@ auth(\_::$User->UserAccess);
 $data = $data ?? [];
 $routeHandler = function ($data) {
     module("Table");
-    $module = new Table(table("Invoice")->OrderBy("UpdateTime", false));
+    $module = new Table(table("Finance_Invoice")->OrderBy("UpdateTime", false));
     $module->SelectCondition = "UserId=" . \_::$User->Id;
     $module->KeyColumns = ["Title"];
     $module->IncludeColumns = ["Code" => "Name", "Status", "Title", "Amount", "Currency", "Description", "UpdateTime", "MetaData"];

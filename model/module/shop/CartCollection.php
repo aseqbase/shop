@@ -64,6 +64,7 @@ class CartCollection extends MerchandiseCollection
                 Struct::$Break,
                 [Struct::Button("Add something...", $this->CollectionRoot, ["class" => "main be fit"])]
             ], ["class" => "be align center"]);
+        $this->AllowSupplier = \_::$Joint->Shop->CartShowSupplier;
     }
 
     public function GetStyle()

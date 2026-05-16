@@ -16,7 +16,7 @@ class Merchandise extends \MiMFa\Module\Content
      public $Root = "/shop/item/";
      public $CollectionRoot = "/shop/items/";
 
-     public $AllowAuthor = false;
+     public $AllowSupplier = true;
 
      public $CommentTitle = "Leave Your Idea";
      public $CommentDescription = "How did you find this item?";
@@ -43,6 +43,7 @@ class Merchandise extends \MiMFa\Module\Content
           $this->DefaultImage = \_::$Joint->Shop->ItemDefaultImagePath;
           $this->DefaultTitle = \_::$Joint->Shop->ItemDefaultTitle;
           $this->DefaultDescription = \_::$Joint->Shop->ItemDefaultDescription;
+          $this->AllowSupplier = \_::$Joint->Shop->ItemShowSupplier;
      }
 
      public function GetStyle()
@@ -228,7 +229,7 @@ class Merchandise extends \MiMFa\Module\Content
      {
           $shownId = "m_" . $this->Item["MerchandiseId"];
           $output = $this->CartCollection->GetAdditionalButtons($shownId, $this->Item);
-          if (isValid($this->Item["MerchandiseSupplierId"])) {
+          if ($this->AllowSupplier && isValid($this->Item["MerchandiseSupplierId"])) {
                $d = table("User")->SelectRow("Id, Organization, Name, Image", "WHERE `Id`=:Id", [":Id" => $this->Item["MerchandiseSupplierId"]]);
                if (isset($d["Id"]))
                     $output .= Struct::Division(

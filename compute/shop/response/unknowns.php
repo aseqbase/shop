@@ -4,8 +4,8 @@ use MiMFa\Library\Struct;
 $successAction = "compute/shop/response/succeed";
 $errorAction = "compute/shop/response/failed";
 $trackAction = "compute/shop/response/track";
-
-$piId = table("Invoice")->Insert([
+$data = $data??[];
+$piId = table("Finance_Invoice")->Insert([
     "UserId" => \_::$User->Id,
     "Name" => \_::$Joint->Finance->ShownUnknownPrice,
     "Title" => "'" . \_::$Joint->Finance->ShownUnknownPrice . "' Invoice",

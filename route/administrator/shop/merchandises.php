@@ -190,6 +190,7 @@ $data = $data ?? [];
             //     $std->Value = $r["ContentId"];
             //     return $std;
             // },
+            "Image" => "image",
             "ContentId" => function ($t, $v) {
                 $std = new stdClass();
                 $std->Title = "Item";
@@ -206,12 +207,7 @@ $data = $data ?? [];
                     $std->Value = \_::$User->Id;
                 return $std;
             },
-            "Media" => function ($t, $v) {
-                $std = new stdClass();
-                $std->Type = "collection";
-                $std->Options = ["Type" => "path"];
-                return $std;
-            },
+            "Media" => "images",
             "Digital" => function ($t, $v) {
                 $std = new stdClass();
                 $std->Type = "bool";

@@ -168,6 +168,11 @@ class Shop extends \MiMFa\Library\Revise
     public $ItemRootUrlPath = "/shop/item/";
     /**
      * @category Item
+     * @field bool
+     */
+    public $ItemShowSupplier = true;
+    /**
+     * @category Item
      * @field json
      */
     public $ItemMetaData = null;
@@ -197,6 +202,11 @@ class Shop extends \MiMFa\Library\Revise
      * @field text
      */
     public $ItemsRootUrlPath = "/shop/items/";
+    /**
+     * @category Items
+     * @field bool
+     */
+    public $ItemsShowSupplier = true;
     /**
      * @category Items
      * @field json
@@ -233,6 +243,11 @@ class Shop extends \MiMFa\Library\Revise
      * @field text
      */
     public $CartUrlPath = "/shop/cart";
+    /**
+     * @category Items
+     * @field bool
+     */
+    public $CartShowSupplier = true;
     /**
      * @category Cart
      * @field json
