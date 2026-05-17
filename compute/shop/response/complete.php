@@ -3,9 +3,9 @@
 use MiMFa\Library\Contact;
 use MiMFa\Library\Convert;
 use MiMFa\Library\Struct;
-
+$data = $data??[];
 if ($collection = get($data, "Collection")) {
-    $rows = table("Shop_Request")->As("R")->Join(table("Shop_Merchandise")->As("M"))
+    $rows = table("Shop_Request")->As("R")->Join(table("Shop_Merchandise")->As("M"), "R.MerchandiseId=M.Id")
         ->Select(
             "*, R.Id AS Id, R.Count AS Count, R.Amount AS Amount,
             M.Id AS MerchandiseId, M.Count AS MerchandiseCount,
@@ -31,6 +31,7 @@ if ($collection = get($data, "Collection")) {
 
         // Checkout
         $req = table("Shop_Request")->SelectRow("*", "Id=:Id", [":Id" => $id]);
+        $res = $req;// Response Row
         if ($mCount) {
             if ($mCount >= $count) {
                 if (
@@ -40,15 +41,13 @@ if ($collection = get($data, "Collection")) {
                         ":Volume" => $mVol + $amount,
                     ])
                 )
-                    $req["Status"] = $initialStatus;// Accepted
+                    $res["Status"] = $initialStatus;// Accepted
                 else
-                    $req["Status"] = \_::$Joint->Shop->DefectedStatus;// Defected
+                    $res["Status"] = \_::$Joint->Shop->DefectedStatus;// Defected
             } else {
-                $res = $req;// Response Row
                 $price = $req["Amount"] / $count;
-                $req["Status"] = $initialStatus;// Accepted
                 $req["Count"] = $mCount;
-                $req["Amount"] = $price * $req["Count"];
+                $req["Amount"] = $price * $mCount;
                 $res["Id"] = -1 * $req["Id"];
                 $res["Status"] = \_::$Joint->Shop->UnavailableStatus;// Unavailable
                 $res["Count"] = $count - $mCount;
@@ -69,9 +68,9 @@ if ($collection = get($data, "Collection")) {
                         [$mer, $req, $res]
                     )
                 )
-                    $req["Status"] = $initialStatus;// Accepted
+                    $res["Status"] = $initialStatus;// Accepted
                 else
-                    $req["Status"] = \_::$Joint->Shop->DefectedStatus;// Defected
+                    $res["Status"] = \_::$Joint->Shop->DefectedStatus;// Defected
             }
         } elseif ($isDigital) {
             if (
@@ -80,49 +79,50 @@ if ($collection = get($data, "Collection")) {
                     ":Volume" => $mVol + $amount,
                 ])
             )
-                $req["Status"] = \_::$Joint->Shop->DigitalInitialStatus;// Digital Accepted
+                $res["Status"] = \_::$Joint->Shop->DigitalInitialStatus;// Digital Accepted
         } else
-            $req["Status"] = \_::$Joint->Shop->UnavailableStatus;// Physical Unavailable
+            $res["Status"] = \_::$Joint->Shop->UnavailableStatus;// Physical Unavailable
 
-        // Send Digital Info
-        // Create Private Content
+        // To Send Digital Info and Create Private Content
         if (
-            \_::$Joint->Shop->StatusToIInt($req["Status"]) > 0 &&
-            $req["Private"] = compute("shop/response/privates", [
+            \_::$Joint->Shop->StatusToIInt($res["Status"]) > 0 &&
+            $res["Private"] = compute("shop/response/privates", [
                 "Merchandise" => $row,
                 "Request" => $req,
             ])
         ) {
             if ($isDigital)
-                $req["Status"] = \_::$Joint->Shop->PreparedStatus;// Digital Prepared
+                $res["Status"] = \_::$Joint->Shop->PreparedStatus;// Digital Prepared
             if (
                 Contact::SendHtmlEmail(
                     \_::$User->SenderEmail,
                     $isDigital ? $address : \_::$User->Email,
                     Convert::FromDynamicString(get($row, "PrivateSubject"))??$subject??get($row, "Title"),
-                    $req["Private"]
+                    $res["Private"]
                 )
                 && $isDigital
             )
-                $req["Status"] = \_::$Joint->Shop->DigitalResponseStatus;// Digital Sent
+                $res["Status"] = \_::$Joint->Shop->DigitalResponseStatus;// Digital Sent
 
             if ($title || $description) {
                 response(
                     Struct::Page(
                         ($title ? Struct::Heading2($title) : "") .
                         ($description ? Struct::Paragraph($description) : "") . 
-                        $req["Private"]
+                        $res["Private"]
                     )
                 );
                 if ($isDigital)
-                    $req["Status"] = \_::$Joint->Shop->ReceivedStatus;// Digital Received
+                    $res["Status"] = \_::$Joint->Shop->ReceivedStatus;// Digital Received
             }
         }
+
+        // To Move request to the response table
         if (
             \_::$Back->DataBase->Transaction([
                 table("Shop_Request")->DeleteQuery("Id=:Id"),
-                table("Shop_Response")->InsertQuery($req)
-            ], [[":Id" => $id], $req])
+                table("Shop_Response")->InsertQuery($res)
+            ], [[":Id" => $id], $res])
         )
             $hasres++;
     }

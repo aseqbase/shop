@@ -1,6 +1,8 @@
 <?php
 use MiMFa\Library\Convert;
 use MiMFa\Library\Struct;
+$data = $data??[];
+if(!$data) return null;
 $row = get($data, "Merchandise");
 $res = get($data, "Request");
 $result = [];
