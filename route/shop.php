@@ -1,5 +1,6 @@
 <?php
 
+use MiMFa\Library\Convert;
 use MiMFa\Library\Struct;
 
 (new Router())
@@ -44,74 +45,86 @@ use MiMFa\Library\Struct;
             "ErrorHandler" => "Could not find related merchandise"
         ])
     ->On(\_::$Joint->Shop->PaymentUrlPath . "(?!/)")
-        ->Put(fn() => deliver(compute("shop/request/update", receive())))
-        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/payment"]))
+    ->Put(fn() => deliver(compute("shop/request/update", receive())))
+    ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/payment"]))
     ->On(\_::$Joint->Shop->DiscountUrlPath . "(?!/)")
-        ->Put(function () {
-            $msg = null;
-            return \_::$Joint->Shop->SetDiscountCode(receivePut("DiscountCode"), $msg) ? deliverRedirect($msg) : deliver($msg, 400);
-        })
-        ->Delete(fn() => \_::$Joint->Shop->PopDiscountCode() ? redirect() : null)
+    ->Put(function () {
+        $msg = null;
+        return \_::$Joint->Shop->SetDiscountCode(receivePut("DiscountCode"), $msg) ? deliverRedirect($msg) : deliver($msg, 400);
+    })
+    ->Delete(fn() => \_::$Joint->Shop->PopDiscountCode() ? redirect() : null)
     ->On(\_::$Joint->Shop->OptionsUrlPath . "(?!/)")
-        ->Post(function () {
-            if (!\_::$User->HasAccess(\_::$User->UserAccess))
-                return error("You don't have enough access!");
-            $received = receivePost();
-            $address = [];
-            if ($v = get($received, "Email"))
-                \_::$User->SetMetaValue("Email", $v);
-            if ($v = get($received, "Contact"))
-                \_::$User->SetMetaValue("Contact", $v);
+    ->Post(function () {
+        if (!\_::$User->HasAccess(\_::$User->UserAccess))
+            return error("You don't have enough access!");
+        $received = receivePost();
+        $address = [];
+        if ($v = get($received, "Email"))
+            \_::$User->SetMetaValue("Email", $v);
+        if ($v = get($received, "Contact"))
+            \_::$User->SetMetaValue("Contact", $v);
 
-            if ($v = get($received, "Address")) {
-                \_::$User->SetMetaValue("Address", $v);
-                $address[] = $v;
-            }
-            if ($v = get($received, "PostalCode")) {
-                \_::$User->SetMetaValue("PostalCode", $v);
-                $address[] = PHP_EOL . $v;
-            }
-            if ($v = get($received, "City")) {
-                \_::$User->SetMetaValue("City", $v);
-                $address[] = PHP_EOL . $v;
-            }
-            if ($v = get($received, "Province")) {
-                \_::$User->SetMetaValue("Province", $v);
-                $address[] = PHP_EOL . $v;
-            }
-            if ($v = get($received, "Country")) {
-                \_::$User->SetMetaValue("Country", $v);
-                $address[] = PHP_EOL . $v;
-            }
+        if ($v = get($received, "Address")) {
+            \_::$User->SetMetaValue("Address", $v);
+            $address[] = $v;
+        }
+        if ($v = get($received, "PostalCode")) {
+            \_::$User->SetMetaValue("PostalCode", $v);
+            $address[] = PHP_EOL . $v;
+        }
+        if ($v = get($received, "City")) {
+            \_::$User->SetMetaValue("City", $v);
+            $address[] = PHP_EOL . $v;
+        }
+        if ($v = get($received, "Province")) {
+            \_::$User->SetMetaValue("Province", $v);
+            $address[] = PHP_EOL . $v;
+        }
+        if ($v = get($received, "Country")) {
+            \_::$User->SetMetaValue("Country", $v);
+            $address[] = PHP_EOL . $v;
+        }
 
-            \_::$User->SetMetaValue("CartDescription", get($received, "Description"));
+        \_::$User->SetMetaValue("CartDescription", get($received, "Description"));
 
-            if ($address)
-                $address = join(", ", $address);
-            else
-                $address = null;
-            $uaddress = \_::$User->GetValue("Address");
-            if ($address && !$uaddress)
-                \_::$User->Set(["Address" => get($received, "Address")]);
-            $r = compute("shop/request/update-physicals", ["Address" => $address, "Contact" => get($received, "Contact")]) === null ? null : true;
-            $r = compute("shop/request/update-digitals", ["Address" => get($received, "Email"), "Contact" => get($received, "Contact")]) === null ? $r : true;
-            if ($r)
-                return deliverRedirect(Struct::Success("Your requests data updated successfully!"), get($received, "Next"));
-            else
-                return error("Could not update your requests data!");
-        })
-        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/options"]))
+        if ($address)
+            $address = join(", ", $address);
+        else
+            $address = null;
+        $uaddress = \_::$User->GetValue("Address");
+        if ($address && !$uaddress)
+            \_::$User->Set(["Address" => get($received, "Address")]);
+        $r = compute("shop/request/update-physicals", ["Address" => $address, "Contact" => get($received, "Contact")]) === null ? null : true;
+        $r = compute("shop/request/update-digitals", ["Address" => get($received, "Email"), "Contact" => get($received, "Contact")]) === null ? $r : true;
+        if ($r)
+            return deliverRedirect(Struct::Success("Your requests data updated successfully!"), get($received, "Next"));
+        else
+            return error("Could not update your requests data!");
+    })
+    ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/options"]))
     ->On(\_::$Joint->Shop->RequestsUrlPath . "(?!/)")
-        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/requests"]))
+    ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/requests"]))
     ->On(\_::$Joint->Shop->ResponsesUrlPath . "(?!/)")
-        ->Patch(fn() => compute("shop/response/response"))
+    ->Patch(fn() => compute("shop/response/response"))
     ->On(\_::$Joint->Shop->GroupsUrlPath . "(?!/)")
-        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/groups"]))
+    ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/groups"]))
     ->On(\_::$Joint->Shop->CartUrlPath . "(?!/)")
-        ->Put(fn() => deliver(compute("shop/request/add", receive())))
-        ->Patch(fn() => deliver(compute("shop/request/update", receive())))
-        ->Delete(fn() => deliver(compute("shop/request/remove", receive())))
-        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/cart"]))
-    ->On(\_::$Joint->Shop->RootUrlPath . ".*")
-        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => \_::$Address->UrlRoute,]))
-->Handle();
+    ->Put(fn() => deliver(compute("shop/request/add", receive())))
+    ->Patch(fn() => deliver(compute("shop/request/update", receive())))
+    ->Delete(fn() => deliver(compute("shop/request/remove", receive())))
+    ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/cart"]))
+    ->On(\_::$Joint->Shop->RootUrlPath . ".+")
+    ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => \_::$Address->UrlRoute,]))
+    ->On(\_::$Joint->Shop->UrlPath)
+    ->Get(function () {
+        $path = implode("/", array_slice(explode("/", \_::$Address->UrlRoute), 1));
+        $parent = compute("category/get", ["Direction" => $path]);
+        return view("category", [
+                "Root" => \_::$Joint->Shop->ItemRootUrlPath,
+                "Items" => compute("category/all", [
+                "Direction" => $path
+            ]),
+            ...$parent ?? []
+        ]);
+    })
+    ->Handle();

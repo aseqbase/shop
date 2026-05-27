@@ -26,7 +26,7 @@ if (\_::$Joint->Shop->DefaultMenu) {
             "Name" => \_::$Joint->Shop->Title,
             "Description" => \_::$Joint->Shop->Description,
             "Image" => \_::$Joint->Shop->Image,
-            "Path" => \_::$Joint->Shop->ItemsRootUrlPath,
+            "Path" => \_::$Joint->Shop->UrlPath,
             "Items" => array(
                 array(
                     "Name" => \_::$Joint->Shop->ItemsTitle,

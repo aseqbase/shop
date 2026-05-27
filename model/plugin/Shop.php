@@ -48,6 +48,7 @@ class Shop extends \MiMFa\Library\Revise
     public $CriticalSupply = 5;
     public $MerchandiseUnit = " merchandises";
     public $ItemsUnit = " items";
+    public $UrlPath = "/shop";
     public $RootUrlPath = "/shop/";
     public $DefaultMenu = true;
 
