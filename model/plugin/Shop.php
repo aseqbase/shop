@@ -50,6 +50,7 @@ class Shop extends \MiMFa\Library\Revise
     public $ItemsUnit = " items";
     public $UrlPath = "/shop";
     public $RootUrlPath = "/shop/";
+    public $CategoryRootUrlPath = "/shop/cat/";
     public $DefaultMenu = true;
 
     /**
