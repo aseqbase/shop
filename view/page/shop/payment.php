@@ -106,7 +106,7 @@ $module->Content = ($balance ? Struct::Field("switch", \_::$Joint->Finance->Wall
                 )
             ], ["class" => "payment-platforms"]);
 $module->BackButton = Struct::Button(\_::$Joint->Shop->OptionsTitle, \_::$Joint->Shop->OptionsUrlPath, ["class" => "col-sm-4"]);
-$module->NextButton = Struct::SubmitButton(\_::$Joint->Finance->SubmitRequestKey, "Pay", ["class" => "btn main col-sm"]);
+$module->NextButton = $methods?Struct::SubmitButton(\_::$Joint->Finance->SubmitRequestKey, "Pay", ["class" => "btn main col-sm"]):null;
 
 style("
     .payment-platforms{
