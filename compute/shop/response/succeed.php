@@ -25,7 +25,7 @@ if (!$collection)
 $items = compute("shop/request/fixed");
 if ($items && table("Shop_Request")->SetValue(loop($items, fn($v) => $v["RequestId"]), "Collection", $collection))
     if (compute("shop/response/complete", ["Collection" => $collection]))
-        return deliverRedirect(Struct::Success("Your transaction verified successfully!"),  "/finance/". $transaction["Relation"] . "?id=" . $transaction["RelationId"]);
+        return deliverRedirect(Struct::Success("Your transaction verified successfully!"),  \_::$Joint->Finance->RootUrlPath. strtolower($transaction["Relation"]) . "?id=" . $transaction["RelationId"]);
     else
         return warning("A problem was occured! please " . Struct::Link("call to the provider", "contact") . ".");
 else

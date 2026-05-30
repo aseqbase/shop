@@ -107,4 +107,4 @@ if (\_::$Joint->Shop->DefaultMenu) {
  * Use your routers by below formats
  * \_::$Router->On("A Part Of Path?")->Default("Route Name");
  */
-\_::$Router->On(\_::$Joint->Shop->UrlPath)->Default("shop");
+\_::$Router->On(\_::$Joint->Shop->UrlPath.".*")->Default("shop");
