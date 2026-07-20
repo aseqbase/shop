@@ -463,7 +463,7 @@ class CartCollection extends MerchandiseCollection
                     Struct::Span("Discount Code") .
                     Struct::Box(
                         [
-                            Struct::TextInput("Code", null, ["style" => "width:calc(3 * var(--size-max));", "PlaceHolder" => "Put your discount code"]),
+                            Struct::TextInput("Code", null, ["style" => "width:calc(3 * var(--size-max));", "PlaceHolder" => "Put your 'discount code'"]),
                             Struct::Icon("plus", "if(this.previousElementSibling.value) " . Script::Send(
                                 "PUT",
                                 \_::$Joint->Shop->DiscountUrlPath,

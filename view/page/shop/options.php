@@ -1,6 +1,9 @@
 <?php
+use MiMFa\Library\Convert;
 use MiMFa\Library\Script;
 use MiMFa\Library\Struct;
+
+$data = $data??[];
 if (!\_::$User->HasAccess(\_::$User->UserAccess))
     return page(\_::$Joint->Shop->SignInUrlPath, $data);
 response(Struct::OpenTag("div", ["class"=>"page"]));
@@ -64,29 +67,29 @@ $module->Description .= Struct::Style("
                             "[" . Script::Convert($isDigital) . ", _(this).matches('optgroup:has(option[value=\"'+_(this).val()+'\"])').attr('label'), _(this).val(), getQuery(this.parentNode.nextElementSibling)]",
                             function ($isDigital, $continent, $country, $selector) {
                                 $sites = \_::$Joint->Shop->GetSites($isDigital, $continent, $country);
-                                return \MiMFa\Library\Struct::Script(
+                                return Struct::Script(
                                     "_('$selector').replace(" .
-                                    \MiMFa\Library\Script::Convert(
+                                    Script::Convert(
                                         $sites ?
-                                        \MiMFa\Library\Struct::Field(type: "Select", key: "Province", value: \_::$User->GetMetaValue("Province"), options: $sites, description: "Your province to send your cart there...", attributes: [
+                                        Struct::Field(type: "Select", key: "Province", value: \_::$User->GetMetaValue("Province"), options: $sites, description: "Your province to send your cart there...", attributes: [
                                             "required",
-                                            "onchange" => \MiMFa\Library\Script::Action(
-                                                "[" . \MiMFa\Library\Script::Convert($isDigital) . ", " . \MiMFa\Library\Script::Convert($continent) . ", " . \MiMFa\Library\Script::Convert($country) . ", _(this).val(), getQuery(this.parentNode.nextElementSibling)]",
+                                            "onchange" => Script::Action(
+                                                "[" . Script::Convert($isDigital) . ", " . Script::Convert($continent) . ", " . Script::Convert($country) . ", _(this).val(), getQuery(this.parentNode.nextElementSibling)]",
                                                 function ($isDigital, $continent, $country, $province, $selector) {
                                                     $sites = \_::$Joint->Shop->GetSites($isDigital, $continent, $country, $province);
-                                                    return \MiMFa\Library\Struct::Script(
+                                                    return Struct::Script(
                                                         "_('$selector').replace(" .
-                                                        \MiMFa\Library\Script::Convert(
+                                                        Script::Convert(
                                                             $sites ?
-                                                            \MiMFa\Library\Struct::Field(type: "Select", key: "City", value: \_::$User->GetMetaValue("City"), options: $sites, description: "Your city to send your cart there...", attributes: ["required"]) :
-                                                            \MiMFa\Library\Struct::Field(type: "text", key: "City", value: \_::$User->GetMetaValue("City"), options: $sites, description: "Your city to send your cart there...", attributes: ["required"])
+                                                            Struct::Field(type: "Select", key: "City", value: \_::$User->GetMetaValue("City"), options: $sites, description: "Your city to send your cart there...", attributes: ["required"]) :
+                                                            Struct::Field(type: "text", key: "City", value: \_::$User->GetMetaValue("City"), options: $sites, description: "Your city to send your cart there...", attributes: ["required"])
                                                         ) .
                                                         ");"
                                                     );
                                                 }
                                             )
                                         ]) :
-                                        \MiMFa\Library\Struct::Field(type: "Text", key: "Province", value: \_::$User->GetMetaValue("Province"), options: $sites, description: "Your province to send your cart there...", attributes: ["required"])
+                                        Struct::Field(type: "Text", key: "Province", value: \_::$User->GetMetaValue("Province"), options: $sites, description: "Your province to send your cart there...", attributes: ["required"])
                                     ) .
                                     ");"
                                 );
@@ -102,8 +105,8 @@ $module->Description .= Struct::Style("
                 // Struct::Field(type: "Text", key: "Country", value: \_::$User->GetMetaValue("Country"), description: "Your country to send your cart there..."),
                 // Struct::Field(type: "Text", key: "Province", value: \_::$User->GetMetaValue("Province"), description: "Your province to send your cart there..."),
                 // Struct::Field(type: "Text", key: "City", value: \_::$User->GetMetaValue("City"), description: "Your city to send your cart there..."),
-                Struct::Field(type: "Texts", key: "Address", value: \_::$User->GetMetaValue("Address") ?? \_::$User->GetValue("Address"), description: "Your optional full address..."),
-                Struct::Field(type: "Text", key: "PostalCode", value: \_::$User->GetMetaValue("PostalCode"), description: "Your exact postal code (zipcode)")
+                // Struct::Field(type: "Texts", key: "Address", value: \_::$User->GetMetaValue("Address") ?? \_::$User->GetValue("Address"), description: "Your optional full address..."),
+                // Struct::Field(type: "Text", key: "PostalCode", value: \_::$User->GetMetaValue("PostalCode"), description: "Your exact postal code (zipcode)")
             ]),
             Struct::Field(type: "Texts", key: "Description", value: \_::$User->GetMetaValue("CartDescription"), description: "Your description for vendor")
         ],
@@ -112,7 +115,7 @@ $module->Description .= Struct::Style("
     );
 $module->BackButton = Struct::Button(\_::$Joint->Shop->CartTitle, \_::$Joint->Shop->CartUrlPath, ["class" => "col-sm-4"]);
 $module->NextButton = Struct::Button($sd?\_::$Joint->Shop->PaymentTitle:\_::$Joint->Shop->PreviewTitle, "if(_('#$id').validate()) submitForm('#$id');", ["class" => "btn main col-sm"]);
-if ($metadata = \MiMFa\Library\Convert::FromJson(\_::$Joint->Shop->OptionsMetaData))
+if ($metadata = Convert::FromJson(\_::$Joint->Shop->OptionsMetaData))
     pod($module, $metadata);
 pod($module, $data);
 $module->Render();
