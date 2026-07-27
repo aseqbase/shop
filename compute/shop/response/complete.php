@@ -1,8 +1,8 @@
 <?php
-
 use MiMFa\Library\Contact;
 use MiMFa\Library\Convert;
 use MiMFa\Library\Struct;
+
 $data = $data??[];
 if ($collection = get($data, "Collection")) {
     $rows = table("Shop_Request")->As("R")->Join(table("Shop_Merchandise")->As("M"), "R.MerchandiseId=M.Id")
@@ -93,6 +93,7 @@ if ($collection = get($data, "Collection")) {
         ) {
             if ($isDigital)
                 $res["Status"] = \_::$Joint->Shop->PreparedStatus;// Digital Prepared
+
             if (
                 Contact::SendHtmlEmail(
                     \_::$User->SenderEmail,
@@ -102,6 +103,8 @@ if ($collection = get($data, "Collection")) {
                 )
                 && $isDigital
             )
+                $res["Status"] = \_::$Joint->Shop->DigitalResponseStatus;// Digital Sent
+            else if(!get($row, "PrivateSubject") && $isDigital) 
                 $res["Status"] = \_::$Joint->Shop->DigitalResponseStatus;// Digital Sent
 
             if ($title || $description) {

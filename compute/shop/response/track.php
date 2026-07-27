@@ -3,6 +3,7 @@ use MiMFa\Library\Convert;
 use MiMFa\Library\Script;
 use MiMFa\Library\Struct;
 use MiMFa\Module\Table;
+$data = $data ?? [];
 if (!$data)
     return null;
 if (!\_::$User->HasAccess())
@@ -56,7 +57,7 @@ $module->CellsValues = [
         return Struct::Link($v, \_::$Joint->Shop->ItemRootUrlPath . $r["ItemPath"], ["target" => "blank"]);
     },
     "Status" => function ($v) use ($sc) {
-        $vi = \_::$Joint->Shop->StatusToIInt($v = $v?:\_::$Joint->Shop->UncheckedStatus);
+        $vi = \_::$Joint->Shop->StatusToIInt($v = $v ?: \_::$Joint->Shop->UncheckedStatus);
         return Struct::Span(\_::$Joint->Shop->ResponsesStatuses[$v] ?? "Undefined", ["class" => "response-status " . ($vi > 0 ? "success" : ($vi < 0 ? "error" : "")), "style" => "background-color:rgba(" . (128 - $vi * $sc) . ", " . (128 + $vi * $sc) . ", 0)"]);
     },
     "Destination" => function ($v, $k, $r) {

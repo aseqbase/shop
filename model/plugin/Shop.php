@@ -317,7 +317,7 @@ class Shop extends \MiMFa\Library\Revise
      * @field json
      */
     public $RequestsMetaData = null;
-    
+
     /**
      * @category Responses
      * @field bool
@@ -333,19 +333,19 @@ class Shop extends \MiMFa\Library\Revise
      * @field Pairs
      */
     public $ResponsesStatuses = [
-        "Returned"=>"Returned",
-        "Rejected"=>"Rejected",
-        "Canceled"=>"Canceled",
-        "Defected"=>"Defected",
-        "Unavailable"=>"Unavailable",
-        "Unaccepted"=>"Unaccepted",
-        "Unchecked"=>"Unchecked",
-        "Accepted"=>"Accepted",
-        "Prepared"=>"Prepared",
-        "Sent"=>"Sent",
-        "Received"=>"Received",
-        "Delivered"=>"Delivered",
-        "Finished"=>"Finished"
+        "Returned" => "Returned",
+        "Rejected" => "Rejected",
+        "Canceled" => "Canceled",
+        "Defected" => "Defected",
+        "Unavailable" => "Unavailable",
+        "Unaccepted" => "Unaccepted",
+        "Unchecked" => "Unchecked",
+        "Accepted" => "Accepted",
+        "Prepared" => "Prepared",
+        "Sent" => "Sent",
+        "Received" => "Received",
+        "Delivered" => "Delivered",
+        "Finished" => "Finished"
     ];
     /**
      * @category Responses
@@ -443,22 +443,25 @@ class Shop extends \MiMFa\Library\Revise
      */
     public $DigitalFinalStatus = "Finished";
 
-    public function StatusToIInt($status) {
+    public function StatusToIInt($status)
+    {
         $keys = array_keys($this->ResponsesStatuses);
-        if(find( $keys, $status, $key, $index))
-            return $index - (count($this->ResponsesStatuses)-1)/2;
+        if (find($keys, $status, $key, $index))
+            return $index - (count($this->ResponsesStatuses) - 1) / 2;
         return null;
     }
-    public function PreviousStatus($status) {
+    public function PreviousStatus($status)
+    {
         $keys = array_keys($this->ResponsesStatuses);
-        if(find( $keys, $status, $key, $index))
-            return $keys[$index-1]??null;
+        if (find($keys, $status, $key, $index))
+            return $keys[$index - 1] ?? null;
         return null;
     }
-    public function NextStatus($status) {
+    public function NextStatus($status)
+    {
         $keys = array_keys($this->ResponsesStatuses);
-        if(find( $keys, $status, $key, $index))
-            return $keys[$index+1]??null;
+        if (find($keys, $status, $key, $index))
+            return $keys[$index + 1] ?? null;
         return null;
     }
 
@@ -620,8 +623,9 @@ class Shop extends \MiMFa\Library\Revise
             $address = $address ?? get($item, 'RequestAddress');
             $metadata = $metadata ?? get($item, 'MerchandiseMetaData');
         }
-        if(isEmpty($amount)) return $amount;
-        
+        if (isEmpty($amount))
+            return $amount;
+
         if ($discount)
             $billPriceParams['Discount'] = ($billPriceParams['Discount'] ?? 0) - ($discount * $count * $amount / 100);
         else
@@ -630,7 +634,7 @@ class Shop extends \MiMFa\Library\Revise
         $amount = ($count * $amount) - ($discount * $count * $amount / 100);
         $params = [];
 
-        if ($isDigital && $this->DigitalPriceParams)
+        if ($isDigital)
             foreach ($this->DigitalPriceParams ?? [] as $key => $value)
                 $params[$key] = [...($params[$key] ?? []), $value];
         elseif ($this->PhysicalPriceParams) {

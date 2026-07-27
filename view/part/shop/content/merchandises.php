@@ -1,4 +1,5 @@
 <?php
+$data = $data??[];
 $Items = pop($data, "Items");
 $Name = pop($data, 'Name');
 $Title = pop($data, 'Title');
@@ -13,6 +14,5 @@ $module->Class .= " page";
 $module->Items = $nav->GetItems();
 if($metadata = \MiMFa\Library\Convert::FromJson(\_::$Joint->Shop->ItemsMetaData))
     pod($module, $metadata);
-pod($module, $data);
 $module->Render();
 $nav->Render();

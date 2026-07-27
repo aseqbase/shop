@@ -24,12 +24,12 @@ class MerchandiseCollection extends \MiMFa\Module\Collection
      * The Width of thumbnail preshow
      * @var string
      */
-    public $ImageWidth = "auto";
+    public $ImageWidth = "100%";
     /**
      * The Height of thumbnail preshow
      * @var string
      */
-    public $ImageHeight = "20vh";
+    public $ImageHeight = "auto";
 
     /**
      * @var bool
@@ -148,7 +148,6 @@ class MerchandiseCollection extends \MiMFa\Module\Collection
         $this->DefaultImage = \_::$Joint->Shop->ItemDefaultImagePath;
         $this->DefaultTitle = \_::$Joint->Shop->ItemDefaultTitle;
         $this->DefaultDescription = \_::$Joint->Shop->ItemDefaultDescription;
-        $this->AllowSupplier = \_::$Joint->Shop->ItemsShowSupplier;
     }
 
     public function GetStyle()
@@ -193,17 +192,21 @@ class MerchandiseCollection extends \MiMFa\Module\Collection
 			}
 
 			.{$this->MainClass} div.item .header{
+                margin-bottom: var(--size-1);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: calc(var(--size-0) / 4);
+                gap: calc(var(--size-0) / 3);
                 overflow: hidden;
+			}
+			.{$this->MainClass} div.item .header:has(.image){
+                margin-top: calc(-1 * var(--size-2));
 			}
 			.{$this->MainClass} div.item .title{
                 font-weight: bold;
-                display: inline;
+                display: inline-block;
                 margin-top: 0px;
-                margin-bottom: 0px;
+                margin-bottom: calc(var(--size-0) / 3);
 			}
 			.{$this->MainClass} div.item .item-image {
 				color: var(--fore-color-output);
@@ -211,6 +214,7 @@ class MerchandiseCollection extends \MiMFa\Module\Collection
 				width: {$this->ImageWidth};
 				height: {$this->ImageHeight};
                 margin: 0px;
+                margin-bottom: var(--size-1);
                 padding: 0px;
                 overflow: hidden;
                 display: inline-flex;

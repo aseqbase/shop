@@ -1,6 +1,7 @@
 <?php
 use MiMFa\Library\Script;
 use MiMFa\Library\Struct;
+$data = $data??[];
 if (!\_::$User->HasAccess(\_::$User->UserAccess))
     return page(\_::$Joint->Shop->SignInUrlPath, $data);
 $successAction = "compute/shop/response/succeed";

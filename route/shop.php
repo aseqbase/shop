@@ -1,28 +1,48 @@
 <?php
 
 use MiMFa\Library\Struct;
-
+$items = [
+            "Compute" => [
+                "ComputeName" => "shop/content/merchandises",
+                "ContentTable" => $ctable = table("Content"),
+                "MerchandiseTable" => table("Shop_Merchandise"),
+                "RequestTable" => table("Shop_Request"),
+                "Order" => "$ctable->Name.`UpdateTime` DESC"
+            ],
+            "View" => [
+                "Part" => "shop/content/merchandises",
+                "Root" => \_::$Joint->Shop->ItemRootUrlPath,
+                "CollectionRoot" => \_::$Joint->Shop->ItemsRootUrlPath,
+                "Title" => \_::$Joint->Shop->ItemsTitle,
+                "Description" => \_::$Joint->Shop->ItemsDescription,
+                "Image" => "box",
+                "CheckAccess" => function ($item) {
+                    return \_::$User->HasAccess(\_::$User->AdminAccess) || \_::$User->HasAccess(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$User->VisitAccess))));
+                }
+            ],
+            "ErrorHandler" => "Could not find related merchandise"
+        ];
 (new Router())
-    ->On(\_::$Joint->Shop->ItemUrlPath)
-        ->Default("content", [
-                "Compute" => [
-                    "ComputeName" => "shop/content/merchandise",
-                    "ContentTable" => table("Content"),
-                    "MerchandiseTable" => table("Shop_Merchandise"),
-                    "RequestTable" => table("Shop_Request"),
-                ],
-                "View" => [
-                    "Part" => "shop/content/merchandise",
-                    "DefaultTitle" => \_::$Joint->Shop->ItemDefaultTitle,
-                    "DefaultDescription" => \_::$Joint->Shop->ItemDefaultDescription,
-                    "Root" => \_::$Joint->Shop->ItemRootUrlPath,
-                    "CollectionRoot" => \_::$Joint->Shop->CategoryRootUrlPath,
-                    "CheckAccess" => function ($item) {
-                        return \_::$User->HasAccess(\_::$User->AdminAccess) || \_::$User->HasAccess(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$User->VisitAccess))));
-                    }
-                ],
-                "ErrorHandler" => "Could not find related merchandise"
-            ])
+    ->On(\_::$Joint->Shop->ItemUrlPath)->Default("content", [
+            "Compute" => [
+                "ComputeName" => "shop/content/merchandise",
+                "ContentTable" => table("Content"),
+                "MerchandiseTable" => table("Shop_Merchandise"),
+                "RequestTable" => table("Shop_Request"),
+            ],
+            "View" => [
+                "Part" => "shop/content/merchandise",
+                "DefaultTitle" => \_::$Joint->Shop->ItemDefaultTitle,
+                "DefaultDescription" => \_::$Joint->Shop->ItemDefaultDescription,
+                "Root" => \_::$Joint->Shop->ItemRootUrlPath,
+                "CollectionRoot" => \_::$Joint->Shop->ItemsRootUrlPath,
+                "CheckAccess" => function ($item) {
+                    return \_::$User->HasAccess(\_::$User->AdminAccess) || \_::$User->HasAccess(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$User->VisitAccess))));
+                }
+            ],
+            "ErrorHandler" => "Could not find related merchandise"
+        ])
+    ->On(\_::$Joint->Shop->ItemsUrlPath)->Default("contents", $items)
     ->On(\_::$Joint->Shop->PaymentUrlPath . "(?!/)")
         ->Put(fn() => deliver(compute("shop/request/update", receive())))
         ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/payment"]))
@@ -92,53 +112,8 @@ use MiMFa\Library\Struct;
         ->Patch(fn() => deliver(compute("shop/request/update", receive())))
         ->Delete(fn() => deliver(compute("shop/request/remove", receive())))
         ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => "shop/cart"]))
-    ->On(\_::$Joint->Shop->CategoryRootUrlPath . ".+")
-        ->Default("contents", [
-                "Compute" => [
-                    "Filter"=>[
-                        "Category" => substr(\_::$Address->UrlPath, strlen(\_::$Joint->Shop->CategoryRootUrlPath))
-                    ],
-                    "ComputeName" => "shop/content/merchandises",
-                    "ContentTable" => $ctable = table("Content"),
-                    "MerchandiseTable" => table("Shop_Merchandise"),
-                    "RequestTable" => table("Shop_Request"),
-                    "Order" => "$ctable->Name.`UpdateTime` DESC"
-                ],
-                "View" => [
-                    "Part" => "shop/content/merchandises",
-                    "Root" => \_::$Joint->Shop->ItemRootUrlPath,
-                    "CollectionRoot" => \_::$Joint->Shop->CategoryRootUrlPath,
-                    "Title" => \_::$Joint->Shop->ItemsTitle,
-                    "Description" => \_::$Joint->Shop->ItemsDescription,
-                    "Image" => "box",
-                    "CheckAccess" => function ($item) {
-                        return \_::$User->HasAccess(\_::$User->AdminAccess) || \_::$User->HasAccess(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$User->VisitAccess))));
-                    }
-                ],
-                "ErrorHandler" => "Could not find related merchandise"
-            ])
-    ->On(\_::$Joint->Shop->ItemsUrlPath."|(".\_::$Joint->Shop->RootUrlPath."?)"."|(".\_::$Joint->Shop->CategoryRootUrlPath."?)")
-        ->Default("contents", [
-                "Compute" => [
-                    "ComputeName" => "shop/content/merchandises",
-                    "ContentTable" => $ctable = table("Content"),
-                    "MerchandiseTable" => table("Shop_Merchandise"),
-                    "RequestTable" => table("Shop_Request"),
-                    "Order" => "$ctable->Name.`UpdateTime` DESC"
-                ],
-                "View" => [
-                    "Part" => "shop/content/merchandises",
-                    "Root" => \_::$Joint->Shop->ItemRootUrlPath,
-                    "CollectionRoot" => \_::$Joint->Shop->CategoryRootUrlPath,
-                    "Title" => \_::$Joint->Shop->ItemsTitle,
-                    "Description" => \_::$Joint->Shop->ItemsDescription,
-                    "Image" => "box",
-                    "CheckAccess" => function ($item) {
-                        return \_::$User->HasAccess(\_::$User->AdminAccess) || \_::$User->HasAccess(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$User->VisitAccess))));
-                    }
-                ],
-                "ErrorHandler" => "Could not find related merchandise"
-            ])
-    ->On(\_::$Joint->Shop->UrlPath . ".*")
-        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => \_::$Address->UrlRoute]))
-    ->Handle();
+    ->On(\_::$Joint->Shop->RootUrlPath . ".*")
+        ->Get(fn() => view(\_::$Front->DefaultViewName, ["Name" => \_::$Address->UrlRoute,]))
+    ->On(\_::$Joint->Shop->UrlPath."$")->Default("contents", $items)
+    ->On(\_::$Joint->Shop->UrlPath."?.*")->Default("contents", $items)
+->Handle();

@@ -22,7 +22,7 @@ switch ($state) {
         ) {
             $m = "";
             if ($p = get($res, "Private"))
-                $msg = fn() => deliverModal($p);
+                $msg = fn() => deliverModal(Struct::Convert($p));
             else {
                 $res["Private"] = compute("shop/response/privates", [
                     "Merchandise"=>$row,
@@ -41,7 +41,7 @@ switch ($state) {
                         $m .= Struct::Warning("Could not email to the '$email'!");
                     $status = \_::$Joint->Shop->DigitalFinalStatus;
                 }
-                $msg = fn() => deliverModal($m.$res["Private"]);
+                $msg = fn() => deliverModal($m.Struct::Convert($res["Private"]));
             }
         } else
             return deliverError("Could not deliver the merchandise!");
@@ -76,6 +76,6 @@ if ($id) {
         else
             return deliverRedirect(Struct::Success($msg));
     else
-        return deliverError("Could not change the '$table' status!");
+        return deliverError("Could not change the '$MDT->Name' status!");
 } else
     return deliverError("Something went wrong!");
