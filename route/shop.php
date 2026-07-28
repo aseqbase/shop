@@ -16,7 +16,7 @@ $items = [
                 "Title" => \_::$Joint->Shop->ItemsTitle,
                 "Description" => \_::$Joint->Shop->ItemsDescription,
                 "Image" => "box",
-                "CheckAccess" => function ($item) {
+                "CheckAccess" => function ($item=null) {
                     return \_::$User->HasAccess(\_::$User->AdminAccess) || \_::$User->HasAccess(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$User->VisitAccess))));
                 }
             ],
@@ -36,7 +36,7 @@ $items = [
                 "DefaultDescription" => \_::$Joint->Shop->ItemDefaultDescription,
                 "Root" => \_::$Joint->Shop->ItemRootUrlPath,
                 "CollectionRoot" => \_::$Joint->Shop->ItemsRootUrlPath,
-                "CheckAccess" => function ($item) {
+                "CheckAccess" => function ($item=null) {
                     return \_::$User->HasAccess(\_::$User->AdminAccess) || \_::$User->HasAccess(\MiMFa\Library\Convert::ToSequence(\MiMFa\Library\Convert::FromJson(getValid($item, 'Access', \_::$User->VisitAccess))));
                 }
             ],
