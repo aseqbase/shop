@@ -60,7 +60,7 @@ class CartCollection extends MerchandiseCollection
         if (is_null($this->EmptyHandler))
             $this->EmptyHandler = Struct::Container([
                 Struct::Media("heart-broken", ["style" => "font-size:20vmin; color: #8888;"]),
-                Struct::Center("You haven't selected anything yet!"),
+                Struct::Center(__("You haven't selected anything yet!")),
                 Struct::$Break,
                 [Struct::Button("Add something...", $this->CollectionRoot, ["class" => "main be fit"])]
             ], ["class" => "be align center"]);
